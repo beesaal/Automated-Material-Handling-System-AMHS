@@ -2,12 +2,18 @@
 #define __ROBOT_SERVOS_H
 
 
+<<<<<<< HEAD
 #include "stm32f4xx_hal.h"  // For HAL functions
 #include "FreeRTOS.h"       // For FreeRTOS support
 #include "task.h"           // For task functions
 #include <math.h>           // For math operations
 #include <stdio.h>          // For printf
 #include <stdint.h>         // Standard integer types
+=======
+#include "stm32f4xx_hal.h" 
+#include <math.h>
+#include "stdio.h"
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 // Constant for the servos (to generate pwm from provided angle)
 #define MIN_ANGLE	0
@@ -21,6 +27,7 @@
 #define L3 13.0  // Length from Motor 4 to Gripper
 
 // Global variables to store calculated angles
+<<<<<<< HEAD
 extern int motor_1;
 extern int motor_2;
 extern int motor_3;
@@ -60,6 +67,19 @@ void robot_PickItem(float x_axis, float y_axis, float z_axis);
 void robot_DropItem(float x_axis, float y_axis, float z_axis);
 void pickItem(void *argument);
 void dropItem(void *argument);
+=======
+static int motor_1, motor_2, motor_3, motor_4;
+static TIM_HandleTypeDef *htim_servo;
+static uint16_t tim_channel;
+
+
+
+// Function to map an angle to PWM and control the servo motor
+void pwm_init(TIM_HandleTypeDef *htim, uint32_t channel);				 										// Initialization function for PWM
+uint16_t angle_to_pwm(uint8_t target_angle);                     										// Set servo angle function
+void servos_movement_cal(float horizontal_degree, float horizontal_length, float vertical_length);	//Calculate angle of all servos to move whole arm
+void robot_run(float x, float y, float z);
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 
 

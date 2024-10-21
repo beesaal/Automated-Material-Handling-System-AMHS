@@ -469,9 +469,12 @@ uint32_t HAL_EXTI_GetPending(EXTI_HandleTypeDef *hexti, uint32_t Edge)
   uint32_t linepos;
   uint32_t maskline;
 
+<<<<<<< HEAD
   /* Prevent unused argument(s) compilation warning */
   UNUSED(Edge);
 
+=======
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
   /* Check parameters */
   assert_param(IS_EXTI_LINE(hexti->Line));
   assert_param(IS_EXTI_CONFIG_LINE(hexti->Line));
@@ -499,9 +502,12 @@ void HAL_EXTI_ClearPending(EXTI_HandleTypeDef *hexti, uint32_t Edge)
 {
   uint32_t maskline;
 
+<<<<<<< HEAD
   /* Prevent unused argument(s) compilation warning */
   UNUSED(Edge);
 
+=======
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
   /* Check parameters */
   assert_param(IS_EXTI_LINE(hexti->Line));
   assert_param(IS_EXTI_CONFIG_LINE(hexti->Line));

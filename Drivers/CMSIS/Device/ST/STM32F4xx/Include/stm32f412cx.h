@@ -8497,6 +8497,7 @@ typedef struct
 #define RCC_CFGR_MCO1PRE_1                 (0x2UL << RCC_CFGR_MCO1PRE_Pos)      /*!< 0x02000000 */
 #define RCC_CFGR_MCO1PRE_2                 (0x4UL << RCC_CFGR_MCO1PRE_Pos)      /*!< 0x04000000 */
 
+<<<<<<< HEAD
 #define RCC_CFGR_MCO2PRE_Pos               (27U)
 #define RCC_CFGR_MCO2PRE_Msk               (0x7UL << RCC_CFGR_MCO2PRE_Pos)      /*!< 0x38000000 */
 #define RCC_CFGR_MCO2PRE                   RCC_CFGR_MCO2PRE_Msk
@@ -8509,6 +8510,8 @@ typedef struct
 #define RCC_CFGR_MCO2                      RCC_CFGR_MCO2_Msk
 #define RCC_CFGR_MCO2_0                    (0x1UL << RCC_CFGR_MCO2_Pos)         /*!< 0x40000000 */
 #define RCC_CFGR_MCO2_1                    (0x2UL << RCC_CFGR_MCO2_Pos)         /*!< 0x80000000 */
+=======
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 /********************  Bit definition for RCC_CIR register  *******************/
 #define RCC_CIR_LSIRDYF_Pos                (0U)

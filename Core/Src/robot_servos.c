@@ -1,5 +1,6 @@
 #include "robot_servos.h"
 
+<<<<<<< HEAD
 #include "FreeRTOS.h"  // Correct way to include FreeRTOS header
 #include "task.h"      // Include task header for task-related functions
 
@@ -17,6 +18,17 @@ TaskHandle_t dropItem_TaskHandle = NULL;
 
 void pickItem(void *argument);
 
+=======
+//Function to initialise timmers to generate pwm
+void pwm_init(TIM_HandleTypeDef *htim, uint32_t channel) {
+
+	htim_servo = htim;
+	tim_channel = channel;
+
+
+	HAL_TIM_PWM_Start(htim_servo, tim_channel);
+}
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 //Function to covert angle(degree) into respective pwm value.
 uint16_t angle_to_pwm(uint8_t target_angle) {
@@ -68,6 +80,7 @@ void servos_movement_cal(float horizontal_degree, float horizontal_length, float
 
 }
 
+<<<<<<< HEAD
 
 void motor_run(TIM_HandleTypeDef *htim, uint32_t channel, uint32_t startPulse){
 	uint32_t steps = 50;
@@ -195,6 +208,33 @@ void robot_DropItem(float x_axis, float y_axis, float z_axis){
 
 	uint16_t motor4_pwm = angle_to_pwm(motor_4);
 	motor_run(&htim3, TIM_CHANNEL_4, motor4_pwm);
+=======
+void robot_run(float x, float y, float z){
+
+
+    // Call the function to calculate angles
+    servos_movement_cal(x, y, z);
+
+
+    uint16_t motor1_pwm = angle_to_pwm(motor_1);
+    uint16_t motor2_pwm = angle_to_pwm(motor_2);
+    uint16_t motor3_pwm = angle_to_pwm(motor_3);
+    uint16_t motor4_pwm = angle_to_pwm(motor_4);
+
+
+
+	// Set the PWM value to move the servo motor
+	__HAL_TIM_SET_COMPARE(htim_servo, tim_channel, motor1_pwm);
+	HAL_Delay(1000);
+
+	__HAL_TIM_SET_COMPARE(htim_servo, tim_channel, motor2_pwm);
+	HAL_Delay(1000);
+
+	__HAL_TIM_SET_COMPARE(htim_servo, tim_channel, motor3_pwm);
+	HAL_Delay(1000);
+
+	__HAL_TIM_SET_COMPARE(htim_servo, tim_channel, motor4_pwm);
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 	HAL_Delay(1000);
 
 }

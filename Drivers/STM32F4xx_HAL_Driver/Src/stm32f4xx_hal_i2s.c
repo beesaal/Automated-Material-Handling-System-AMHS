@@ -848,6 +848,7 @@ HAL_StatusTypeDef HAL_I2S_Transmit(I2S_HandleTypeDef *hi2s, uint16_t *pData, uin
     return  HAL_ERROR;
   }
 
+<<<<<<< HEAD
   if (hi2s->State != HAL_I2S_STATE_READY)
   {
     return HAL_BUSY;
@@ -856,6 +857,17 @@ HAL_StatusTypeDef HAL_I2S_Transmit(I2S_HandleTypeDef *hi2s, uint16_t *pData, uin
   /* Process Locked */
   __HAL_LOCK(hi2s);
 
+=======
+  /* Process Locked */
+  __HAL_LOCK(hi2s);
+
+  if (hi2s->State != HAL_I2S_STATE_READY)
+  {
+    __HAL_UNLOCK(hi2s);
+    return HAL_BUSY;
+  }
+
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
   /* Set state and reset error code */
   hi2s->State = HAL_I2S_STATE_BUSY_TX;
   hi2s->ErrorCode = HAL_I2S_ERROR_NONE;
@@ -966,6 +978,7 @@ HAL_StatusTypeDef HAL_I2S_Receive(I2S_HandleTypeDef *hi2s, uint16_t *pData, uint
     return  HAL_ERROR;
   }
 
+<<<<<<< HEAD
   if (hi2s->State != HAL_I2S_STATE_READY)
   {
     return HAL_BUSY;
@@ -974,6 +987,17 @@ HAL_StatusTypeDef HAL_I2S_Receive(I2S_HandleTypeDef *hi2s, uint16_t *pData, uint
   /* Process Locked */
   __HAL_LOCK(hi2s);
   
+=======
+  /* Process Locked */
+  __HAL_LOCK(hi2s);
+
+  if (hi2s->State != HAL_I2S_STATE_READY)
+  {
+    __HAL_UNLOCK(hi2s);
+    return HAL_BUSY;
+  }
+
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
   /* Set state and reset error code */
   hi2s->State = HAL_I2S_STATE_BUSY_RX;
   hi2s->ErrorCode = HAL_I2S_ERROR_NONE;
@@ -1063,6 +1087,7 @@ HAL_StatusTypeDef HAL_I2S_Transmit_IT(I2S_HandleTypeDef *hi2s, uint16_t *pData, 
     return  HAL_ERROR;
   }
 
+<<<<<<< HEAD
   if (hi2s->State != HAL_I2S_STATE_READY)
   {
     return HAL_BUSY;
@@ -1071,6 +1096,17 @@ HAL_StatusTypeDef HAL_I2S_Transmit_IT(I2S_HandleTypeDef *hi2s, uint16_t *pData, 
   /* Process Locked */
   __HAL_LOCK(hi2s);
 
+=======
+  /* Process Locked */
+  __HAL_LOCK(hi2s);
+
+  if (hi2s->State != HAL_I2S_STATE_READY)
+  {
+    __HAL_UNLOCK(hi2s);
+    return HAL_BUSY;
+  }
+
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
   /* Set state and reset error code */
   hi2s->State = HAL_I2S_STATE_BUSY_TX;
   hi2s->ErrorCode = HAL_I2S_ERROR_NONE;
@@ -1089,8 +1125,11 @@ HAL_StatusTypeDef HAL_I2S_Transmit_IT(I2S_HandleTypeDef *hi2s, uint16_t *pData, 
     hi2s->TxXferCount = Size;
   }
 
+<<<<<<< HEAD
   __HAL_UNLOCK(hi2s);
 
+=======
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
   /* Enable TXE and ERR interrupt */
   __HAL_I2S_ENABLE_IT(hi2s, (I2S_IT_TXE | I2S_IT_ERR));
 
@@ -1101,6 +1140,10 @@ HAL_StatusTypeDef HAL_I2S_Transmit_IT(I2S_HandleTypeDef *hi2s, uint16_t *pData, 
     __HAL_I2S_ENABLE(hi2s);
   }
 
+<<<<<<< HEAD
+=======
+  __HAL_UNLOCK(hi2s);
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
   return HAL_OK;
 }
 
@@ -1129,6 +1172,7 @@ HAL_StatusTypeDef HAL_I2S_Receive_IT(I2S_HandleTypeDef *hi2s, uint16_t *pData, u
     return  HAL_ERROR;
   }
 
+<<<<<<< HEAD
   if (hi2s->State != HAL_I2S_STATE_READY)
   {
     return HAL_BUSY;
@@ -1137,6 +1181,17 @@ HAL_StatusTypeDef HAL_I2S_Receive_IT(I2S_HandleTypeDef *hi2s, uint16_t *pData, u
   /* Process Locked */
   __HAL_LOCK(hi2s);
 
+=======
+  /* Process Locked */
+  __HAL_LOCK(hi2s);
+
+  if (hi2s->State != HAL_I2S_STATE_READY)
+  {
+    __HAL_UNLOCK(hi2s);
+    return HAL_BUSY;
+  }
+
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
   /* Set state and reset error code */
   hi2s->State = HAL_I2S_STATE_BUSY_RX;
   hi2s->ErrorCode = HAL_I2S_ERROR_NONE;
@@ -1155,8 +1210,11 @@ HAL_StatusTypeDef HAL_I2S_Receive_IT(I2S_HandleTypeDef *hi2s, uint16_t *pData, u
     hi2s->RxXferCount = Size;
   }
 
+<<<<<<< HEAD
   __HAL_UNLOCK(hi2s);
 
+=======
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
   /* Enable RXNE and ERR interrupt */
   __HAL_I2S_ENABLE_IT(hi2s, (I2S_IT_RXNE | I2S_IT_ERR));
 
@@ -1167,6 +1225,10 @@ HAL_StatusTypeDef HAL_I2S_Receive_IT(I2S_HandleTypeDef *hi2s, uint16_t *pData, u
     __HAL_I2S_ENABLE(hi2s);
   }
 
+<<<<<<< HEAD
+=======
+  __HAL_UNLOCK(hi2s);
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
   return HAL_OK;
 }
 
@@ -1193,6 +1255,7 @@ HAL_StatusTypeDef HAL_I2S_Transmit_DMA(I2S_HandleTypeDef *hi2s, uint16_t *pData,
     return  HAL_ERROR;
   }
 
+<<<<<<< HEAD
   if (hi2s->State != HAL_I2S_STATE_READY)
   {
     return HAL_BUSY;
@@ -1201,6 +1264,17 @@ HAL_StatusTypeDef HAL_I2S_Transmit_DMA(I2S_HandleTypeDef *hi2s, uint16_t *pData,
   /* Process Locked */
   __HAL_LOCK(hi2s);
 
+=======
+  /* Process Locked */
+  __HAL_LOCK(hi2s);
+
+  if (hi2s->State != HAL_I2S_STATE_READY)
+  {
+    __HAL_UNLOCK(hi2s);
+    return HAL_BUSY;
+  }
+
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
   /* Set state and reset error code */
   hi2s->State = HAL_I2S_STATE_BUSY_TX;
   hi2s->ErrorCode = HAL_I2S_ERROR_NONE;
@@ -1242,7 +1316,16 @@ HAL_StatusTypeDef HAL_I2S_Transmit_DMA(I2S_HandleTypeDef *hi2s, uint16_t *pData,
     return HAL_ERROR;
   }
 
+<<<<<<< HEAD
   __HAL_UNLOCK(hi2s);
+=======
+  /* Check if the I2S is already enabled */
+  if (HAL_IS_BIT_CLR(hi2s->Instance->I2SCFGR, SPI_I2SCFGR_I2SE))
+  {
+    /* Enable I2S peripheral */
+    __HAL_I2S_ENABLE(hi2s);
+  }
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
   /* Check if the I2S Tx request is already enabled */
   if (HAL_IS_BIT_CLR(hi2s->Instance->CR2, SPI_CR2_TXDMAEN))
@@ -1251,6 +1334,7 @@ HAL_StatusTypeDef HAL_I2S_Transmit_DMA(I2S_HandleTypeDef *hi2s, uint16_t *pData,
     SET_BIT(hi2s->Instance->CR2, SPI_CR2_TXDMAEN);
   }
 
+<<<<<<< HEAD
   /* Check if the I2S is already enabled */
   if (HAL_IS_BIT_CLR(hi2s->Instance->I2SCFGR, SPI_I2SCFGR_I2SE))
   {
@@ -1258,6 +1342,9 @@ HAL_StatusTypeDef HAL_I2S_Transmit_DMA(I2S_HandleTypeDef *hi2s, uint16_t *pData,
     __HAL_I2S_ENABLE(hi2s);
   }
 
+=======
+  __HAL_UNLOCK(hi2s);
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
   return HAL_OK;
 }
 
@@ -1284,6 +1371,7 @@ HAL_StatusTypeDef HAL_I2S_Receive_DMA(I2S_HandleTypeDef *hi2s, uint16_t *pData, 
     return  HAL_ERROR;
   }
 
+<<<<<<< HEAD
   if (hi2s->State != HAL_I2S_STATE_READY)
   {
     return HAL_BUSY;
@@ -1292,6 +1380,17 @@ HAL_StatusTypeDef HAL_I2S_Receive_DMA(I2S_HandleTypeDef *hi2s, uint16_t *pData, 
   /* Process Locked */
   __HAL_LOCK(hi2s);
 
+=======
+  /* Process Locked */
+  __HAL_LOCK(hi2s);
+
+  if (hi2s->State != HAL_I2S_STATE_READY)
+  {
+    __HAL_UNLOCK(hi2s);
+    return HAL_BUSY;
+  }
+
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
   /* Set state and reset error code */
   hi2s->State = HAL_I2S_STATE_BUSY_RX;
   hi2s->ErrorCode = HAL_I2S_ERROR_NONE;
@@ -1339,7 +1438,16 @@ HAL_StatusTypeDef HAL_I2S_Receive_DMA(I2S_HandleTypeDef *hi2s, uint16_t *pData, 
     return HAL_ERROR;
   }
 
+<<<<<<< HEAD
   __HAL_UNLOCK(hi2s);
+=======
+  /* Check if the I2S is already enabled */
+  if (HAL_IS_BIT_CLR(hi2s->Instance->I2SCFGR, SPI_I2SCFGR_I2SE))
+  {
+    /* Enable I2S peripheral */
+    __HAL_I2S_ENABLE(hi2s);
+  }
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
   /* Check if the I2S Rx request is already enabled */
   if (HAL_IS_BIT_CLR(hi2s->Instance->CR2, SPI_CR2_RXDMAEN))
@@ -1348,6 +1456,7 @@ HAL_StatusTypeDef HAL_I2S_Receive_DMA(I2S_HandleTypeDef *hi2s, uint16_t *pData, 
     SET_BIT(hi2s->Instance->CR2, SPI_CR2_RXDMAEN);
   }
 
+<<<<<<< HEAD
   /* Check if the I2S is already enabled */
   if (HAL_IS_BIT_CLR(hi2s->Instance->I2SCFGR, SPI_I2SCFGR_I2SE))
   {
@@ -1355,6 +1464,9 @@ HAL_StatusTypeDef HAL_I2S_Receive_DMA(I2S_HandleTypeDef *hi2s, uint16_t *pData, 
     __HAL_I2S_ENABLE(hi2s);
   }
 
+=======
+  __HAL_UNLOCK(hi2s);
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
   return HAL_OK;
 }
 

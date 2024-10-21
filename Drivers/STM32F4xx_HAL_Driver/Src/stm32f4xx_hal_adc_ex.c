@@ -779,9 +779,12 @@ uint32_t HAL_ADCEx_MultiModeGetValue(ADC_HandleTypeDef *hadc)
 {
   ADC_Common_TypeDef *tmpADC_Common;
 
+<<<<<<< HEAD
   /* Prevent unused argument(s) compilation warning */
   UNUSED(hadc);
 
+=======
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
   /* Pointer to the common control register to which is belonging hadc    */
   /* (Depending on STM32F4 product, there may be up to 3 ADC and 1 common */
   /* control register)                                                    */

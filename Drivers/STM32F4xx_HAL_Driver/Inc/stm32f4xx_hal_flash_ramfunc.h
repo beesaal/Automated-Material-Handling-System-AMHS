@@ -13,17 +13,28 @@
   * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
   ******************************************************************************
+<<<<<<< HEAD
   */
+=======
+  */ 
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __STM32F4xx_FLASH_RAMFUNC_H
 #define __STM32F4xx_FLASH_RAMFUNC_H
 
 #ifdef __cplusplus
+<<<<<<< HEAD
 extern "C" {
 #endif
 #if defined(STM32F410Tx) || defined(STM32F410Cx) || defined(STM32F410Rx) || defined(STM32F411xE) || defined(STM32F446xx) || defined(STM32F412Zx) ||\
     defined(STM32F412Vx) || defined(STM32F412Rx) || defined(STM32F412Cx)
+=======
+ extern "C" {
+#endif
+#if defined(STM32F410Tx) || defined(STM32F410Cx) || defined(STM32F410Rx) || defined(STM32F411xE) || defined(STM32F446xx) || defined(STM32F412Zx) ||\
+    defined(STM32F412Vx) || defined(STM32F412Rx) || defined(STM32F412Cx)  
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal_def.h"
@@ -45,14 +56,22 @@ extern "C" {
 
 /** @addtogroup FLASH_RAMFUNC_Exported_Functions_Group1
   * @{
+<<<<<<< HEAD
   */
+=======
+  */   
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 __RAM_FUNC HAL_StatusTypeDef HAL_FLASHEx_StopFlashInterfaceClk(void);
 __RAM_FUNC HAL_StatusTypeDef HAL_FLASHEx_StartFlashInterfaceClk(void);
 __RAM_FUNC HAL_StatusTypeDef HAL_FLASHEx_EnableFlashSleepMode(void);
 __RAM_FUNC HAL_StatusTypeDef HAL_FLASHEx_DisableFlashSleepMode(void);
 /**
   * @}
+<<<<<<< HEAD
   */
+=======
+  */ 
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 /**
   * @}
@@ -60,13 +79,21 @@ __RAM_FUNC HAL_StatusTypeDef HAL_FLASHEx_DisableFlashSleepMode(void);
 
 /**
   * @}
+<<<<<<< HEAD
   */
+=======
+  */ 
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 /**
   * @}
   */
 
+<<<<<<< HEAD
 #endif /* STM32F410xx || STM32F411xE || STM32F446xx || STM32F412Zx || STM32F412Vx || STM32F412Rx || STM32F412Cx */
+=======
+#endif /* STM32F410xx || STM32F411xE || STM32F446xx || STM32F412Zx || STM32F412Vx || STM32F412Rx || STM32F412Cx */  
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 #ifdef __cplusplus
 }
 #endif

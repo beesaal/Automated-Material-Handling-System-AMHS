@@ -1720,12 +1720,15 @@ static void HCD_HC_OUT_IRQHandler(HCD_HandleTypeDef *hhcd, uint8_t chnum)
       else
       {
         hhcd->hc[chnum].urb_state = URB_NOTREADY;
+<<<<<<< HEAD
 
         /* Re-activate the channel  */
         tmpreg = USBx_HC(chnum)->HCCHAR;
         tmpreg &= ~USB_OTG_HCCHAR_CHDIS;
         tmpreg |= USB_OTG_HCCHAR_CHENA;
         USBx_HC(chnum)->HCCHAR = tmpreg;
+=======
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
       }
     }
     __HAL_HCD_CLEAR_HC_INT(chnum, USB_OTG_HCINT_TXERR);

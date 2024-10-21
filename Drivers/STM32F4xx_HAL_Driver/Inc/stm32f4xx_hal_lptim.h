@@ -399,7 +399,10 @@ typedef  void (*pLPTIM_CallbackTypeDef)(LPTIM_HandleTypeDef *hlptim);  /*!< poin
   * @brief  Write the passed parameter in the Autoreload register.
   * @param  __HANDLE__ LPTIM handle
   * @param  __VALUE__ Autoreload value
+<<<<<<< HEAD
   *         This parameter must be a value between Min_Data = 0x0001 and Max_Data = 0xFFFF.
+=======
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
   * @retval None
   * @note   The ARR register can only be modified when the LPTIM instance is enabled.
   */
@@ -819,6 +822,12 @@ HAL_LPTIM_StateTypeDef HAL_LPTIM_GetState(const LPTIM_HandleTypeDef *hlptim);
 #define IS_LPTIM_COUNTER_SOURCE(__SOURCE__)     (((__SOURCE__) == LPTIM_COUNTERSOURCE_INTERNAL) || \
                                                  ((__SOURCE__) == LPTIM_COUNTERSOURCE_EXTERNAL))
 
+<<<<<<< HEAD
+=======
+#define IS_LPTIM_AUTORELOAD(__AUTORELOAD__)     ((0x00000001UL <= (__AUTORELOAD__)) &&\
+                                                 ((__AUTORELOAD__) <= 0x0000FFFFUL))
+
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 #define IS_LPTIM_COMPARE(__COMPARE__)           ((__COMPARE__) <= 0x0000FFFFUL)
 
 #define IS_LPTIM_PERIOD(__PERIOD__)             ((0x00000001UL <= (__PERIOD__)) &&\

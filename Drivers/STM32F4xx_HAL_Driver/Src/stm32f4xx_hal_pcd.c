@@ -1814,7 +1814,11 @@ HAL_StatusTypeDef HAL_PCD_SetAddress(PCD_HandleTypeDef *hpcd, uint8_t address)
 HAL_StatusTypeDef HAL_PCD_EP_Open(PCD_HandleTypeDef *hpcd, uint8_t ep_addr,
                                   uint16_t ep_mps, uint8_t ep_type)
 {
+<<<<<<< HEAD
   HAL_StatusTypeDef ret = HAL_OK;
+=======
+  HAL_StatusTypeDef  ret = HAL_OK;
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
   PCD_EPTypeDef *ep;
 
   if ((ep_addr & 0x80U) == 0x80U)
@@ -1829,7 +1833,11 @@ HAL_StatusTypeDef HAL_PCD_EP_Open(PCD_HandleTypeDef *hpcd, uint8_t ep_addr,
   }
 
   ep->num = ep_addr & EP_ADDR_MSK;
+<<<<<<< HEAD
   ep->maxpacket = (uint32_t)ep_mps & 0x7FFU;
+=======
+  ep->maxpacket = ep_mps;
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
   ep->type = ep_type;
 
   if (ep->is_in != 0U)
@@ -2379,11 +2387,19 @@ static HAL_StatusTypeDef PCD_EP_OutSetupPacket_int(PCD_HandleTypeDef *hpcd, uint
 }
 #endif /* defined (USB_OTG_FS) || defined (USB_OTG_HS) */
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 /**
   * @}
   */
 #endif /* defined (USB_OTG_FS) || defined (USB_OTG_HS) */
 #endif /* HAL_PCD_MODULE_ENABLED */
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 /**
   * @}
   */

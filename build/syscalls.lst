@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ARM GAS  /tmp/cczjxY1c.s 			page 1
+=======
+ARM GAS  /tmp/ccHlGDG7.s 			page 1
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 
    1              		.cpu cortex-m4
@@ -58,7 +62,11 @@ ARM GAS  /tmp/cczjxY1c.s 			page 1
   28:Core/Src/syscalls.c **** #include <signal.h>
   29:Core/Src/syscalls.c **** #include <time.h>
   30:Core/Src/syscalls.c **** #include <sys/time.h>
+<<<<<<< HEAD
 ARM GAS  /tmp/cczjxY1c.s 			page 2
+=======
+ARM GAS  /tmp/ccHlGDG7.s 			page 2
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 
   31:Core/Src/syscalls.c **** #include <sys/times.h>
@@ -118,7 +126,11 @@ ARM GAS  /tmp/cczjxY1c.s 			page 1
   65              		.thumb_func
   67              	_kill:
   68              	.LVL0:
+<<<<<<< HEAD
 ARM GAS  /tmp/cczjxY1c.s 			page 3
+=======
+ARM GAS  /tmp/ccHlGDG7.s 			page 3
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 
   69              	.LFB27:
@@ -178,7 +190,11 @@ ARM GAS  /tmp/cczjxY1c.s 			page 1
  114              		.cfi_offset 3, -8
  115              		.cfi_offset 14, -4
   63:Core/Src/syscalls.c ****   _kill(status, -1);
+<<<<<<< HEAD
 ARM GAS  /tmp/cczjxY1c.s 			page 4
+=======
+ARM GAS  /tmp/ccHlGDG7.s 			page 4
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 
  116              		.loc 1 63 3 is_stmt 1 view .LVU15
@@ -238,7 +254,11 @@ ARM GAS  /tmp/cczjxY1c.s 			page 1
   74:Core/Src/syscalls.c ****     *ptr++ = __io_getchar();
  162              		.loc 1 74 5 is_stmt 1 discriminator 3 view .LVU26
  163              		.loc 1 74 14 is_stmt 0 discriminator 3 view .LVU27
+<<<<<<< HEAD
 ARM GAS  /tmp/cczjxY1c.s 			page 5
+=======
+ARM GAS  /tmp/ccHlGDG7.s 			page 5
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 
  164 000a FFF7FEFF 		bl	__io_getchar
@@ -298,7 +318,11 @@ ARM GAS  /tmp/cczjxY1c.s 			page 1
  209              		.cfi_def_cfa_offset 16
  210              		.cfi_offset 4, -16
  211              		.cfi_offset 5, -12
+<<<<<<< HEAD
 ARM GAS  /tmp/cczjxY1c.s 			page 6
+=======
+ARM GAS  /tmp/ccHlGDG7.s 			page 6
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 
  212              		.cfi_offset 6, -8
@@ -358,7 +382,11 @@ ARM GAS  /tmp/cczjxY1c.s 			page 1
  254              		.thumb
  255              		.thumb_func
  257              	_close:
+<<<<<<< HEAD
 ARM GAS  /tmp/cczjxY1c.s 			page 7
+=======
+ARM GAS  /tmp/ccHlGDG7.s 			page 7
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 
  258              	.LVL18:
@@ -418,7 +446,11 @@ ARM GAS  /tmp/cczjxY1c.s 			page 1
  300 0008 7047     		bx	lr
  301              		.cfi_endproc
  302              	.LFE32:
+<<<<<<< HEAD
 ARM GAS  /tmp/cczjxY1c.s 			page 8
+=======
+ARM GAS  /tmp/ccHlGDG7.s 			page 8
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 
  304              		.section	.text._isatty,"ax",%progbits
@@ -478,7 +510,11 @@ ARM GAS  /tmp/cczjxY1c.s 			page 1
  118:Core/Src/syscalls.c **** }
  348              		.loc 1 118 1 is_stmt 0 view .LVU77
  349 0000 0020     		movs	r0, #0
+<<<<<<< HEAD
 ARM GAS  /tmp/cczjxY1c.s 			page 9
+=======
+ARM GAS  /tmp/ccHlGDG7.s 			page 9
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 
  350              	.LVL25:
@@ -538,7 +574,11 @@ ARM GAS  /tmp/cczjxY1c.s 			page 1
  399              		.thumb
  400              		.thumb_func
  402              	_wait:
+<<<<<<< HEAD
 ARM GAS  /tmp/cczjxY1c.s 			page 10
+=======
+ARM GAS  /tmp/ccHlGDG7.s 			page 10
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 
  403              	.LVL28:
@@ -598,7 +638,11 @@ ARM GAS  /tmp/cczjxY1c.s 			page 1
  137:Core/Src/syscalls.c ****   (void)name;
  449              		.loc 1 137 3 is_stmt 1 view .LVU95
  138:Core/Src/syscalls.c ****   errno = ENOENT;
+<<<<<<< HEAD
 ARM GAS  /tmp/cczjxY1c.s 			page 11
+=======
+ARM GAS  /tmp/ccHlGDG7.s 			page 11
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 
  450              		.loc 1 138 3 view .LVU96
@@ -658,7 +702,11 @@ ARM GAS  /tmp/cczjxY1c.s 			page 1
  149:Core/Src/syscalls.c **** {
  498              		.loc 1 149 1 is_stmt 1 view -0
  499              		.cfi_startproc
+<<<<<<< HEAD
 ARM GAS  /tmp/cczjxY1c.s 			page 12
+=======
+ARM GAS  /tmp/ccHlGDG7.s 			page 12
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 
  500              		@ args = 0, pretend = 0, frame = 0
@@ -718,7 +766,11 @@ ARM GAS  /tmp/cczjxY1c.s 			page 1
  545              		.loc 1 160 3 is_stmt 1 view .LVU118
  161:Core/Src/syscalls.c **** }
  546              		.loc 1 161 1 is_stmt 0 view .LVU119
+<<<<<<< HEAD
 ARM GAS  /tmp/cczjxY1c.s 			page 13
+=======
+ARM GAS  /tmp/ccHlGDG7.s 			page 13
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 
  547 000a 4FF0FF30 		mov	r0, #-1
@@ -778,7 +830,11 @@ ARM GAS  /tmp/cczjxY1c.s 			page 1
  596              		@ frame_needed = 0, uses_anonymous_args = 0
  597              		.loc 1 170 1 is_stmt 0 view .LVU126
  598 0000 08B5     		push	{r3, lr}
+<<<<<<< HEAD
 ARM GAS  /tmp/cczjxY1c.s 			page 14
+=======
+ARM GAS  /tmp/ccHlGDG7.s 			page 14
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 
  599              	.LCFI10:
@@ -828,11 +884,16 @@ ARM GAS  /tmp/cczjxY1c.s 			page 1
  642              		.file 7 "/usr/local/arm-none-eabi/include/sys/stat.h"
  643              		.file 8 "/usr/local/arm-none-eabi/include/sys/times.h"
  644              		.file 9 "/usr/local/arm-none-eabi/include/sys/errno.h"
+<<<<<<< HEAD
 ARM GAS  /tmp/cczjxY1c.s 			page 15
+=======
+ARM GAS  /tmp/ccHlGDG7.s 			page 15
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 syscalls.c
+<<<<<<< HEAD
      /tmp/cczjxY1c.s:20     .text.initialise_monitor_handles:0000000000000000 $t
      /tmp/cczjxY1c.s:26     .text.initialise_monitor_handles:0000000000000000 initialise_monitor_handles
      /tmp/cczjxY1c.s:40     .text._getpid:0000000000000000 $t
@@ -873,6 +934,48 @@ DEFINED SYMBOLS
      /tmp/cczjxY1c.s:625    .bss.__env:0000000000000000 __env
      /tmp/cczjxY1c.s:622    .bss.__env:0000000000000000 $d
      /tmp/cczjxY1c.s:628    .data.environ:0000000000000000 $d
+=======
+     /tmp/ccHlGDG7.s:20     .text.initialise_monitor_handles:0000000000000000 $t
+     /tmp/ccHlGDG7.s:26     .text.initialise_monitor_handles:0000000000000000 initialise_monitor_handles
+     /tmp/ccHlGDG7.s:40     .text._getpid:0000000000000000 $t
+     /tmp/ccHlGDG7.s:46     .text._getpid:0000000000000000 _getpid
+     /tmp/ccHlGDG7.s:61     .text._kill:0000000000000000 $t
+     /tmp/ccHlGDG7.s:67     .text._kill:0000000000000000 _kill
+     /tmp/ccHlGDG7.s:96     .text._exit:0000000000000000 $t
+     /tmp/ccHlGDG7.s:102    .text._exit:0000000000000000 _exit
+     /tmp/ccHlGDG7.s:129    .text._read:0000000000000000 $t
+     /tmp/ccHlGDG7.s:135    .text._read:0000000000000000 _read
+     /tmp/ccHlGDG7.s:193    .text._write:0000000000000000 $t
+     /tmp/ccHlGDG7.s:199    .text._write:0000000000000000 _write
+     /tmp/ccHlGDG7.s:251    .text._close:0000000000000000 $t
+     /tmp/ccHlGDG7.s:257    .text._close:0000000000000000 _close
+     /tmp/ccHlGDG7.s:276    .text._fstat:0000000000000000 $t
+     /tmp/ccHlGDG7.s:282    .text._fstat:0000000000000000 _fstat
+     /tmp/ccHlGDG7.s:305    .text._isatty:0000000000000000 $t
+     /tmp/ccHlGDG7.s:311    .text._isatty:0000000000000000 _isatty
+     /tmp/ccHlGDG7.s:330    .text._lseek:0000000000000000 $t
+     /tmp/ccHlGDG7.s:336    .text._lseek:0000000000000000 _lseek
+     /tmp/ccHlGDG7.s:357    .text._open:0000000000000000 $t
+     /tmp/ccHlGDG7.s:363    .text._open:0000000000000000 _open
+     /tmp/ccHlGDG7.s:396    .text._wait:0000000000000000 $t
+     /tmp/ccHlGDG7.s:402    .text._wait:0000000000000000 _wait
+     /tmp/ccHlGDG7.s:430    .text._unlink:0000000000000000 $t
+     /tmp/ccHlGDG7.s:436    .text._unlink:0000000000000000 _unlink
+     /tmp/ccHlGDG7.s:464    .text._times:0000000000000000 $t
+     /tmp/ccHlGDG7.s:470    .text._times:0000000000000000 _times
+     /tmp/ccHlGDG7.s:489    .text._stat:0000000000000000 $t
+     /tmp/ccHlGDG7.s:495    .text._stat:0000000000000000 _stat
+     /tmp/ccHlGDG7.s:518    .text._link:0000000000000000 $t
+     /tmp/ccHlGDG7.s:524    .text._link:0000000000000000 _link
+     /tmp/ccHlGDG7.s:553    .text._fork:0000000000000000 $t
+     /tmp/ccHlGDG7.s:559    .text._fork:0000000000000000 _fork
+     /tmp/ccHlGDG7.s:584    .text._execve:0000000000000000 $t
+     /tmp/ccHlGDG7.s:590    .text._execve:0000000000000000 _execve
+     /tmp/ccHlGDG7.s:631    .data.environ:0000000000000000 environ
+     /tmp/ccHlGDG7.s:625    .bss.__env:0000000000000000 __env
+     /tmp/ccHlGDG7.s:622    .bss.__env:0000000000000000 $d
+     /tmp/ccHlGDG7.s:628    .data.environ:0000000000000000 $d
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 UNDEFINED SYMBOLS
 __errno

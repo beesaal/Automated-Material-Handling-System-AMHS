@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ARM GAS  /tmp/ccEHCjIX.s 			page 1
+=======
+ARM GAS  /tmp/ccMexbJ6.s 			page 1
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 
    1              		.cpu cortex-m4
@@ -58,7 +62,11 @@ ARM GAS  /tmp/ccEHCjIX.s 			page 1
   27:Middlewares/Third_Party/FreeRTOS/Source/list.c **** 
   28:Middlewares/Third_Party/FreeRTOS/Source/list.c **** 
   29:Middlewares/Third_Party/FreeRTOS/Source/list.c **** #include <stdlib.h>
+<<<<<<< HEAD
 ARM GAS  /tmp/ccEHCjIX.s 			page 2
+=======
+ARM GAS  /tmp/ccMexbJ6.s 			page 2
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 
   30:Middlewares/Third_Party/FreeRTOS/Source/list.c **** #include "FreeRTOS.h"
@@ -118,7 +126,11 @@ ARM GAS  /tmp/ccEHCjIX.s 			page 1
   55              		.loc 1 58 48 view .LVU13
   59:Middlewares/Third_Party/FreeRTOS/Source/list.c **** }
   56              		.loc 1 59 1 is_stmt 0 view .LVU14
+<<<<<<< HEAD
 ARM GAS  /tmp/ccEHCjIX.s 			page 3
+=======
+ARM GAS  /tmp/ccMexbJ6.s 			page 3
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 
   57 0014 7047     		bx	lr
@@ -178,7 +190,11 @@ ARM GAS  /tmp/ccEHCjIX.s 			page 1
   99              		@ args = 0, pretend = 0, frame = 0
  100              		@ frame_needed = 0, uses_anonymous_args = 0
  101              		@ link register save eliminated.
+<<<<<<< HEAD
 ARM GAS  /tmp/ccEHCjIX.s 			page 4
+=======
+ARM GAS  /tmp/ccMexbJ6.s 			page 4
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 
   76:Middlewares/Third_Party/FreeRTOS/Source/list.c **** ListItem_t * const pxIndex = pxList->pxIndex;
@@ -238,7 +254,11 @@ ARM GAS  /tmp/ccEHCjIX.s 			page 1
  132 0012 0360     		str	r3, [r0]
  100:Middlewares/Third_Party/FreeRTOS/Source/list.c **** }
  133              		.loc 1 100 1 view .LVU41
+<<<<<<< HEAD
 ARM GAS  /tmp/ccEHCjIX.s 			page 5
+=======
+ARM GAS  /tmp/ccMexbJ6.s 			page 5
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 
  134 0014 7047     		bx	lr
@@ -298,7 +318,11 @@ ARM GAS  /tmp/ccEHCjIX.s 			page 1
  168 0004 B5F1FF3F 		cmp	r5, #-1
  169 0008 11D0     		beq	.L9
  123:Middlewares/Third_Party/FreeRTOS/Source/list.c **** 	{
+<<<<<<< HEAD
 ARM GAS  /tmp/ccEHCjIX.s 			page 6
+=======
+ARM GAS  /tmp/ccMexbJ6.s 			page 6
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 
  124:Middlewares/Third_Party/FreeRTOS/Source/list.c **** 		pxIterator = pxList->xListEnd.pxPrevious;
@@ -358,7 +382,11 @@ ARM GAS  /tmp/ccEHCjIX.s 			page 1
  190 001a 4B60     		str	r3, [r1, #4]
  158:Middlewares/Third_Party/FreeRTOS/Source/list.c **** 	pxNewListItem->pxNext->pxPrevious = pxNewListItem;
  191              		.loc 1 158 2 is_stmt 1 view .LVU60
+<<<<<<< HEAD
 ARM GAS  /tmp/ccEHCjIX.s 			page 7
+=======
+ARM GAS  /tmp/ccMexbJ6.s 			page 7
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 
  192              		.loc 1 158 36 is_stmt 0 view .LVU61
@@ -418,7 +446,11 @@ ARM GAS  /tmp/ccEHCjIX.s 			page 1
  235              		.syntax unified
  236              		.thumb
  237              		.thumb_func
+<<<<<<< HEAD
 ARM GAS  /tmp/ccEHCjIX.s 			page 8
+=======
+ARM GAS  /tmp/ccMexbJ6.s 			page 8
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 
  239              	uxListRemove:
@@ -478,7 +510,11 @@ ARM GAS  /tmp/ccEHCjIX.s 			page 1
  271              		.loc 1 189 27 is_stmt 1 view .LVU90
  190:Middlewares/Third_Party/FreeRTOS/Source/list.c **** 	}
  191:Middlewares/Third_Party/FreeRTOS/Source/list.c **** 
+<<<<<<< HEAD
 ARM GAS  /tmp/ccEHCjIX.s 			page 9
+=======
+ARM GAS  /tmp/ccMexbJ6.s 			page 9
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 
  192:Middlewares/Third_Party/FreeRTOS/Source/list.c **** 	pxItemToRemove->pxContainer = NULL;
@@ -521,11 +557,16 @@ ARM GAS  /tmp/ccEHCjIX.s 			page 1
  302              		.file 3 "/usr/local/arm-none-eabi/include/sys/_stdint.h"
  303              		.file 4 "Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h"
  304              		.file 5 "Middlewares/Third_Party/FreeRTOS/Source/include/list.h"
+<<<<<<< HEAD
 ARM GAS  /tmp/ccEHCjIX.s 			page 10
+=======
+ARM GAS  /tmp/ccMexbJ6.s 			page 10
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 list.c
+<<<<<<< HEAD
      /tmp/ccEHCjIX.s:20     .text.vListInitialise:0000000000000000 $t
      /tmp/ccEHCjIX.s:26     .text.vListInitialise:0000000000000000 vListInitialise
      /tmp/ccEHCjIX.s:62     .text.vListInitialiseItem:0000000000000000 $t
@@ -536,5 +577,17 @@ DEFINED SYMBOLS
      /tmp/ccEHCjIX.s:145    .text.vListInsert:0000000000000000 vListInsert
      /tmp/ccEHCjIX.s:233    .text.uxListRemove:0000000000000000 $t
      /tmp/ccEHCjIX.s:239    .text.uxListRemove:0000000000000000 uxListRemove
+=======
+     /tmp/ccMexbJ6.s:20     .text.vListInitialise:0000000000000000 $t
+     /tmp/ccMexbJ6.s:26     .text.vListInitialise:0000000000000000 vListInitialise
+     /tmp/ccMexbJ6.s:62     .text.vListInitialiseItem:0000000000000000 $t
+     /tmp/ccMexbJ6.s:68     .text.vListInitialiseItem:0000000000000000 vListInitialiseItem
+     /tmp/ccMexbJ6.s:88     .text.vListInsertEnd:0000000000000000 $t
+     /tmp/ccMexbJ6.s:94     .text.vListInsertEnd:0000000000000000 vListInsertEnd
+     /tmp/ccMexbJ6.s:139    .text.vListInsert:0000000000000000 $t
+     /tmp/ccMexbJ6.s:145    .text.vListInsert:0000000000000000 vListInsert
+     /tmp/ccMexbJ6.s:233    .text.uxListRemove:0000000000000000 $t
+     /tmp/ccMexbJ6.s:239    .text.uxListRemove:0000000000000000 uxListRemove
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 NO UNDEFINED SYMBOLS

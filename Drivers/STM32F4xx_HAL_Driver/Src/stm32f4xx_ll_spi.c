@@ -119,7 +119,11 @@
   *          - SUCCESS: SPI registers are de-initialized
   *          - ERROR: SPI registers are not de-initialized
   */
+<<<<<<< HEAD
 ErrorStatus LL_SPI_DeInit(const SPI_TypeDef *SPIx)
+=======
+ErrorStatus LL_SPI_DeInit(SPI_TypeDef *SPIx)
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 {
   ErrorStatus status = ERROR;
 
@@ -381,7 +385,11 @@ void LL_SPI_StructInit(LL_SPI_InitTypeDef *SPI_InitStruct)
   *          - SUCCESS: SPI registers are de-initialized
   *          - ERROR: SPI registers are not de-initialized
   */
+<<<<<<< HEAD
 ErrorStatus LL_I2S_DeInit(const SPI_TypeDef *SPIx)
+=======
+ErrorStatus LL_I2S_DeInit(SPI_TypeDef *SPIx)
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 {
   return LL_SPI_DeInit(SPIx);
 }

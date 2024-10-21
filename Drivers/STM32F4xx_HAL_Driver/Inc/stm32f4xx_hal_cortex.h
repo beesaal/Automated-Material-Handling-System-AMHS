@@ -284,8 +284,11 @@ void HAL_SYSTICK_Callback(void);
 #if (__MPU_PRESENT == 1U)
 void HAL_MPU_Enable(uint32_t MPU_Control);
 void HAL_MPU_Disable(void);
+<<<<<<< HEAD
 void HAL_MPU_EnableRegion(uint32_t RegionNumber);
 void HAL_MPU_DisableRegion(uint32_t RegionNumber);
+=======
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 void HAL_MPU_ConfigRegion(MPU_Region_InitTypeDef *MPU_Init);
 #endif /* __MPU_PRESENT */
 void HAL_CORTEX_ClearEvent(void);

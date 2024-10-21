@@ -623,13 +623,22 @@ HAL_StatusTypeDef     HAL_QSPI_UnRegisterCallback   (QSPI_HandleTypeDef *hqspi, 
   * @{
   */
 /* Peripheral Control and State functions  ************************************/
+<<<<<<< HEAD
 HAL_QSPI_StateTypeDef HAL_QSPI_GetState        (const QSPI_HandleTypeDef *hqspi);
 uint32_t              HAL_QSPI_GetError        (const QSPI_HandleTypeDef *hqspi);
+=======
+HAL_QSPI_StateTypeDef HAL_QSPI_GetState        (QSPI_HandleTypeDef *hqspi);
+uint32_t              HAL_QSPI_GetError        (QSPI_HandleTypeDef *hqspi);
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 HAL_StatusTypeDef     HAL_QSPI_Abort           (QSPI_HandleTypeDef *hqspi);
 HAL_StatusTypeDef     HAL_QSPI_Abort_IT        (QSPI_HandleTypeDef *hqspi);
 void                  HAL_QSPI_SetTimeout      (QSPI_HandleTypeDef *hqspi, uint32_t Timeout);
 HAL_StatusTypeDef     HAL_QSPI_SetFifoThreshold(QSPI_HandleTypeDef *hqspi, uint32_t Threshold);
+<<<<<<< HEAD
 uint32_t              HAL_QSPI_GetFifoThreshold(const QSPI_HandleTypeDef *hqspi);
+=======
+uint32_t              HAL_QSPI_GetFifoThreshold(QSPI_HandleTypeDef *hqspi);
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 HAL_StatusTypeDef     HAL_QSPI_SetFlashID      (QSPI_HandleTypeDef *hqspi, uint32_t FlashID);
 /**
   * @}

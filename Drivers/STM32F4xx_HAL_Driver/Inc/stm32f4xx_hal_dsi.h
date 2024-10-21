@@ -1184,7 +1184,11 @@ HAL_StatusTypeDef HAL_DSI_LongWrite(DSI_HandleTypeDef *hdsi,
                                     uint32_t Mode,
                                     uint32_t NbParams,
                                     uint32_t Param1,
+<<<<<<< HEAD
                                     const uint8_t *ParametersTable);
+=======
+                                    uint8_t *ParametersTable);
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 HAL_StatusTypeDef HAL_DSI_Read(DSI_HandleTypeDef *hdsi,
                                uint32_t ChannelNbr,
                                uint8_t *Array,
@@ -1222,8 +1226,13 @@ HAL_StatusTypeDef HAL_DSI_SetContentionDetectionOff(DSI_HandleTypeDef *hdsi, Fun
   *  @brief    Peripheral State and Errors functions
   * @{
   */
+<<<<<<< HEAD
 uint32_t HAL_DSI_GetError(const DSI_HandleTypeDef *hdsi);
 HAL_DSI_StateTypeDef HAL_DSI_GetState(const DSI_HandleTypeDef *hdsi);
+=======
+uint32_t HAL_DSI_GetError(DSI_HandleTypeDef *hdsi);
+HAL_DSI_StateTypeDef HAL_DSI_GetState(DSI_HandleTypeDef *hdsi);
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
 
 /**
   * @}

@@ -254,7 +254,11 @@ __STATIC_INLINE uint32_t LL_GetPackageType(void)
   * @param  HCLKFrequency HCLK frequency in Hz (can be calculated thanks to RCC helper macro)
   * @note   When a RTOS is used, it is recommended to avoid changing the SysTick
   *         configuration by calling this function, for a delay use rather osDelay RTOS service.
+<<<<<<< HEAD
   * @param  Ticks Frequency of Ticks (Hz)
+=======
+  * @param  Ticks Number of ticks
+>>>>>>> 4ae2208c09bd3a1352a92288a9b9e224d15faf00
   * @retval None
   */
 __STATIC_INLINE void LL_InitTick(uint32_t HCLKFrequency, uint32_t Ticks)
