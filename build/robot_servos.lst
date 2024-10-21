@@ -1,0 +1,1367 @@
+ARM GAS  /tmp/ccZsu01m.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"robot_servos.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.rodata.angle_to_pwm.str1.4,"aMS",%progbits,1
+  20              		.align	2
+  21              	.LC0:
+  22 0000 4572726F 		.ascii	"Error!!!\015\012Target angle out of range.\015\000"
+  22      72212121 
+  22      0D0A5461 
+  22      72676574 
+  22      20616E67 
+  23 0026 0000     		.align	2
+  24              	.LC1:
+  25 0028 4572726F 		.ascii	"Error!!!\015\012PWM value out of range.\015\000"
+  25      72212121 
+  25      0D0A5057 
+  25      4D207661 
+  25      6C756520 
+  26 004b 00       		.align	2
+  27              	.LC2:
+  28 004c 53657474 		.ascii	"Setting PWM for angle %d to %d\015\012\000"
+  28      696E6720 
+  28      50574D20 
+  28      666F7220 
+  28      616E676C 
+  29              		.section	.text.angle_to_pwm,"ax",%progbits
+  30              		.align	1
+  31              		.global	angle_to_pwm
+  32              		.syntax unified
+  33              		.thumb
+  34              		.thumb_func
+  36              	angle_to_pwm:
+  37              	.LVL0:
+  38              	.LFB141:
+  39              		.file 1 "Core/Src/robot_servos.c"
+   1:Core/Src/robot_servos.c **** #include "robot_servos.h"
+   2:Core/Src/robot_servos.c **** 
+   3:Core/Src/robot_servos.c **** 
+   4:Core/Src/robot_servos.c **** #include "FreeRTOS.h"  // Correct way to include FreeRTOS header
+   5:Core/Src/robot_servos.c **** #include "task.h"      // Include task header for task-related functions
+   6:Core/Src/robot_servos.c **** 
+   7:Core/Src/robot_servos.c **** 
+ARM GAS  /tmp/ccZsu01m.s 			page 2
+
+
+   8:Core/Src/robot_servos.c **** int motor_1 = 0;
+   9:Core/Src/robot_servos.c **** int motor_2 = 0;
+  10:Core/Src/robot_servos.c **** int motor_3 = 0;
+  11:Core/Src/robot_servos.c **** int motor_4 = 0;
+  12:Core/Src/robot_servos.c **** 
+  13:Core/Src/robot_servos.c **** uint32_t pulse_value;
+  14:Core/Src/robot_servos.c **** 
+  15:Core/Src/robot_servos.c **** 
+  16:Core/Src/robot_servos.c **** TaskHandle_t pickItem_TaskHandle = NULL;
+  17:Core/Src/robot_servos.c **** TaskHandle_t dropItem_TaskHandle = NULL;
+  18:Core/Src/robot_servos.c **** 
+  19:Core/Src/robot_servos.c **** 
+  20:Core/Src/robot_servos.c **** //Function to covert angle(degree) into respective pwm value.
+  21:Core/Src/robot_servos.c **** uint16_t angle_to_pwm(uint8_t target_angle) {
+  40              		.loc 1 21 45 view -0
+  41              		.cfi_startproc
+  42              		@ args = 0, pretend = 0, frame = 0
+  43              		@ frame_needed = 0, uses_anonymous_args = 0
+  44              		.loc 1 21 45 is_stmt 0 view .LVU1
+  45 0000 10B5     		push	{r4, lr}
+  46              	.LCFI0:
+  47              		.cfi_def_cfa_offset 8
+  48              		.cfi_offset 4, -8
+  49              		.cfi_offset 14, -4
+  22:Core/Src/robot_servos.c **** 	if (target_angle < MIN_ANGLE || target_angle > MAX_ANGLE) {
+  50              		.loc 1 22 2 is_stmt 1 view .LVU2
+  51              		.loc 1 22 5 is_stmt 0 view .LVU3
+  52 0002 B428     		cmp	r0, #180
+  53 0004 1DD8     		bhi	.L6
+  54 0006 0146     		mov	r1, r0
+  23:Core/Src/robot_servos.c **** 		printf("Error!!!\r\nTarget angle out of range.\r\n");
+  24:Core/Src/robot_servos.c **** 		return 0;
+  25:Core/Src/robot_servos.c **** 	}
+  26:Core/Src/robot_servos.c **** 
+  27:Core/Src/robot_servos.c **** 	// Calculate the new PWM value based on the target angle
+  28:Core/Src/robot_servos.c **** 	int pwm_value = (int) (((float) (PWM_MAX - PWM_MIN)
+  55              		.loc 1 28 2 is_stmt 1 view .LVU4
+  29:Core/Src/robot_servos.c **** 			/ (MAX_ANGLE - MIN_ANGLE)) * target_angle + PWM_MIN);
+  56              		.loc 1 29 31 is_stmt 0 view .LVU5
+  57 0008 07EE900A 		vmov	s15, r0	@ int
+  58 000c F8EEE77A 		vcvt.f32.s32	s15, s15
+  59 0010 9FED117A 		vldr.32	s14, .L8
+  60 0014 67EE877A 		vmul.f32	s15, s15, s14
+  61              		.loc 1 29 46 view .LVU6
+  62 0018 9FED107A 		vldr.32	s14, .L8+4
+  63 001c 77EE877A 		vadd.f32	s15, s15, s14
+  28:Core/Src/robot_servos.c **** 			/ (MAX_ANGLE - MIN_ANGLE)) * target_angle + PWM_MIN);
+  64              		.loc 1 28 6 view .LVU7
+  65 0020 FDEEE77A 		vcvt.s32.f32	s15, s15
+  66 0024 17EE904A 		vmov	r4, s15	@ int
+  67              	.LVL1:
+  30:Core/Src/robot_servos.c **** 
+  31:Core/Src/robot_servos.c **** 	// Check if the calculated value is within limits
+  32:Core/Src/robot_servos.c **** 	if (pwm_value < PWM_MIN || pwm_value > PWM_MAX) {
+  68              		.loc 1 32 2 is_stmt 1 view .LVU8
+  69              		.loc 1 32 26 is_stmt 0 view .LVU9
+  70 0028 A4F1C802 		sub	r2, r4, #200
+ARM GAS  /tmp/ccZsu01m.s 			page 3
+
+
+  71              		.loc 1 32 5 view .LVU10
+  72 002c 40F2B633 		movw	r3, #950
+  73 0030 9A42     		cmp	r2, r3
+  74 0032 0BD8     		bhi	.L7
+  33:Core/Src/robot_servos.c **** 		printf("Error!!!\r\nPWM value out of range.\r\n");
+  34:Core/Src/robot_servos.c **** 		return 0;
+  35:Core/Src/robot_servos.c **** 	}
+  36:Core/Src/robot_servos.c **** 
+  37:Core/Src/robot_servos.c **** 
+  38:Core/Src/robot_servos.c **** 	// Debugging info
+  39:Core/Src/robot_servos.c **** 	printf("Setting PWM for angle %d to %d\r\n", target_angle, pwm_value);
+  75              		.loc 1 39 2 is_stmt 1 view .LVU11
+  76 0034 17EE902A 		vmov	r2, s15	@ int
+  77 0038 0948     		ldr	r0, .L8+8
+  78              	.LVL2:
+  79              		.loc 1 39 2 is_stmt 0 view .LVU12
+  80 003a FFF7FEFF 		bl	printf
+  81              	.LVL3:
+  40:Core/Src/robot_servos.c **** 
+  41:Core/Src/robot_servos.c **** 	return pwm_value;
+  82              		.loc 1 41 2 is_stmt 1 view .LVU13
+  83              		.loc 1 41 9 is_stmt 0 view .LVU14
+  84 003e A0B2     		uxth	r0, r4
+  85              	.LVL4:
+  86              	.L3:
+  42:Core/Src/robot_servos.c **** }
+  87              		.loc 1 42 1 view .LVU15
+  88 0040 10BD     		pop	{r4, pc}
+  89              	.LVL5:
+  90              	.L6:
+  23:Core/Src/robot_servos.c **** 		return 0;
+  91              		.loc 1 23 3 is_stmt 1 view .LVU16
+  92 0042 0848     		ldr	r0, .L8+12
+  93              	.LVL6:
+  23:Core/Src/robot_servos.c **** 		return 0;
+  94              		.loc 1 23 3 is_stmt 0 view .LVU17
+  95 0044 FFF7FEFF 		bl	puts
+  96              	.LVL7:
+  24:Core/Src/robot_servos.c **** 	}
+  97              		.loc 1 24 3 is_stmt 1 view .LVU18
+  24:Core/Src/robot_servos.c **** 	}
+  98              		.loc 1 24 10 is_stmt 0 view .LVU19
+  99 0048 0020     		movs	r0, #0
+ 100 004a F9E7     		b	.L3
+ 101              	.LVL8:
+ 102              	.L7:
+  33:Core/Src/robot_servos.c **** 		return 0;
+ 103              		.loc 1 33 3 is_stmt 1 view .LVU20
+ 104 004c 0648     		ldr	r0, .L8+16
+ 105              	.LVL9:
+  33:Core/Src/robot_servos.c **** 		return 0;
+ 106              		.loc 1 33 3 is_stmt 0 view .LVU21
+ 107 004e FFF7FEFF 		bl	puts
+ 108              	.LVL10:
+  34:Core/Src/robot_servos.c **** 	}
+ 109              		.loc 1 34 3 is_stmt 1 view .LVU22
+  34:Core/Src/robot_servos.c **** 	}
+ARM GAS  /tmp/ccZsu01m.s 			page 4
+
+
+ 110              		.loc 1 34 10 is_stmt 0 view .LVU23
+ 111 0052 0020     		movs	r0, #0
+ 112 0054 F4E7     		b	.L3
+ 113              	.L9:
+ 114 0056 00BF     		.align	2
+ 115              	.L8:
+ 116 0058 8EE3A840 		.word	1084810126
+ 117 005c 00004843 		.word	1128792064
+ 118 0060 4C000000 		.word	.LC2
+ 119 0064 00000000 		.word	.LC0
+ 120 0068 28000000 		.word	.LC1
+ 121              		.cfi_endproc
+ 122              	.LFE141:
+ 124              		.global	__aeabi_f2d
+ 125              		.global	__aeabi_d2f
+ 126              		.global	__aeabi_dsub
+ 127              		.global	__aeabi_ddiv
+ 128              		.global	__aeabi_dmul
+ 129              		.global	__aeabi_d2iz
+ 130              		.global	__aeabi_i2d
+ 131              		.global	__aeabi_dadd
+ 132              		.section	.text.servos_movement_cal,"ax",%progbits
+ 133              		.align	1
+ 134              		.global	servos_movement_cal
+ 135              		.syntax unified
+ 136              		.thumb
+ 137              		.thumb_func
+ 139              	servos_movement_cal:
+ 140              	.LVL11:
+ 141              	.LFB142:
+  43:Core/Src/robot_servos.c **** 
+  44:Core/Src/robot_servos.c **** //Function to generate angle for each servos to rotate to move the whole arm to corresponding co-or
+  45:Core/Src/robot_servos.c **** void servos_movement_cal(float horizontal_degree, float horizontal_length, float vertical_length) {
+ 142              		.loc 1 45 99 is_stmt 1 view -0
+ 143              		.cfi_startproc
+ 144              		@ args = 0, pretend = 0, frame = 0
+ 145              		@ frame_needed = 0, uses_anonymous_args = 0
+ 146              		.loc 1 45 99 is_stmt 0 view .LVU25
+ 147 0000 38B5     		push	{r3, r4, r5, lr}
+ 148              	.LCFI1:
+ 149              		.cfi_def_cfa_offset 16
+ 150              		.cfi_offset 3, -16
+ 151              		.cfi_offset 4, -12
+ 152              		.cfi_offset 5, -8
+ 153              		.cfi_offset 14, -4
+ 154 0002 2DED028B 		vpush.64	{d8}
+ 155              	.LCFI2:
+ 156              		.cfi_def_cfa_offset 24
+ 157              		.cfi_offset 80, -24
+ 158              		.cfi_offset 81, -20
+ 159 0006 B0EE408A 		vmov.f32	s16, s0
+  46:Core/Src/robot_servos.c **** 	float target_length = sqrt(
+ 160              		.loc 1 46 2 is_stmt 1 view .LVU26
+  47:Core/Src/robot_servos.c **** 			(vertical_length * vertical_length)
+ 161              		.loc 1 47 21 is_stmt 0 view .LVU27
+ 162 000a 21EE011A 		vmul.f32	s2, s2, s2
+ 163              	.LVL12:
+ARM GAS  /tmp/ccZsu01m.s 			page 5
+
+
+  48:Core/Src/robot_servos.c **** 					+ (horizontal_length * horizontal_length));
+ 164              		.loc 1 48 27 view .LVU28
+ 165 000e 60EEA00A 		vmul.f32	s1, s1, s1
+ 166              	.LVL13:
+  46:Core/Src/robot_servos.c **** 	float target_length = sqrt(
+ 167              		.loc 1 46 24 view .LVU29
+ 168 0012 71EE207A 		vadd.f32	s15, s2, s1
+ 169 0016 17EE900A 		vmov	r0, s15
+ 170 001a FFF7FEFF 		bl	__aeabi_f2d
+ 171              	.LVL14:
+  46:Core/Src/robot_servos.c **** 	float target_length = sqrt(
+ 172              		.loc 1 46 24 view .LVU30
+ 173 001e 41EC100B 		vmov	d0, r0, r1
+ 174 0022 FFF7FEFF 		bl	sqrt
+ 175              	.LVL15:
+ 176 0026 51EC100B 		vmov	r0, r1, d0
+  46:Core/Src/robot_servos.c **** 	float target_length = sqrt(
+ 177              		.loc 1 46 8 view .LVU31
+ 178 002a FFF7FEFF 		bl	__aeabi_d2f
+ 179              	.LVL16:
+ 180 002e 08EE900A 		vmov	s17, r0
+ 181              	.LVL17:
+  49:Core/Src/robot_servos.c **** 
+  50:Core/Src/robot_servos.c **** 	// Motor 3 angle calculation
+  51:Core/Src/robot_servos.c **** 	motor_3 = (int) (acos(
+ 182              		.loc 1 51 2 is_stmt 1 view .LVU32
+  52:Core/Src/robot_servos.c **** 			(L1 * L1 + L2 * L2 - target_length * target_length) / (2 * L1 * L2))
+ 183              		.loc 1 52 39 is_stmt 0 view .LVU33
+ 184 0032 68EEA87A 		vmul.f32	s15, s17, s17
+ 185 0036 17EE900A 		vmov	r0, s15
+ 186              	.LVL18:
+ 187              		.loc 1 52 39 view .LVU34
+ 188 003a FFF7FEFF 		bl	__aeabi_f2d
+ 189              	.LVL19:
+ 190 003e 0446     		mov	r4, r0
+ 191 0040 0D46     		mov	r5, r1
+ 192              		.loc 1 52 23 view .LVU35
+ 193 0042 0246     		mov	r2, r0
+ 194 0044 0B46     		mov	r3, r1
+ 195 0046 45A1     		adr	r1, .L12+60
+ 196 0048 D1E90001 		ldrd	r0, [r1]
+ 197 004c FFF7FEFF 		bl	__aeabi_dsub
+ 198              	.LVL20:
+  51:Core/Src/robot_servos.c **** 			(L1 * L1 + L2 * L2 - target_length * target_length) / (2 * L1 * L2))
+ 199              		.loc 1 51 19 view .LVU36
+ 200 0050 0022     		movs	r2, #0
+ 201 0052 3B4B     		ldr	r3, .L12+32
+ 202 0054 FFF7FEFF 		bl	__aeabi_ddiv
+ 203              	.LVL21:
+ 204 0058 41EC100B 		vmov	d0, r0, r1
+ 205 005c FFF7FEFF 		bl	acos
+ 206              	.LVL22:
+ 207 0060 51EC100B 		vmov	r0, r1, d0
+  53:Core/Src/robot_servos.c **** 			* (180.0 / M_PI));
+ 208              		.loc 1 53 4 view .LVU37
+ 209 0064 2EA3     		adr	r3, .L12
+ 210 0066 D3E90023 		ldrd	r2, [r3]
+ARM GAS  /tmp/ccZsu01m.s 			page 6
+
+
+ 211 006a FFF7FEFF 		bl	__aeabi_dmul
+ 212              	.LVL23:
+  51:Core/Src/robot_servos.c **** 			(L1 * L1 + L2 * L2 - target_length * target_length) / (2 * L1 * L2))
+ 213              		.loc 1 51 12 view .LVU38
+ 214 006e FFF7FEFF 		bl	__aeabi_d2iz
+ 215              	.LVL24:
+  51:Core/Src/robot_servos.c **** 			(L1 * L1 + L2 * L2 - target_length * target_length) / (2 * L1 * L2))
+ 216              		.loc 1 51 10 view .LVU39
+ 217 0072 344B     		ldr	r3, .L12+36
+ 218 0074 1860     		str	r0, [r3]
+  54:Core/Src/robot_servos.c **** 
+  55:Core/Src/robot_servos.c **** 	// Motor 4 angle calculation
+  56:Core/Src/robot_servos.c **** 	motor_4 = (int) acos(
+ 219              		.loc 1 56 2 is_stmt 1 view .LVU40
+  57:Core/Src/robot_servos.c **** 			(L2 * L2 + L3 * L3 - target_length * target_length) / (2 * L2 * L3))
+ 220              		.loc 1 57 23 is_stmt 0 view .LVU41
+ 221 0076 2246     		mov	r2, r4
+ 222 0078 2B46     		mov	r3, r5
+ 223 007a 2BA1     		adr	r1, .L12+8
+ 224 007c D1E90001 		ldrd	r0, [r1]
+ 225 0080 FFF7FEFF 		bl	__aeabi_dsub
+ 226              	.LVL25:
+  56:Core/Src/robot_servos.c **** 			(L2 * L2 + L3 * L3 - target_length * target_length) / (2 * L2 * L3))
+ 227              		.loc 1 56 18 view .LVU42
+ 228 0084 2AA3     		adr	r3, .L12+16
+ 229 0086 D3E90023 		ldrd	r2, [r3]
+ 230 008a FFF7FEFF 		bl	__aeabi_ddiv
+ 231              	.LVL26:
+ 232 008e 41EC100B 		vmov	d0, r0, r1
+ 233 0092 FFF7FEFF 		bl	acos
+ 234              	.LVL27:
+ 235 0096 51EC100B 		vmov	r0, r1, d0
+  56:Core/Src/robot_servos.c **** 			(L2 * L2 + L3 * L3 - target_length * target_length) / (2 * L2 * L3))
+ 236              		.loc 1 56 12 view .LVU43
+ 237 009a FFF7FEFF 		bl	__aeabi_d2iz
+ 238              	.LVL28:
+  58:Core/Src/robot_servos.c **** 			* (180.0 / M_PI);
+ 239              		.loc 1 58 4 view .LVU44
+ 240 009e FFF7FEFF 		bl	__aeabi_i2d
+ 241              	.LVL29:
+ 242 00a2 1FA3     		adr	r3, .L12
+ 243 00a4 D3E90023 		ldrd	r2, [r3]
+ 244 00a8 FFF7FEFF 		bl	__aeabi_dmul
+ 245              	.LVL30:
+  56:Core/Src/robot_servos.c **** 			(L2 * L2 + L3 * L3 - target_length * target_length) / (2 * L2 * L3))
+ 246              		.loc 1 56 10 view .LVU45
+ 247 00ac FFF7FEFF 		bl	__aeabi_d2iz
+ 248              	.LVL31:
+ 249 00b0 254B     		ldr	r3, .L12+40
+ 250 00b2 1860     		str	r0, [r3]
+  59:Core/Src/robot_servos.c **** 
+  60:Core/Src/robot_servos.c **** 	// Motor 2 angle calculation
+  61:Core/Src/robot_servos.c **** 	motor_2 = (int) acos(
+ 251              		.loc 1 61 2 is_stmt 1 view .LVU46
+  62:Core/Src/robot_servos.c **** 			(L1 * L1 + target_length * target_length - L2 * L2)
+ 252              		.loc 1 62 13 is_stmt 0 view .LVU47
+ 253 00b4 0022     		movs	r2, #0
+ARM GAS  /tmp/ccZsu01m.s 			page 7
+
+
+ 254 00b6 254B     		ldr	r3, .L12+44
+ 255 00b8 2046     		mov	r0, r4
+ 256 00ba 2946     		mov	r1, r5
+ 257 00bc FFF7FEFF 		bl	__aeabi_dadd
+ 258              	.LVL32:
+ 259              		.loc 1 62 45 view .LVU48
+ 260 00c0 1DA3     		adr	r3, .L12+24
+ 261 00c2 D3E90023 		ldrd	r2, [r3]
+ 262 00c6 FFF7FEFF 		bl	__aeabi_dsub
+ 263              	.LVL33:
+ 264 00ca 0446     		mov	r4, r0
+ 265 00cc 0D46     		mov	r5, r1
+  63:Core/Src/robot_servos.c **** 					/ (2 * L1 * target_length)) * (180.0 / M_PI);
+ 266              		.loc 1 63 16 view .LVU49
+ 267 00ce 18EE900A 		vmov	r0, s17
+ 268 00d2 FFF7FEFF 		bl	__aeabi_f2d
+ 269              	.LVL34:
+ 270 00d6 0022     		movs	r2, #0
+ 271 00d8 1D4B     		ldr	r3, .L12+48
+ 272 00da FFF7FEFF 		bl	__aeabi_dmul
+ 273              	.LVL35:
+ 274 00de 0246     		mov	r2, r0
+ 275 00e0 0B46     		mov	r3, r1
+  61:Core/Src/robot_servos.c **** 			(L1 * L1 + target_length * target_length - L2 * L2)
+ 276              		.loc 1 61 18 view .LVU50
+ 277 00e2 2046     		mov	r0, r4
+ 278 00e4 2946     		mov	r1, r5
+ 279 00e6 FFF7FEFF 		bl	__aeabi_ddiv
+ 280              	.LVL36:
+ 281 00ea 41EC100B 		vmov	d0, r0, r1
+ 282 00ee FFF7FEFF 		bl	acos
+ 283              	.LVL37:
+ 284 00f2 51EC100B 		vmov	r0, r1, d0
+  61:Core/Src/robot_servos.c **** 			(L1 * L1 + target_length * target_length - L2 * L2)
+ 285              		.loc 1 61 12 view .LVU51
+ 286 00f6 FFF7FEFF 		bl	__aeabi_d2iz
+ 287              	.LVL38:
+ 288              		.loc 1 63 34 view .LVU52
+ 289 00fa FFF7FEFF 		bl	__aeabi_i2d
+ 290              	.LVL39:
+ 291 00fe 08A3     		adr	r3, .L12
+ 292 0100 D3E90023 		ldrd	r2, [r3]
+ 293 0104 FFF7FEFF 		bl	__aeabi_dmul
+ 294              	.LVL40:
+  61:Core/Src/robot_servos.c **** 			(L1 * L1 + target_length * target_length - L2 * L2)
+ 295              		.loc 1 61 10 view .LVU53
+ 296 0108 FFF7FEFF 		bl	__aeabi_d2iz
+ 297              	.LVL41:
+ 298 010c 114B     		ldr	r3, .L12+52
+ 299 010e 1860     		str	r0, [r3]
+  64:Core/Src/robot_servos.c **** 
+  65:Core/Src/robot_servos.c **** 	//Motor 1 angle calculation
+  66:Core/Src/robot_servos.c **** 	motor_1 = (int) horizontal_degree;
+ 300              		.loc 1 66 2 is_stmt 1 view .LVU54
+ 301              		.loc 1 66 12 is_stmt 0 view .LVU55
+ 302 0110 BDEEC88A 		vcvt.s32.f32	s16, s16
+ 303              	.LVL42:
+ARM GAS  /tmp/ccZsu01m.s 			page 8
+
+
+ 304              		.loc 1 66 10 view .LVU56
+ 305 0114 104B     		ldr	r3, .L12+56
+ 306 0116 83ED008A 		vstr.32	s16, [r3]	@ int
+  67:Core/Src/robot_servos.c **** 
+  68:Core/Src/robot_servos.c **** }
+ 307              		.loc 1 68 1 view .LVU57
+ 308 011a BDEC028B 		vldm	sp!, {d8}
+ 309              	.LCFI3:
+ 310              		.cfi_restore 80
+ 311              		.cfi_restore 81
+ 312              		.cfi_def_cfa_offset 16
+ 313 011e 38BD     		pop	{r3, r4, r5, pc}
+ 314              	.L13:
+ 315              		.align	3
+ 316              	.L12:
+ 317 0120 F8C1631A 		.word	442745336
+ 318 0124 DCA54C40 		.word	1078765020
+ 319 0128 00000000 		.word	0
+ 320 012c 00A07840 		.word	1081647104
+ 321 0130 00000000 		.word	0
+ 322 0134 00607840 		.word	1081630720
+ 323 0138 00000000 		.word	0
+ 324 013c 00206C40 		.word	1080827904
+ 325 0140 00807640 		.word	1081507840
+ 326 0144 00000000 		.word	.LANCHOR0
+ 327 0148 00000000 		.word	.LANCHOR1
+ 328 014c 00006240 		.word	1080164352
+ 329 0150 00003840 		.word	1077411840
+ 330 0154 00000000 		.word	.LANCHOR2
+ 331 0158 00000000 		.word	.LANCHOR3
+ 332 015c 00000000 		.word	0
+ 333 0160 00107740 		.word	1081544704
+ 334              		.cfi_endproc
+ 335              	.LFE142:
+ 337              		.section	.rodata.motor_run.str1.4,"aMS",%progbits,1
+ 338              		.align	2
+ 339              	.LC3:
+ 340 0000 4E657720 		.ascii	"New PWM value = %ld\015\012\000"
+ 340      50574D20 
+ 340      76616C75 
+ 340      65203D20 
+ 340      256C640D 
+ 341              		.section	.text.motor_run,"ax",%progbits
+ 342              		.align	1
+ 343              		.global	motor_run
+ 344              		.syntax unified
+ 345              		.thumb
+ 346              		.thumb_func
+ 348              	motor_run:
+ 349              	.LVL43:
+ 350              	.LFB143:
+  69:Core/Src/robot_servos.c **** 
+  70:Core/Src/robot_servos.c **** 
+  71:Core/Src/robot_servos.c **** 
+  72:Core/Src/robot_servos.c **** void motor_run(TIM_HandleTypeDef *htim, uint32_t channel, uint32_t startPulse){
+ 351              		.loc 1 72 79 is_stmt 1 view -0
+ 352              		.cfi_startproc
+ARM GAS  /tmp/ccZsu01m.s 			page 9
+
+
+ 353              		@ args = 0, pretend = 0, frame = 0
+ 354              		@ frame_needed = 0, uses_anonymous_args = 0
+ 355              		.loc 1 72 79 is_stmt 0 view .LVU59
+ 356 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 357              	.LCFI4:
+ 358              		.cfi_def_cfa_offset 24
+ 359              		.cfi_offset 3, -24
+ 360              		.cfi_offset 4, -20
+ 361              		.cfi_offset 5, -16
+ 362              		.cfi_offset 6, -12
+ 363              		.cfi_offset 7, -8
+ 364              		.cfi_offset 14, -4
+ 365 0002 2DED028B 		vpush.64	{d8}
+ 366              	.LCFI5:
+ 367              		.cfi_def_cfa_offset 32
+ 368              		.cfi_offset 80, -32
+ 369              		.cfi_offset 81, -28
+ 370 0006 0746     		mov	r7, r0
+ 371 0008 0D46     		mov	r5, r1
+ 372 000a 1646     		mov	r6, r2
+  73:Core/Src/robot_servos.c **** 	uint32_t steps = 50;
+ 373              		.loc 1 73 2 is_stmt 1 view .LVU60
+ 374              	.LVL44:
+  74:Core/Src/robot_servos.c **** 	float increment = startPulse / (float) steps;
+ 375              		.loc 1 74 2 view .LVU61
+ 376              		.loc 1 74 31 is_stmt 0 view .LVU62
+ 377 000c 07EE902A 		vmov	s15, r2	@ int
+ 378 0010 B8EE677A 		vcvt.f32.u32	s14, s15
+ 379              		.loc 1 74 8 view .LVU63
+ 380 0014 DFED1B7A 		vldr.32	s15, .L25
+ 381 0018 87EE278A 		vdiv.f32	s16, s14, s15
+ 382              	.LVL45:
+  75:Core/Src/robot_servos.c **** 	for (uint32_t i = 0; i <= steps; i++){
+ 383              		.loc 1 75 2 is_stmt 1 view .LVU64
+ 384              	.LBB2:
+ 385              		.loc 1 75 7 view .LVU65
+ 386              		.loc 1 75 16 is_stmt 0 view .LVU66
+ 387 001c 0024     		movs	r4, #0
+ 388              		.loc 1 75 2 view .LVU67
+ 389 001e 0BE0     		b	.L15
+ 390              	.LVL46:
+ 391              	.L16:
+  76:Core/Src/robot_servos.c **** 		pulse_value = startPulse + (uint32_t) (increment * i);
+  77:Core/Src/robot_servos.c **** 		printf("New PWM value = %ld\r\n", pulse_value);
+  78:Core/Src/robot_servos.c **** 		__HAL_TIM_SET_COMPARE(htim, channel, pulse_value);
+ 392              		.loc 1 78 3 discriminator 2 view .LVU68
+ 393 0020 042D     		cmp	r5, #4
+ 394 0022 22D0     		beq	.L22
+ 395              		.loc 1 78 3 discriminator 4 view .LVU69
+ 396 0024 082D     		cmp	r5, #8
+ 397 0026 25D0     		beq	.L23
+ 398              		.loc 1 78 3 discriminator 7 view .LVU70
+ 399 0028 3B68     		ldr	r3, [r7]
+ 400 002a 174A     		ldr	r2, .L25+4
+ 401 002c 1268     		ldr	r2, [r2]
+ 402 002e 1A64     		str	r2, [r3, #64]
+ 403              	.L17:
+ARM GAS  /tmp/ccZsu01m.s 			page 10
+
+
+  79:Core/Src/robot_servos.c **** 		HAL_Delay(20);
+ 404              		.loc 1 79 3 is_stmt 1 discriminator 2 view .LVU71
+ 405 0030 1420     		movs	r0, #20
+ 406 0032 FFF7FEFF 		bl	HAL_Delay
+ 407              	.LVL47:
+  75:Core/Src/robot_servos.c **** 	for (uint32_t i = 0; i <= steps; i++){
+ 408              		.loc 1 75 35 discriminator 2 view .LVU72
+  75:Core/Src/robot_servos.c **** 	for (uint32_t i = 0; i <= steps; i++){
+ 409              		.loc 1 75 36 is_stmt 0 discriminator 2 view .LVU73
+ 410 0036 0134     		adds	r4, r4, #1
+ 411              	.LVL48:
+ 412              	.L15:
+  75:Core/Src/robot_servos.c **** 	for (uint32_t i = 0; i <= steps; i++){
+ 413              		.loc 1 75 23 is_stmt 1 discriminator 1 view .LVU74
+  75:Core/Src/robot_servos.c **** 	for (uint32_t i = 0; i <= steps; i++){
+ 414              		.loc 1 75 2 is_stmt 0 discriminator 1 view .LVU75
+ 415 0038 322C     		cmp	r4, #50
+ 416 003a 20D8     		bhi	.L24
+  76:Core/Src/robot_servos.c **** 		pulse_value = startPulse + (uint32_t) (increment * i);
+ 417              		.loc 1 76 3 is_stmt 1 view .LVU76
+  76:Core/Src/robot_servos.c **** 		pulse_value = startPulse + (uint32_t) (increment * i);
+ 418              		.loc 1 76 52 is_stmt 0 view .LVU77
+ 419 003c 07EE904A 		vmov	s15, r4	@ int
+ 420 0040 F8EE677A 		vcvt.f32.u32	s15, s15
+ 421 0044 67EE887A 		vmul.f32	s15, s15, s16
+  76:Core/Src/robot_servos.c **** 		pulse_value = startPulse + (uint32_t) (increment * i);
+ 422              		.loc 1 76 30 view .LVU78
+ 423 0048 FCEEE77A 		vcvt.u32.f32	s15, s15
+ 424 004c 17EE901A 		vmov	r1, s15	@ int
+  76:Core/Src/robot_servos.c **** 		pulse_value = startPulse + (uint32_t) (increment * i);
+ 425              		.loc 1 76 28 view .LVU79
+ 426 0050 3144     		add	r1, r1, r6
+  76:Core/Src/robot_servos.c **** 		pulse_value = startPulse + (uint32_t) (increment * i);
+ 427              		.loc 1 76 15 view .LVU80
+ 428 0052 0D4B     		ldr	r3, .L25+4
+ 429 0054 1960     		str	r1, [r3]
+  77:Core/Src/robot_servos.c **** 		__HAL_TIM_SET_COMPARE(htim, channel, pulse_value);
+ 430              		.loc 1 77 3 is_stmt 1 view .LVU81
+ 431 0056 0D48     		ldr	r0, .L25+8
+ 432 0058 FFF7FEFF 		bl	printf
+ 433              	.LVL49:
+  78:Core/Src/robot_servos.c **** 		HAL_Delay(20);
+ 434              		.loc 1 78 3 view .LVU82
+ 435 005c 002D     		cmp	r5, #0
+ 436 005e DFD1     		bne	.L16
+  78:Core/Src/robot_servos.c **** 		HAL_Delay(20);
+ 437              		.loc 1 78 3 is_stmt 0 discriminator 1 view .LVU83
+ 438 0060 3B68     		ldr	r3, [r7]
+ 439 0062 094A     		ldr	r2, .L25+4
+ 440 0064 1268     		ldr	r2, [r2]
+ 441 0066 5A63     		str	r2, [r3, #52]
+ 442 0068 E2E7     		b	.L17
+ 443              	.L22:
+  78:Core/Src/robot_servos.c **** 		HAL_Delay(20);
+ 444              		.loc 1 78 3 discriminator 3 view .LVU84
+ 445 006a 3B68     		ldr	r3, [r7]
+ 446 006c 064A     		ldr	r2, .L25+4
+ARM GAS  /tmp/ccZsu01m.s 			page 11
+
+
+ 447 006e 1268     		ldr	r2, [r2]
+ 448 0070 9A63     		str	r2, [r3, #56]
+ 449 0072 DDE7     		b	.L17
+ 450              	.L23:
+  78:Core/Src/robot_servos.c **** 		HAL_Delay(20);
+ 451              		.loc 1 78 3 discriminator 6 view .LVU85
+ 452 0074 3B68     		ldr	r3, [r7]
+ 453 0076 044A     		ldr	r2, .L25+4
+ 454 0078 1268     		ldr	r2, [r2]
+ 455 007a DA63     		str	r2, [r3, #60]
+ 456 007c D8E7     		b	.L17
+ 457              	.L24:
+  78:Core/Src/robot_servos.c **** 		HAL_Delay(20);
+ 458              		.loc 1 78 3 discriminator 6 view .LVU86
+ 459              	.LBE2:
+  80:Core/Src/robot_servos.c **** 	}
+  81:Core/Src/robot_servos.c **** }
+ 460              		.loc 1 81 1 view .LVU87
+ 461 007e BDEC028B 		vldm	sp!, {d8}
+ 462              	.LCFI6:
+ 463              		.cfi_restore 80
+ 464              		.cfi_restore 81
+ 465              		.cfi_def_cfa_offset 24
+ 466              	.LVL50:
+ 467              		.loc 1 81 1 view .LVU88
+ 468 0082 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 469              	.LVL51:
+ 470              	.L26:
+ 471              		.loc 1 81 1 view .LVU89
+ 472              		.align	2
+ 473              	.L25:
+ 474 0084 00004842 		.word	1112014848
+ 475 0088 00000000 		.word	.LANCHOR4
+ 476 008c 00000000 		.word	.LC3
+ 477              		.cfi_endproc
+ 478              	.LFE143:
+ 480              		.section	.text.pickItem,"ax",%progbits
+ 481              		.align	1
+ 482              		.global	pickItem
+ 483              		.syntax unified
+ 484              		.thumb
+ 485              		.thumb_func
+ 487              	pickItem:
+ 488              	.LVL52:
+ 489              	.LFB144:
+  82:Core/Src/robot_servos.c **** 
+  83:Core/Src/robot_servos.c **** void pickItem(void *argument){
+ 490              		.loc 1 83 30 is_stmt 1 view -0
+ 491              		.cfi_startproc
+ 492              		@ args = 0, pretend = 0, frame = 0
+ 493              		@ frame_needed = 0, uses_anonymous_args = 0
+ 494              		.loc 1 83 30 is_stmt 0 view .LVU91
+ 495 0000 10B5     		push	{r4, lr}
+ 496              	.LCFI7:
+ 497              		.cfi_def_cfa_offset 8
+ 498              		.cfi_offset 4, -8
+ 499              		.cfi_offset 14, -4
+ARM GAS  /tmp/ccZsu01m.s 			page 12
+
+
+  84:Core/Src/robot_servos.c **** 
+  85:Core/Src/robot_servos.c **** 	uint16_t motor5_pwm = 0;
+ 500              		.loc 1 85 2 is_stmt 1 view .LVU92
+ 501              	.LVL53:
+  86:Core/Src/robot_servos.c **** 	uint16_t motor6_pwm = 0;
+ 502              		.loc 1 86 2 view .LVU93
+  87:Core/Src/robot_servos.c **** 
+  88:Core/Src/robot_servos.c **** 	//inittializze 0
+  89:Core/Src/robot_servos.c ****     motor_run(&htim4, TIM_CHANNEL_1, 200);
+ 503              		.loc 1 89 5 view .LVU94
+ 504 0002 1B4C     		ldr	r4, .L29
+ 505 0004 C822     		movs	r2, #200
+ 506 0006 0021     		movs	r1, #0
+ 507 0008 2046     		mov	r0, r4
+ 508              	.LVL54:
+ 509              		.loc 1 89 5 is_stmt 0 view .LVU95
+ 510 000a FFF7FEFF 		bl	motor_run
+ 511              	.LVL55:
+  90:Core/Src/robot_servos.c ****     motor_run(&htim4, TIM_CHANNEL_2, 200);
+ 512              		.loc 1 90 5 is_stmt 1 view .LVU96
+ 513 000e C822     		movs	r2, #200
+ 514 0010 0421     		movs	r1, #4
+ 515 0012 2046     		mov	r0, r4
+ 516 0014 FFF7FEFF 		bl	motor_run
+ 517              	.LVL56:
+  91:Core/Src/robot_servos.c **** 
+  92:Core/Src/robot_servos.c **** 	//Make Grip Horizontal (Default vertical position!)
+  93:Core/Src/robot_servos.c **** 	motor5_pwm = angle_to_pwm(90);		
+ 518              		.loc 1 93 2 view .LVU97
+ 519              		.loc 1 93 15 is_stmt 0 view .LVU98
+ 520 0018 5A20     		movs	r0, #90
+ 521 001a FFF7FEFF 		bl	angle_to_pwm
+ 522              	.LVL57:
+ 523 001e 0246     		mov	r2, r0
+ 524              	.LVL58:
+  94:Core/Src/robot_servos.c ****     motor_run(&htim4, TIM_CHANNEL_1, motor5_pwm);
+ 525              		.loc 1 94 5 is_stmt 1 view .LVU99
+ 526 0020 0021     		movs	r1, #0
+ 527 0022 2046     		mov	r0, r4
+ 528 0024 FFF7FEFF 		bl	motor_run
+ 529              	.LVL59:
+  95:Core/Src/robot_servos.c **** 	HAL_Delay(1000);
+ 530              		.loc 1 95 2 view .LVU100
+ 531 0028 4FF47A70 		mov	r0, #1000
+ 532 002c FFF7FEFF 		bl	HAL_Delay
+ 533              	.LVL60:
+  96:Core/Src/robot_servos.c **** 
+  97:Core/Src/robot_servos.c **** 	//Extend the Grip
+  98:Core/Src/robot_servos.c **** 	motor6_pwm = angle_to_pwm(25);						
+ 534              		.loc 1 98 2 view .LVU101
+ 535              		.loc 1 98 15 is_stmt 0 view .LVU102
+ 536 0030 1920     		movs	r0, #25
+ 537 0032 FFF7FEFF 		bl	angle_to_pwm
+ 538              	.LVL61:
+ 539 0036 0246     		mov	r2, r0
+ 540              	.LVL62:
+  99:Core/Src/robot_servos.c **** 	motor_run(&htim4, TIM_CHANNEL_1, motor6_pwm);
+ARM GAS  /tmp/ccZsu01m.s 			page 13
+
+
+ 541              		.loc 1 99 2 is_stmt 1 view .LVU103
+ 542 0038 0021     		movs	r1, #0
+ 543 003a 2046     		mov	r0, r4
+ 544 003c FFF7FEFF 		bl	motor_run
+ 545              	.LVL63:
+ 100:Core/Src/robot_servos.c **** 	HAL_Delay(1000);
+ 546              		.loc 1 100 2 view .LVU104
+ 547 0040 4FF47A70 		mov	r0, #1000
+ 548 0044 FFF7FEFF 		bl	HAL_Delay
+ 549              	.LVL64:
+ 101:Core/Src/robot_servos.c **** 
+ 102:Core/Src/robot_servos.c **** 
+ 103:Core/Src/robot_servos.c **** 	//Wait till arm reach it's position
+ 104:Core/Src/robot_servos.c **** 	vTaskDelay(5000);
+ 550              		.loc 1 104 2 view .LVU105
+ 551 0048 41F28830 		movw	r0, #5000
+ 552 004c FFF7FEFF 		bl	vTaskDelay
+ 553              	.LVL65:
+ 105:Core/Src/robot_servos.c **** 
+ 106:Core/Src/robot_servos.c **** 
+ 107:Core/Src/robot_servos.c **** 	//Close the Grip
+ 108:Core/Src/robot_servos.c **** 	motor6_pwm = angle_to_pwm(0);						
+ 554              		.loc 1 108 2 view .LVU106
+ 555              		.loc 1 108 15 is_stmt 0 view .LVU107
+ 556 0050 0020     		movs	r0, #0
+ 557 0052 FFF7FEFF 		bl	angle_to_pwm
+ 558              	.LVL66:
+ 559 0056 0246     		mov	r2, r0
+ 560              	.LVL67:
+ 109:Core/Src/robot_servos.c **** 	motor_run(&htim4, TIM_CHANNEL_1, motor6_pwm);
+ 561              		.loc 1 109 2 is_stmt 1 view .LVU108
+ 562 0058 0021     		movs	r1, #0
+ 563 005a 2046     		mov	r0, r4
+ 564 005c FFF7FEFF 		bl	motor_run
+ 565              	.LVL68:
+ 110:Core/Src/robot_servos.c **** 	HAL_Delay(1000);
+ 566              		.loc 1 110 2 view .LVU109
+ 567 0060 4FF47A70 		mov	r0, #1000
+ 568 0064 FFF7FEFF 		bl	HAL_Delay
+ 569              	.LVL69:
+ 111:Core/Src/robot_servos.c **** 
+ 112:Core/Src/robot_servos.c **** 	KillTask(&pickItem_TaskHandle);
+ 570              		.loc 1 112 2 view .LVU110
+ 571 0068 0248     		ldr	r0, .L29+4
+ 572 006a FFF7FEFF 		bl	KillTask
+ 573              	.LVL70:
+ 113:Core/Src/robot_servos.c **** 
+ 114:Core/Src/robot_servos.c **** }
+ 574              		.loc 1 114 1 is_stmt 0 view .LVU111
+ 575 006e 10BD     		pop	{r4, pc}
+ 576              	.L30:
+ 577              		.align	2
+ 578              	.L29:
+ 579 0070 00000000 		.word	htim4
+ 580 0074 00000000 		.word	.LANCHOR5
+ 581              		.cfi_endproc
+ 582              	.LFE144:
+ARM GAS  /tmp/ccZsu01m.s 			page 14
+
+
+ 584              		.section	.text.dropItem,"ax",%progbits
+ 585              		.align	1
+ 586              		.global	dropItem
+ 587              		.syntax unified
+ 588              		.thumb
+ 589              		.thumb_func
+ 591              	dropItem:
+ 592              	.LVL71:
+ 593              	.LFB145:
+ 115:Core/Src/robot_servos.c **** 
+ 116:Core/Src/robot_servos.c **** void dropItem(void *argument){
+ 594              		.loc 1 116 30 is_stmt 1 view -0
+ 595              		.cfi_startproc
+ 596              		@ args = 0, pretend = 0, frame = 0
+ 597              		@ frame_needed = 0, uses_anonymous_args = 0
+ 598              		.loc 1 116 30 is_stmt 0 view .LVU113
+ 599 0000 10B5     		push	{r4, lr}
+ 600              	.LCFI8:
+ 601              		.cfi_def_cfa_offset 8
+ 602              		.cfi_offset 4, -8
+ 603              		.cfi_offset 14, -4
+ 117:Core/Src/robot_servos.c **** 
+ 118:Core/Src/robot_servos.c **** 	uint16_t motor5_pwm = 0;
+ 604              		.loc 1 118 2 is_stmt 1 view .LVU114
+ 605              	.LVL72:
+ 119:Core/Src/robot_servos.c **** 	uint16_t motor6_pwm = 0;
+ 606              		.loc 1 119 2 view .LVU115
+ 120:Core/Src/robot_servos.c **** 
+ 121:Core/Src/robot_servos.c **** 	//Make Grip Horizontal (Default vertical position!)
+ 122:Core/Src/robot_servos.c **** 	motor5_pwm = angle_to_pwm(90);		
+ 607              		.loc 1 122 2 view .LVU116
+ 608              		.loc 1 122 15 is_stmt 0 view .LVU117
+ 609 0002 5A20     		movs	r0, #90
+ 610              	.LVL73:
+ 611              		.loc 1 122 15 view .LVU118
+ 612 0004 FFF7FEFF 		bl	angle_to_pwm
+ 613              	.LVL74:
+ 614 0008 0246     		mov	r2, r0
+ 615              	.LVL75:
+ 123:Core/Src/robot_servos.c ****     motor_run(&htim4, TIM_CHANNEL_1, motor5_pwm);
+ 616              		.loc 1 123 5 is_stmt 1 view .LVU119
+ 617 000a 144C     		ldr	r4, .L33
+ 618 000c 0021     		movs	r1, #0
+ 619 000e 2046     		mov	r0, r4
+ 620 0010 FFF7FEFF 		bl	motor_run
+ 621              	.LVL76:
+ 124:Core/Src/robot_servos.c **** 	HAL_Delay(1000);
+ 622              		.loc 1 124 2 view .LVU120
+ 623 0014 4FF47A70 		mov	r0, #1000
+ 624 0018 FFF7FEFF 		bl	HAL_Delay
+ 625              	.LVL77:
+ 125:Core/Src/robot_servos.c **** 
+ 126:Core/Src/robot_servos.c **** 	//closed  Grip variable value
+ 127:Core/Src/robot_servos.c **** 	motor6_pwm = angle_to_pwm(0);						
+ 626              		.loc 1 127 2 view .LVU121
+ 627              		.loc 1 127 15 is_stmt 0 view .LVU122
+ 628 001c 0020     		movs	r0, #0
+ARM GAS  /tmp/ccZsu01m.s 			page 15
+
+
+ 629 001e FFF7FEFF 		bl	angle_to_pwm
+ 630              	.LVL78:
+ 631 0022 0246     		mov	r2, r0
+ 632              	.LVL79:
+ 128:Core/Src/robot_servos.c **** 	motor_run(&htim4, TIM_CHANNEL_1, motor6_pwm);
+ 633              		.loc 1 128 2 is_stmt 1 view .LVU123
+ 634 0024 0021     		movs	r1, #0
+ 635 0026 2046     		mov	r0, r4
+ 636 0028 FFF7FEFF 		bl	motor_run
+ 637              	.LVL80:
+ 129:Core/Src/robot_servos.c **** 	HAL_Delay(1000);
+ 638              		.loc 1 129 2 view .LVU124
+ 639 002c 4FF47A70 		mov	r0, #1000
+ 640 0030 FFF7FEFF 		bl	HAL_Delay
+ 641              	.LVL81:
+ 130:Core/Src/robot_servos.c **** 
+ 131:Core/Src/robot_servos.c **** 
+ 132:Core/Src/robot_servos.c **** 	//Wait till arm reach it's position
+ 133:Core/Src/robot_servos.c **** 	vTaskDelay(5000);
+ 642              		.loc 1 133 2 view .LVU125
+ 643 0034 41F28830 		movw	r0, #5000
+ 644 0038 FFF7FEFF 		bl	vTaskDelay
+ 645              	.LVL82:
+ 134:Core/Src/robot_servos.c **** 
+ 135:Core/Src/robot_servos.c **** 
+ 136:Core/Src/robot_servos.c **** 	//Extend the Grip
+ 137:Core/Src/robot_servos.c **** 	motor6_pwm = angle_to_pwm(30);						
+ 646              		.loc 1 137 2 view .LVU126
+ 647              		.loc 1 137 15 is_stmt 0 view .LVU127
+ 648 003c 1E20     		movs	r0, #30
+ 649 003e FFF7FEFF 		bl	angle_to_pwm
+ 650              	.LVL83:
+ 651 0042 0246     		mov	r2, r0
+ 652              	.LVL84:
+ 138:Core/Src/robot_servos.c **** 	motor_run(&htim4, TIM_CHANNEL_1, motor6_pwm);
+ 653              		.loc 1 138 2 is_stmt 1 view .LVU128
+ 654 0044 0021     		movs	r1, #0
+ 655 0046 2046     		mov	r0, r4
+ 656 0048 FFF7FEFF 		bl	motor_run
+ 657              	.LVL85:
+ 139:Core/Src/robot_servos.c **** 	HAL_Delay(1000);
+ 658              		.loc 1 139 2 view .LVU129
+ 659 004c 4FF47A70 		mov	r0, #1000
+ 660 0050 FFF7FEFF 		bl	HAL_Delay
+ 661              	.LVL86:
+ 140:Core/Src/robot_servos.c **** 
+ 141:Core/Src/robot_servos.c **** 	KillTask(&dropItem_TaskHandle);
+ 662              		.loc 1 141 2 view .LVU130
+ 663 0054 0248     		ldr	r0, .L33+4
+ 664 0056 FFF7FEFF 		bl	KillTask
+ 665              	.LVL87:
+ 142:Core/Src/robot_servos.c **** 
+ 143:Core/Src/robot_servos.c **** }
+ 666              		.loc 1 143 1 is_stmt 0 view .LVU131
+ 667 005a 10BD     		pop	{r4, pc}
+ 668              	.L34:
+ 669              		.align	2
+ARM GAS  /tmp/ccZsu01m.s 			page 16
+
+
+ 670              	.L33:
+ 671 005c 00000000 		.word	htim4
+ 672 0060 00000000 		.word	.LANCHOR6
+ 673              		.cfi_endproc
+ 674              	.LFE145:
+ 676              		.section	.rodata.robot_PickItem.str1.4,"aMS",%progbits,1
+ 677              		.align	2
+ 678              	.LC4:
+ 679 0000 5461736B 		.ascii	"Task03\000"
+ 679      303300
+ 680              		.section	.text.robot_PickItem,"ax",%progbits
+ 681              		.align	1
+ 682              		.global	robot_PickItem
+ 683              		.syntax unified
+ 684              		.thumb
+ 685              		.thumb_func
+ 687              	robot_PickItem:
+ 688              	.LVL88:
+ 689              	.LFB146:
+ 144:Core/Src/robot_servos.c **** 
+ 145:Core/Src/robot_servos.c **** void robot_PickItem(float x_axis, float y_axis, float z_axis){
+ 690              		.loc 1 145 62 is_stmt 1 view -0
+ 691              		.cfi_startproc
+ 692              		@ args = 0, pretend = 0, frame = 0
+ 693              		@ frame_needed = 0, uses_anonymous_args = 0
+ 694              		.loc 1 145 62 is_stmt 0 view .LVU133
+ 695 0000 30B5     		push	{r4, r5, lr}
+ 696              	.LCFI9:
+ 697              		.cfi_def_cfa_offset 12
+ 698              		.cfi_offset 4, -12
+ 699              		.cfi_offset 5, -8
+ 700              		.cfi_offset 14, -4
+ 701 0002 83B0     		sub	sp, sp, #12
+ 702              	.LCFI10:
+ 703              		.cfi_def_cfa_offset 24
+ 146:Core/Src/robot_servos.c **** 	// Call the function to calculate angles
+ 147:Core/Src/robot_servos.c ****     servos_movement_cal(x_axis, y_axis, z_axis);
+ 704              		.loc 1 147 5 is_stmt 1 view .LVU134
+ 705 0004 FFF7FEFF 		bl	servos_movement_cal
+ 706              	.LVL89:
+ 148:Core/Src/robot_servos.c **** 
+ 149:Core/Src/robot_servos.c **** 
+ 150:Core/Src/robot_servos.c ****     // Set the PWM value to move the servo motor
+ 151:Core/Src/robot_servos.c ****     uint16_t motor1Pwm = angle_to_pwm(motor_1);
+ 707              		.loc 1 151 5 view .LVU135
+ 708              		.loc 1 151 26 is_stmt 0 view .LVU136
+ 709 0008 224B     		ldr	r3, .L37
+ 710 000a 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 711 000c FFF7FEFF 		bl	angle_to_pwm
+ 712              	.LVL90:
+ 713 0010 0246     		mov	r2, r0
+ 714              	.LVL91:
+ 152:Core/Src/robot_servos.c ****     motor_run(&htim3, TIM_CHANNEL_1, motor1Pwm);
+ 715              		.loc 1 152 5 is_stmt 1 view .LVU137
+ 716 0012 214C     		ldr	r4, .L37+4
+ 717 0014 0021     		movs	r1, #0
+ 718 0016 2046     		mov	r0, r4
+ARM GAS  /tmp/ccZsu01m.s 			page 17
+
+
+ 719 0018 FFF7FEFF 		bl	motor_run
+ 720              	.LVL92:
+ 153:Core/Src/robot_servos.c **** 	HAL_Delay(1000);
+ 721              		.loc 1 153 2 view .LVU138
+ 722 001c 4FF47A70 		mov	r0, #1000
+ 723 0020 FFF7FEFF 		bl	HAL_Delay
+ 724              	.LVL93:
+ 154:Core/Src/robot_servos.c **** 
+ 155:Core/Src/robot_servos.c **** 	TaskAdd(pickItem, "Task03", 512, NULL, 8, &pickItem_TaskHandle);
+ 725              		.loc 1 155 2 view .LVU139
+ 726 0024 1D4B     		ldr	r3, .L37+8
+ 727 0026 0193     		str	r3, [sp, #4]
+ 728 0028 0825     		movs	r5, #8
+ 729 002a 0095     		str	r5, [sp]
+ 730 002c 0023     		movs	r3, #0
+ 731 002e 4FF40072 		mov	r2, #512
+ 732 0032 1B49     		ldr	r1, .L37+12
+ 733 0034 1B48     		ldr	r0, .L37+16
+ 734 0036 FFF7FEFF 		bl	TaskAdd
+ 735              	.LVL94:
+ 156:Core/Src/robot_servos.c **** 	vTaskDelay(1000);
+ 736              		.loc 1 156 2 view .LVU140
+ 737 003a 4FF47A70 		mov	r0, #1000
+ 738 003e FFF7FEFF 		bl	vTaskDelay
+ 739              	.LVL95:
+ 157:Core/Src/robot_servos.c **** 
+ 158:Core/Src/robot_servos.c **** 
+ 159:Core/Src/robot_servos.c ****     uint16_t motor2_pwm = angle_to_pwm(motor_2);
+ 740              		.loc 1 159 5 view .LVU141
+ 741              		.loc 1 159 27 is_stmt 0 view .LVU142
+ 742 0042 194B     		ldr	r3, .L37+20
+ 743 0044 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 744 0046 FFF7FEFF 		bl	angle_to_pwm
+ 745              	.LVL96:
+ 746 004a 0246     		mov	r2, r0
+ 747              	.LVL97:
+ 160:Core/Src/robot_servos.c ****     motor_run(&htim3, TIM_CHANNEL_2, motor2_pwm);
+ 748              		.loc 1 160 5 is_stmt 1 view .LVU143
+ 749 004c 0421     		movs	r1, #4
+ 750 004e 2046     		mov	r0, r4
+ 751 0050 FFF7FEFF 		bl	motor_run
+ 752              	.LVL98:
+ 161:Core/Src/robot_servos.c **** 	HAL_Delay(1000);
+ 753              		.loc 1 161 2 view .LVU144
+ 754 0054 4FF47A70 		mov	r0, #1000
+ 755 0058 FFF7FEFF 		bl	HAL_Delay
+ 756              	.LVL99:
+ 162:Core/Src/robot_servos.c **** 
+ 163:Core/Src/robot_servos.c **** 	uint16_t motor3_pwm = angle_to_pwm(motor_3);
+ 757              		.loc 1 163 2 view .LVU145
+ 758              		.loc 1 163 24 is_stmt 0 view .LVU146
+ 759 005c 134B     		ldr	r3, .L37+24
+ 760 005e 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 761 0060 FFF7FEFF 		bl	angle_to_pwm
+ 762              	.LVL100:
+ 763 0064 0246     		mov	r2, r0
+ 764              	.LVL101:
+ARM GAS  /tmp/ccZsu01m.s 			page 18
+
+
+ 164:Core/Src/robot_servos.c **** 	motor_run(&htim3, TIM_CHANNEL_3, motor3_pwm);
+ 765              		.loc 1 164 2 is_stmt 1 view .LVU147
+ 766 0066 2946     		mov	r1, r5
+ 767 0068 2046     		mov	r0, r4
+ 768 006a FFF7FEFF 		bl	motor_run
+ 769              	.LVL102:
+ 165:Core/Src/robot_servos.c **** 	HAL_Delay(1000);
+ 770              		.loc 1 165 2 view .LVU148
+ 771 006e 4FF47A70 		mov	r0, #1000
+ 772 0072 FFF7FEFF 		bl	HAL_Delay
+ 773              	.LVL103:
+ 166:Core/Src/robot_servos.c **** 
+ 167:Core/Src/robot_servos.c **** 	uint16_t motor4_pwm = angle_to_pwm(motor_4);
+ 774              		.loc 1 167 2 view .LVU149
+ 775              		.loc 1 167 24 is_stmt 0 view .LVU150
+ 776 0076 0E4B     		ldr	r3, .L37+28
+ 777 0078 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 778 007a FFF7FEFF 		bl	angle_to_pwm
+ 779              	.LVL104:
+ 780 007e 0246     		mov	r2, r0
+ 781              	.LVL105:
+ 168:Core/Src/robot_servos.c **** 	motor_run(&htim3, TIM_CHANNEL_4, motor4_pwm);
+ 782              		.loc 1 168 2 is_stmt 1 view .LVU151
+ 783 0080 0C21     		movs	r1, #12
+ 784 0082 2046     		mov	r0, r4
+ 785 0084 FFF7FEFF 		bl	motor_run
+ 786              	.LVL106:
+ 169:Core/Src/robot_servos.c **** 	HAL_Delay(1000);
+ 787              		.loc 1 169 2 view .LVU152
+ 788 0088 4FF47A70 		mov	r0, #1000
+ 789 008c FFF7FEFF 		bl	HAL_Delay
+ 790              	.LVL107:
+ 170:Core/Src/robot_servos.c **** 
+ 171:Core/Src/robot_servos.c **** }
+ 791              		.loc 1 171 1 is_stmt 0 view .LVU153
+ 792 0090 03B0     		add	sp, sp, #12
+ 793              	.LCFI11:
+ 794              		.cfi_def_cfa_offset 12
+ 795              		@ sp needed
+ 796 0092 30BD     		pop	{r4, r5, pc}
+ 797              	.L38:
+ 798              		.align	2
+ 799              	.L37:
+ 800 0094 00000000 		.word	.LANCHOR3
+ 801 0098 00000000 		.word	htim3
+ 802 009c 00000000 		.word	.LANCHOR5
+ 803 00a0 00000000 		.word	.LC4
+ 804 00a4 00000000 		.word	pickItem
+ 805 00a8 00000000 		.word	.LANCHOR2
+ 806 00ac 00000000 		.word	.LANCHOR0
+ 807 00b0 00000000 		.word	.LANCHOR1
+ 808              		.cfi_endproc
+ 809              	.LFE146:
+ 811              		.section	.rodata.robot_DropItem.str1.4,"aMS",%progbits,1
+ 812              		.align	2
+ 813              	.LC5:
+ 814 0000 5461736B 		.ascii	"Task04\000"
+ARM GAS  /tmp/ccZsu01m.s 			page 19
+
+
+ 814      303400
+ 815              		.section	.text.robot_DropItem,"ax",%progbits
+ 816              		.align	1
+ 817              		.global	robot_DropItem
+ 818              		.syntax unified
+ 819              		.thumb
+ 820              		.thumb_func
+ 822              	robot_DropItem:
+ 823              	.LVL108:
+ 824              	.LFB147:
+ 172:Core/Src/robot_servos.c **** 
+ 173:Core/Src/robot_servos.c **** 
+ 174:Core/Src/robot_servos.c **** void robot_DropItem(float x_axis, float y_axis, float z_axis){
+ 825              		.loc 1 174 62 is_stmt 1 view -0
+ 826              		.cfi_startproc
+ 827              		@ args = 0, pretend = 0, frame = 0
+ 828              		@ frame_needed = 0, uses_anonymous_args = 0
+ 829              		.loc 1 174 62 is_stmt 0 view .LVU155
+ 830 0000 10B5     		push	{r4, lr}
+ 831              	.LCFI12:
+ 832              		.cfi_def_cfa_offset 8
+ 833              		.cfi_offset 4, -8
+ 834              		.cfi_offset 14, -4
+ 835 0002 82B0     		sub	sp, sp, #8
+ 836              	.LCFI13:
+ 837              		.cfi_def_cfa_offset 16
+ 175:Core/Src/robot_servos.c **** 	// Call the function to calculate angles
+ 176:Core/Src/robot_servos.c ****     servos_movement_cal(x_axis, y_axis, z_axis);
+ 838              		.loc 1 176 5 is_stmt 1 view .LVU156
+ 839 0004 FFF7FEFF 		bl	servos_movement_cal
+ 840              	.LVL109:
+ 177:Core/Src/robot_servos.c **** 
+ 178:Core/Src/robot_servos.c **** 
+ 179:Core/Src/robot_servos.c ****     // Set the PWM value to move the servo motor
+ 180:Core/Src/robot_servos.c ****     uint16_t motor1Pwm = angle_to_pwm(motor_1);
+ 841              		.loc 1 180 5 view .LVU157
+ 842              		.loc 1 180 26 is_stmt 0 view .LVU158
+ 843 0008 204B     		ldr	r3, .L41
+ 844 000a 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 845 000c FFF7FEFF 		bl	angle_to_pwm
+ 846              	.LVL110:
+ 847 0010 0246     		mov	r2, r0
+ 848              	.LVL111:
+ 181:Core/Src/robot_servos.c ****     motor_run(&htim3, TIM_CHANNEL_1, motor1Pwm);
+ 849              		.loc 1 181 5 is_stmt 1 view .LVU159
+ 850 0012 1F4C     		ldr	r4, .L41+4
+ 851 0014 0021     		movs	r1, #0
+ 852 0016 2046     		mov	r0, r4
+ 853 0018 FFF7FEFF 		bl	motor_run
+ 854              	.LVL112:
+ 182:Core/Src/robot_servos.c **** 	HAL_Delay(1000);
+ 855              		.loc 1 182 2 view .LVU160
+ 856 001c 4FF47A70 		mov	r0, #1000
+ 857 0020 FFF7FEFF 		bl	HAL_Delay
+ 858              	.LVL113:
+ 183:Core/Src/robot_servos.c **** 
+ 184:Core/Src/robot_servos.c **** 	TaskAdd(dropItem, "Task04", 512, NULL, 9, &dropItem_TaskHandle);
+ARM GAS  /tmp/ccZsu01m.s 			page 20
+
+
+ 859              		.loc 1 184 2 view .LVU161
+ 860 0024 1B4B     		ldr	r3, .L41+8
+ 861 0026 0193     		str	r3, [sp, #4]
+ 862 0028 0923     		movs	r3, #9
+ 863 002a 0093     		str	r3, [sp]
+ 864 002c 0023     		movs	r3, #0
+ 865 002e 4FF40072 		mov	r2, #512
+ 866 0032 1949     		ldr	r1, .L41+12
+ 867 0034 1948     		ldr	r0, .L41+16
+ 868 0036 FFF7FEFF 		bl	TaskAdd
+ 869              	.LVL114:
+ 185:Core/Src/robot_servos.c **** 	vTaskDelay(1000);
+ 870              		.loc 1 185 2 view .LVU162
+ 871 003a 4FF47A70 		mov	r0, #1000
+ 872 003e FFF7FEFF 		bl	vTaskDelay
+ 873              	.LVL115:
+ 186:Core/Src/robot_servos.c **** 
+ 187:Core/Src/robot_servos.c **** 
+ 188:Core/Src/robot_servos.c ****     uint16_t motor2_pwm = angle_to_pwm(motor_2);
+ 874              		.loc 1 188 5 view .LVU163
+ 875              		.loc 1 188 27 is_stmt 0 view .LVU164
+ 876 0042 174B     		ldr	r3, .L41+20
+ 877 0044 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 878 0046 FFF7FEFF 		bl	angle_to_pwm
+ 879              	.LVL116:
+ 880 004a 0246     		mov	r2, r0
+ 881              	.LVL117:
+ 189:Core/Src/robot_servos.c ****     motor_run(&htim3, TIM_CHANNEL_2, motor2_pwm);
+ 882              		.loc 1 189 5 is_stmt 1 view .LVU165
+ 883 004c 0421     		movs	r1, #4
+ 884 004e 2046     		mov	r0, r4
+ 885 0050 FFF7FEFF 		bl	motor_run
+ 886              	.LVL118:
+ 190:Core/Src/robot_servos.c **** 	HAL_Delay(1000);
+ 887              		.loc 1 190 2 view .LVU166
+ 888 0054 4FF47A70 		mov	r0, #1000
+ 889 0058 FFF7FEFF 		bl	HAL_Delay
+ 890              	.LVL119:
+ 191:Core/Src/robot_servos.c **** 
+ 192:Core/Src/robot_servos.c **** 	uint16_t motor3_pwm = angle_to_pwm(motor_3);
+ 891              		.loc 1 192 2 view .LVU167
+ 892              		.loc 1 192 24 is_stmt 0 view .LVU168
+ 893 005c 114B     		ldr	r3, .L41+24
+ 894 005e 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 895 0060 FFF7FEFF 		bl	angle_to_pwm
+ 896              	.LVL120:
+ 897 0064 0246     		mov	r2, r0
+ 898              	.LVL121:
+ 193:Core/Src/robot_servos.c **** 	motor_run(&htim3, TIM_CHANNEL_3, motor3_pwm);
+ 899              		.loc 1 193 2 is_stmt 1 view .LVU169
+ 900 0066 0821     		movs	r1, #8
+ 901 0068 2046     		mov	r0, r4
+ 902 006a FFF7FEFF 		bl	motor_run
+ 903              	.LVL122:
+ 194:Core/Src/robot_servos.c **** 	HAL_Delay(1000);
+ 904              		.loc 1 194 2 view .LVU170
+ 905 006e 4FF47A70 		mov	r0, #1000
+ARM GAS  /tmp/ccZsu01m.s 			page 21
+
+
+ 906 0072 FFF7FEFF 		bl	HAL_Delay
+ 907              	.LVL123:
+ 195:Core/Src/robot_servos.c **** 
+ 196:Core/Src/robot_servos.c **** 	uint16_t motor4_pwm = angle_to_pwm(motor_4);
+ 908              		.loc 1 196 2 view .LVU171
+ 909              		.loc 1 196 24 is_stmt 0 view .LVU172
+ 910 0076 0C4B     		ldr	r3, .L41+28
+ 911 0078 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+ 912 007a FFF7FEFF 		bl	angle_to_pwm
+ 913              	.LVL124:
+ 914 007e 0246     		mov	r2, r0
+ 915              	.LVL125:
+ 197:Core/Src/robot_servos.c **** 	motor_run(&htim3, TIM_CHANNEL_4, motor4_pwm);
+ 916              		.loc 1 197 2 is_stmt 1 view .LVU173
+ 917 0080 0C21     		movs	r1, #12
+ 918 0082 2046     		mov	r0, r4
+ 919 0084 FFF7FEFF 		bl	motor_run
+ 920              	.LVL126:
+ 198:Core/Src/robot_servos.c **** }...
+ 921              		.loc 1 198 1 is_stmt 0 view .LVU174
+ 922 0088 02B0     		add	sp, sp, #8
+ 923              	.LCFI14:
+ 924              		.cfi_def_cfa_offset 8
+ 925              		@ sp needed
+ 926 008a 10BD     		pop	{r4, pc}
+ 927              	.L42:
+ 928              		.align	2
+ 929              	.L41:
+ 930 008c 00000000 		.word	.LANCHOR3
+ 931 0090 00000000 		.word	htim3
+ 932 0094 00000000 		.word	.LANCHOR6
+ 933 0098 00000000 		.word	.LC5
+ 934 009c 00000000 		.word	dropItem
+ 935 00a0 00000000 		.word	.LANCHOR2
+ 936 00a4 00000000 		.word	.LANCHOR0
+ 937 00a8 00000000 		.word	.LANCHOR1
+ 938              		.cfi_endproc
+ 939              	.LFE147:
+ 941              		.global	dropItem_TaskHandle
+ 942              		.global	pickItem_TaskHandle
+ 943              		.global	pulse_value
+ 944              		.global	motor_4
+ 945              		.global	motor_3
+ 946              		.global	motor_2
+ 947              		.global	motor_1
+ 948              		.section	.bss.dropItem_TaskHandle,"aw",%nobits
+ 949              		.align	2
+ 950              		.set	.LANCHOR6,. + 0
+ 953              	dropItem_TaskHandle:
+ 954 0000 00000000 		.space	4
+ 955              		.section	.bss.motor_1,"aw",%nobits
+ 956              		.align	2
+ 957              		.set	.LANCHOR3,. + 0
+ 960              	motor_1:
+ 961 0000 00000000 		.space	4
+ 962              		.section	.bss.motor_2,"aw",%nobits
+ 963              		.align	2
+ARM GAS  /tmp/ccZsu01m.s 			page 22
+
+
+ 964              		.set	.LANCHOR2,. + 0
+ 967              	motor_2:
+ 968 0000 00000000 		.space	4
+ 969              		.section	.bss.motor_3,"aw",%nobits
+ 970              		.align	2
+ 971              		.set	.LANCHOR0,. + 0
+ 974              	motor_3:
+ 975 0000 00000000 		.space	4
+ 976              		.section	.bss.motor_4,"aw",%nobits
+ 977              		.align	2
+ 978              		.set	.LANCHOR1,. + 0
+ 981              	motor_4:
+ 982 0000 00000000 		.space	4
+ 983              		.section	.bss.pickItem_TaskHandle,"aw",%nobits
+ 984              		.align	2
+ 985              		.set	.LANCHOR5,. + 0
+ 988              	pickItem_TaskHandle:
+ 989 0000 00000000 		.space	4
+ 990              		.section	.bss.pulse_value,"aw",%nobits
+ 991              		.align	2
+ 992              		.set	.LANCHOR4,. + 0
+ 995              	pulse_value:
+ 996 0000 00000000 		.space	4
+ 997              		.text
+ 998              	.Letext0:
+ 999              		.file 2 "/usr/local/arm-none-eabi/include/machine/_default_types.h"
+ 1000              		.file 3 "/usr/local/arm-none-eabi/include/sys/_stdint.h"
+ 1001              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f411xe.h"
+ 1002              		.file 5 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 1003              		.file 6 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 1004              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h"
+ 1005              		.file 8 "Middlewares/Third_Party/FreeRTOS/Source/include/task.h"
+ 1006              		.file 9 "Core/Inc/robot_servos.h"
+ 1007              		.file 10 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ 1008              		.file 11 "/usr/local/arm-none-eabi/include/stdio.h"
+ 1009              		.file 12 "/usr/local/arm-none-eabi/include/math.h"
+ 1010              		.file 13 "<built-in>"
+ARM GAS  /tmp/ccZsu01m.s 			page 23
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 robot_servos.c
+     /tmp/ccZsu01m.s:20     .rodata.angle_to_pwm.str1.4:0000000000000000 $d
+     /tmp/ccZsu01m.s:30     .text.angle_to_pwm:0000000000000000 $t
+     /tmp/ccZsu01m.s:36     .text.angle_to_pwm:0000000000000000 angle_to_pwm
+     /tmp/ccZsu01m.s:116    .text.angle_to_pwm:0000000000000058 $d
+     /tmp/ccZsu01m.s:133    .text.servos_movement_cal:0000000000000000 $t
+     /tmp/ccZsu01m.s:139    .text.servos_movement_cal:0000000000000000 servos_movement_cal
+     /tmp/ccZsu01m.s:317    .text.servos_movement_cal:0000000000000120 $d
+     /tmp/ccZsu01m.s:338    .rodata.motor_run.str1.4:0000000000000000 $d
+     /tmp/ccZsu01m.s:342    .text.motor_run:0000000000000000 $t
+     /tmp/ccZsu01m.s:348    .text.motor_run:0000000000000000 motor_run
+     /tmp/ccZsu01m.s:474    .text.motor_run:0000000000000084 $d
+     /tmp/ccZsu01m.s:481    .text.pickItem:0000000000000000 $t
+     /tmp/ccZsu01m.s:487    .text.pickItem:0000000000000000 pickItem
+     /tmp/ccZsu01m.s:579    .text.pickItem:0000000000000070 $d
+     /tmp/ccZsu01m.s:585    .text.dropItem:0000000000000000 $t
+     /tmp/ccZsu01m.s:591    .text.dropItem:0000000000000000 dropItem
+     /tmp/ccZsu01m.s:671    .text.dropItem:000000000000005c $d
+     /tmp/ccZsu01m.s:677    .rodata.robot_PickItem.str1.4:0000000000000000 $d
+     /tmp/ccZsu01m.s:681    .text.robot_PickItem:0000000000000000 $t
+     /tmp/ccZsu01m.s:687    .text.robot_PickItem:0000000000000000 robot_PickItem
+     /tmp/ccZsu01m.s:800    .text.robot_PickItem:0000000000000094 $d
+     /tmp/ccZsu01m.s:812    .rodata.robot_DropItem.str1.4:0000000000000000 $d
+     /tmp/ccZsu01m.s:816    .text.robot_DropItem:0000000000000000 $t
+     /tmp/ccZsu01m.s:822    .text.robot_DropItem:0000000000000000 robot_DropItem
+     /tmp/ccZsu01m.s:930    .text.robot_DropItem:000000000000008c $d
+     /tmp/ccZsu01m.s:953    .bss.dropItem_TaskHandle:0000000000000000 dropItem_TaskHandle
+     /tmp/ccZsu01m.s:988    .bss.pickItem_TaskHandle:0000000000000000 pickItem_TaskHandle
+     /tmp/ccZsu01m.s:995    .bss.pulse_value:0000000000000000 pulse_value
+     /tmp/ccZsu01m.s:981    .bss.motor_4:0000000000000000 motor_4
+     /tmp/ccZsu01m.s:974    .bss.motor_3:0000000000000000 motor_3
+     /tmp/ccZsu01m.s:967    .bss.motor_2:0000000000000000 motor_2
+     /tmp/ccZsu01m.s:960    .bss.motor_1:0000000000000000 motor_1
+     /tmp/ccZsu01m.s:949    .bss.dropItem_TaskHandle:0000000000000000 $d
+     /tmp/ccZsu01m.s:956    .bss.motor_1:0000000000000000 $d
+     /tmp/ccZsu01m.s:963    .bss.motor_2:0000000000000000 $d
+     /tmp/ccZsu01m.s:970    .bss.motor_3:0000000000000000 $d
+     /tmp/ccZsu01m.s:977    .bss.motor_4:0000000000000000 $d
+     /tmp/ccZsu01m.s:984    .bss.pickItem_TaskHandle:0000000000000000 $d
+     /tmp/ccZsu01m.s:991    .bss.pulse_value:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+printf
+puts
+__aeabi_f2d
+__aeabi_d2f
+__aeabi_dsub
+__aeabi_ddiv
+__aeabi_dmul
+__aeabi_d2iz
+__aeabi_i2d
+__aeabi_dadd
+sqrt
+acos
+HAL_Delay
+vTaskDelay
+ARM GAS  /tmp/ccZsu01m.s 			page 24
+
+
+KillTask
+htim4
+TaskAdd
+htim3
