@@ -15,9 +15,9 @@
 
 #define BUFFER_SIZE 100
 extern UART_HandleTypeDef huart1;
-uint8_t rxBuffer[BUFFER_SIZE];  // Receiving buffer
-uint8_t txBuffer[BUFFER_SIZE];  // Transmitting buffer
-volatile uint8_t received = 0;  // Flag to indicate data received
+extern uint8_t rxBuffer[BUFFER_SIZE];  // Receiving buffer
+extern uint8_t txBuffer[BUFFER_SIZE];  // Transmitting buffer
+extern uint8_t received;  // Flag to indicate data received
 
 
 

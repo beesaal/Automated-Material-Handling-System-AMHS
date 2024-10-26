@@ -122,7 +122,6 @@ Discarded input sections
  .text          0x0000000000000000        0x0 build/main.o
  .data          0x0000000000000000        0x0 build/main.o
  .bss           0x0000000000000000        0x0 build/main.o
- .bss.txBuffer  0x0000000000000000       0x64 build/main.o
  .text          0x0000000000000000        0x0 build/robot_servos.o
  .data          0x0000000000000000        0x0 build/robot_servos.o
  .bss           0x0000000000000000        0x0 build/robot_servos.o
@@ -131,8 +130,6 @@ Discarded input sections
  .bss           0x0000000000000000        0x0 build/bluetooth_comm.o
  .text.HAL_UART_RxCpltCallback
                 0x0000000000000000       0x30 build/bluetooth_comm.o
- .bss.received  0x0000000000000000        0x1 build/bluetooth_comm.o
- .bss.rxBuffer  0x0000000000000000       0x64 build/bluetooth_comm.o
  .text          0x0000000000000000        0x0 build/barcode_reader.o
  .data          0x0000000000000000        0x0 build/barcode_reader.o
  .bss           0x0000000000000000        0x0 build/barcode_reader.o
@@ -3127,7 +3124,7 @@ LOAD /usr/local/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/crtn.o
  .igot.plt      0x0000000020000074        0x0 /usr/local/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/crtbegin.o
                 0x0000000020000074                . = ALIGN (0x4)
 
-.bss            0x0000000020000074     0x4d64 load address 0x000000000800859c
+.bss            0x0000000020000074     0x4cfc load address 0x000000000800859c
                 0x0000000020000074                _sbss = .
                 0x0000000020000074                __bss_start__ = _sbss
  *(.bss)
@@ -3145,184 +3142,182 @@ LOAD /usr/local/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/crtn.o
  .bss.clearScreen_Handle
                 0x000000002000009c        0x4 build/main.o
                 0x000000002000009c                clearScreen_Handle
- .bss.data_received
-                0x00000000200000a0        0x4 build/main.o
-                0x00000000200000a0                data_received
- .bss.hi2c2     0x00000000200000a4       0x54 build/main.o
-                0x00000000200000a4                hi2c2
- .bss.hi2s3     0x00000000200000f8       0x48 build/main.o
-                0x00000000200000f8                hi2s3
- .bss.hspi2     0x0000000020000140       0x58 build/main.o
-                0x0000000020000140                hspi2
- .bss.htim3     0x0000000020000198       0x48 build/main.o
-                0x0000000020000198                htim3
- .bss.htim4     0x00000000200001e0       0x48 build/main.o
-                0x00000000200001e0                htim4
- .bss.huart1    0x0000000020000228       0x48 build/main.o
-                0x0000000020000228                huart1
- .bss.huart2    0x0000000020000270       0x48 build/main.o
-                0x0000000020000270                huart2
- .bss.qr_data   0x00000000200002b8       0x64 build/main.o
-                0x00000000200002b8                qr_data
- .bss.received  0x000000002000031c        0x1 build/main.o
-                0x000000002000031c                received
- *fill*         0x000000002000031d        0x3 
+ .bss.hi2c2     0x00000000200000a0       0x54 build/main.o
+                0x00000000200000a0                hi2c2
+ .bss.hi2s3     0x00000000200000f4       0x48 build/main.o
+                0x00000000200000f4                hi2s3
+ .bss.hspi2     0x000000002000013c       0x58 build/main.o
+                0x000000002000013c                hspi2
+ .bss.htim3     0x0000000020000194       0x48 build/main.o
+                0x0000000020000194                htim3
+ .bss.htim4     0x00000000200001dc       0x48 build/main.o
+                0x00000000200001dc                htim4
+ .bss.huart1    0x0000000020000224       0x48 build/main.o
+                0x0000000020000224                huart1
+ .bss.huart2    0x000000002000026c       0x48 build/main.o
+                0x000000002000026c                huart2
  .bss.robotArm_Handle
-                0x0000000020000320        0x4 build/main.o
-                0x0000000020000320                robotArm_Handle
- .bss.rxBuffer  0x0000000020000324       0x64 build/main.o
-                0x0000000020000324                rxBuffer
+                0x00000000200002b4        0x4 build/main.o
+                0x00000000200002b4                robotArm_Handle
  .bss.servoBelt_Handle
-                0x0000000020000388        0x4 build/main.o
-                0x0000000020000388                servoBelt_Handle
+                0x00000000200002b8        0x4 build/main.o
+                0x00000000200002b8                servoBelt_Handle
  .bss.dropItem_TaskHandle
-                0x000000002000038c        0x4 build/robot_servos.o
-                0x000000002000038c                dropItem_TaskHandle
- .bss.motor_1   0x0000000020000390        0x4 build/robot_servos.o
-                0x0000000020000390                motor_1
- .bss.motor_2   0x0000000020000394        0x4 build/robot_servos.o
-                0x0000000020000394                motor_2
- .bss.motor_3   0x0000000020000398        0x4 build/robot_servos.o
-                0x0000000020000398                motor_3
- .bss.motor_4   0x000000002000039c        0x4 build/robot_servos.o
-                0x000000002000039c                motor_4
+                0x00000000200002bc        0x4 build/robot_servos.o
+                0x00000000200002bc                dropItem_TaskHandle
+ .bss.motor_1   0x00000000200002c0        0x4 build/robot_servos.o
+                0x00000000200002c0                motor_1
+ .bss.motor_2   0x00000000200002c4        0x4 build/robot_servos.o
+                0x00000000200002c4                motor_2
+ .bss.motor_3   0x00000000200002c8        0x4 build/robot_servos.o
+                0x00000000200002c8                motor_3
+ .bss.motor_4   0x00000000200002cc        0x4 build/robot_servos.o
+                0x00000000200002cc                motor_4
  .bss.pickItem_TaskHandle
-                0x00000000200003a0        0x4 build/robot_servos.o
-                0x00000000200003a0                pickItem_TaskHandle
+                0x00000000200002d0        0x4 build/robot_servos.o
+                0x00000000200002d0                pickItem_TaskHandle
  .bss.pulse_value
-                0x00000000200003a4        0x4 build/robot_servos.o
-                0x00000000200003a4                pulse_value
- .bss.txBuffer  0x00000000200003a8       0x64 build/bluetooth_comm.o
+                0x00000000200002d4        0x4 build/robot_servos.o
+                0x00000000200002d4                pulse_value
+ .bss.received  0x00000000200002d8        0x1 build/bluetooth_comm.o
+                0x00000000200002d8                received
+ *fill*         0x00000000200002d9        0x3 
+ .bss.rxBuffer  0x00000000200002dc       0x64 build/bluetooth_comm.o
+                0x00000000200002dc                rxBuffer
+ .bss.txBuffer  0x0000000020000340       0x64 build/bluetooth_comm.o
+                0x0000000020000340                txBuffer
  .bss.data_received
-                0x000000002000040c        0x4 build/barcode_reader.o
- .bss.qr_data   0x0000000020000410       0x64 build/barcode_reader.o
- .bss.uwTick    0x0000000020000474        0x4 build/stm32f4xx_hal.o
-                0x0000000020000474                uwTick
+                0x00000000200003a4        0x4 build/barcode_reader.o
+                0x00000000200003a4                data_received
+ .bss.qr_data   0x00000000200003a8       0x64 build/barcode_reader.o
+                0x00000000200003a8                qr_data
+ .bss.uwTick    0x000000002000040c        0x4 build/stm32f4xx_hal.o
+                0x000000002000040c                uwTick
  .bss.xQueueRegistry
-                0x0000000020000478       0x40 build/queue.o
-                0x0000000020000478                xQueueRegistry
+                0x0000000020000410       0x40 build/queue.o
+                0x0000000020000410                xQueueRegistry
  .bss.pxCurrentTCB
-                0x00000000200004b8        0x4 build/tasks.o
-                0x00000000200004b8                pxCurrentTCB
+                0x0000000020000450        0x4 build/tasks.o
+                0x0000000020000450                pxCurrentTCB
  .bss.pxDelayedTaskList
-                0x00000000200004bc        0x4 build/tasks.o
+                0x0000000020000454        0x4 build/tasks.o
  .bss.pxOverflowDelayedTaskList
-                0x00000000200004c0        0x4 build/tasks.o
+                0x0000000020000458        0x4 build/tasks.o
  .bss.pxReadyTasksLists
-                0x00000000200004c4      0x460 build/tasks.o
+                0x000000002000045c      0x460 build/tasks.o
  .bss.uxCurrentNumberOfTasks
-                0x0000000020000924        0x4 build/tasks.o
+                0x00000000200008bc        0x4 build/tasks.o
  .bss.uxDeletedTasksWaitingCleanUp
-                0x0000000020000928        0x4 build/tasks.o
+                0x00000000200008c0        0x4 build/tasks.o
  .bss.uxSchedulerSuspended
-                0x000000002000092c        0x4 build/tasks.o
+                0x00000000200008c4        0x4 build/tasks.o
  .bss.uxTaskNumber
-                0x0000000020000930        0x4 build/tasks.o
+                0x00000000200008c8        0x4 build/tasks.o
  .bss.uxTopReadyPriority
-                0x0000000020000934        0x4 build/tasks.o
+                0x00000000200008cc        0x4 build/tasks.o
  .bss.xDelayedTaskList1
-                0x0000000020000938       0x14 build/tasks.o
+                0x00000000200008d0       0x14 build/tasks.o
  .bss.xDelayedTaskList2
-                0x000000002000094c       0x14 build/tasks.o
+                0x00000000200008e4       0x14 build/tasks.o
  .bss.xIdleTaskHandle
-                0x0000000020000960        0x4 build/tasks.o
+                0x00000000200008f8        0x4 build/tasks.o
  .bss.xNextTaskUnblockTime
-                0x0000000020000964        0x4 build/tasks.o
+                0x00000000200008fc        0x4 build/tasks.o
  .bss.xNumOfOverflows
-                0x0000000020000968        0x4 build/tasks.o
+                0x0000000020000900        0x4 build/tasks.o
  .bss.xPendedTicks
-                0x000000002000096c        0x4 build/tasks.o
+                0x0000000020000904        0x4 build/tasks.o
  .bss.xPendingReadyList
-                0x0000000020000970       0x14 build/tasks.o
+                0x0000000020000908       0x14 build/tasks.o
  .bss.xSchedulerRunning
-                0x0000000020000984        0x4 build/tasks.o
+                0x000000002000091c        0x4 build/tasks.o
  .bss.xSuspendedTaskList
-                0x0000000020000988       0x14 build/tasks.o
+                0x0000000020000920       0x14 build/tasks.o
  .bss.xTasksWaitingTermination
-                0x000000002000099c       0x14 build/tasks.o
+                0x0000000020000934       0x14 build/tasks.o
  .bss.xTickCount
-                0x00000000200009b0        0x4 build/tasks.o
+                0x0000000020000948        0x4 build/tasks.o
  .bss.xYieldPending
-                0x00000000200009b4        0x4 build/tasks.o
+                0x000000002000094c        0x4 build/tasks.o
  .bss.pxCurrentTimerList
-                0x00000000200009b8        0x4 build/timers.o
+                0x0000000020000950        0x4 build/timers.o
  .bss.pxOverflowTimerList
-                0x00000000200009bc        0x4 build/timers.o
+                0x0000000020000954        0x4 build/timers.o
  .bss.ucStaticTimerQueueStorage.1
-                0x00000000200009c0       0xa0 build/timers.o
+                0x0000000020000958       0xa0 build/timers.o
  .bss.xActiveTimerList1
-                0x0000000020000a60       0x14 build/timers.o
+                0x00000000200009f8       0x14 build/timers.o
  .bss.xActiveTimerList2
-                0x0000000020000a74       0x14 build/timers.o
+                0x0000000020000a0c       0x14 build/timers.o
  .bss.xLastTime.2
-                0x0000000020000a88        0x4 build/timers.o
+                0x0000000020000a20        0x4 build/timers.o
  .bss.xStaticTimerQueue.0
-                0x0000000020000a8c       0x50 build/timers.o
+                0x0000000020000a24       0x50 build/timers.o
  .bss.xTimerQueue
-                0x0000000020000adc        0x4 build/timers.o
+                0x0000000020000a74        0x4 build/timers.o
  .bss.xTimerTaskHandle
-                0x0000000020000ae0        0x4 build/timers.o
+                0x0000000020000a78        0x4 build/timers.o
  .bss.Idle_Stack.2
-                0x0000000020000ae4      0x200 build/cmsis_os2.o
+                0x0000000020000a7c      0x200 build/cmsis_os2.o
  .bss.Idle_TCB.3
-                0x0000000020000ce4       0x5c build/cmsis_os2.o
+                0x0000000020000c7c       0x5c build/cmsis_os2.o
  .bss.Timer_Stack.0
-                0x0000000020000d40      0x400 build/cmsis_os2.o
+                0x0000000020000cd8      0x400 build/cmsis_os2.o
  .bss.Timer_TCB.1
-                0x0000000020001140       0x5c build/cmsis_os2.o
- .bss.pxEnd     0x000000002000119c        0x4 build/heap_4.o
- .bss.ucHeap    0x00000000200011a0     0x3c00 build/heap_4.o
+                0x00000000200010d8       0x5c build/cmsis_os2.o
+ .bss.pxEnd     0x0000000020001134        0x4 build/heap_4.o
+ .bss.ucHeap    0x0000000020001138     0x3c00 build/heap_4.o
  .bss.xBlockAllocatedBit
-                0x0000000020004da0        0x4 build/heap_4.o
+                0x0000000020004d38        0x4 build/heap_4.o
  .bss.xFreeBytesRemaining
-                0x0000000020004da4        0x4 build/heap_4.o
+                0x0000000020004d3c        0x4 build/heap_4.o
  .bss.xMinimumEverFreeBytesRemaining
-                0x0000000020004da8        0x4 build/heap_4.o
+                0x0000000020004d40        0x4 build/heap_4.o
  .bss.xNumberOfSuccessfulAllocations
-                0x0000000020004dac        0x4 build/heap_4.o
+                0x0000000020004d44        0x4 build/heap_4.o
  .bss.xNumberOfSuccessfulFrees
-                0x0000000020004db0        0x4 build/heap_4.o
- .bss.xStart    0x0000000020004db4        0x8 build/heap_4.o
+                0x0000000020004d48        0x4 build/heap_4.o
+ .bss.xStart    0x0000000020004d4c        0x8 build/heap_4.o
  .bss.ucMaxSysCallPriority
-                0x0000000020004dbc        0x1 build/port.o
- *fill*         0x0000000020004dbd        0x3 
+                0x0000000020004d54        0x1 build/port.o
+ *fill*         0x0000000020004d55        0x3 
  .bss.ulMaxPRIGROUPValue
-                0x0000000020004dc0        0x4 build/port.o
+                0x0000000020004d58        0x4 build/port.o
  .bss.__sbrk_heap_end
-                0x0000000020004dc4        0x4 build/sysmem.o
+                0x0000000020004d5c        0x4 build/sysmem.o
  .bss.__lock___malloc_recursive_mutex
-                0x0000000020004dc8        0x1 /usr/local/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-lock.o)
-                0x0000000020004dc8                __lock___malloc_recursive_mutex
+                0x0000000020004d60        0x1 /usr/local/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-lock.o)
+                0x0000000020004d60                __lock___malloc_recursive_mutex
  .bss.__lock___sfp_recursive_mutex
-                0x0000000020004dc9        0x1 /usr/local/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-lock.o)
-                0x0000000020004dc9                __lock___sfp_recursive_mutex
+                0x0000000020004d61        0x1 /usr/local/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-lock.o)
+                0x0000000020004d61                __lock___sfp_recursive_mutex
  .bss.__lock___sinit_recursive_mutex
-                0x0000000020004dca        0x1 /usr/local/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-lock.o)
-                0x0000000020004dca                __lock___sinit_recursive_mutex
- *fill*         0x0000000020004dcb        0x1 
+                0x0000000020004d62        0x1 /usr/local/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-lock.o)
+                0x0000000020004d62                __lock___sinit_recursive_mutex
+ *fill*         0x0000000020004d63        0x1 
  .bss.__malloc_free_list
-                0x0000000020004dcc        0x4 /usr/local/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-nano-mallocr.o)
-                0x0000000020004dcc                __malloc_free_list
+                0x0000000020004d64        0x4 /usr/local/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-nano-mallocr.o)
+                0x0000000020004d64                __malloc_free_list
  .bss.__malloc_sbrk_start
-                0x0000000020004dd0        0x4 /usr/local/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-nano-mallocr.o)
-                0x0000000020004dd0                __malloc_sbrk_start
- .bss.errno     0x0000000020004dd4        0x4 /usr/local/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-reent.o)
-                0x0000000020004dd4                errno
+                0x0000000020004d68        0x4 /usr/local/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-nano-mallocr.o)
+                0x0000000020004d68                __malloc_sbrk_start
+ .bss.errno     0x0000000020004d6c        0x4 /usr/local/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-reent.o)
+                0x0000000020004d6c                errno
  *(COMMON)
-                0x0000000020004dd8                . = ALIGN (0x4)
-                0x0000000020004dd8                _ebss = .
-                0x0000000020004dd8                __bss_end__ = _ebss
+                0x0000000020004d70                . = ALIGN (0x4)
+                0x0000000020004d70                _ebss = .
+                0x0000000020004d70                __bss_end__ = _ebss
 
 ._user_heap_stack
-                0x0000000020004dd8      0x600 load address 0x000000000800859c
-                0x0000000020004dd8                . = ALIGN (0x8)
+                0x0000000020004d70      0x600 load address 0x000000000800859c
+                0x0000000020004d70                . = ALIGN (0x8)
                 [!provide]                        PROVIDE (end = .)
-                0x0000000020004dd8                PROVIDE (_end = .)
-                0x0000000020004fd8                . = (. + _Min_Heap_Size)
- *fill*         0x0000000020004dd8      0x200 
-                0x00000000200053d8                . = (. + _Min_Stack_Size)
- *fill*         0x0000000020004fd8      0x400 
-                0x00000000200053d8                . = ALIGN (0x8)
+                0x0000000020004d70                PROVIDE (_end = .)
+                0x0000000020004f70                . = (. + _Min_Heap_Size)
+ *fill*         0x0000000020004d70      0x200 
+                0x0000000020005370                . = (. + _Min_Stack_Size)
+ *fill*         0x0000000020004f70      0x400 
+                0x0000000020005370                . = ALIGN (0x8)
 
 /DISCARD/
  libc.a(*)
@@ -3496,69 +3491,69 @@ LOAD /usr/local/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/li
 LOAD /usr/local/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a
 LOAD /usr/local/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a
 
-.debug_info     0x0000000000000000    0x2b03d
- .debug_info    0x0000000000000000     0x2a85 build/main.o
- .debug_info    0x0000000000002a85     0x1228 build/robot_servos.o
- .debug_info    0x0000000000003cad      0x786 build/bluetooth_comm.o
- .debug_info    0x0000000000004433      0x80d build/barcode_reader.o
- .debug_info    0x0000000000004c40      0x170 build/stm32f4xx_it.o
- .debug_info    0x0000000000004db0     0x1e5a build/stm32f4xx_hal_msp.o
- .debug_info    0x0000000000006c0a      0xc13 build/stm32f4xx_hal_rcc.o
- .debug_info    0x000000000000781d      0x775 build/stm32f4xx_hal_rcc_ex.o
- .debug_info    0x0000000000007f92      0x872 build/stm32f4xx_hal_gpio.o
- .debug_info    0x0000000000008804      0xbc9 build/stm32f4xx_hal_dma.o
- .debug_info    0x00000000000093cd     0x1136 build/stm32f4xx_hal_cortex.o
- .debug_info    0x000000000000a503      0xa66 build/stm32f4xx_hal.o
- .debug_info    0x000000000000af69     0x3b97 build/stm32f4xx_hal_i2c.o
- .debug_info    0x000000000000eb00     0x12b3 build/stm32f4xx_hal_i2s.o
- .debug_info    0x000000000000fdb3      0xe79 build/stm32f4xx_hal_i2s_ex.o
- .debug_info    0x0000000000010c2c     0x1f21 build/stm32f4xx_hal_spi.o
- .debug_info    0x0000000000012b4d     0x40c4 build/stm32f4xx_hal_tim.o
- .debug_info    0x0000000000016c11     0x1c87 build/stm32f4xx_hal_tim_ex.o
- .debug_info    0x0000000000018898     0x4326 build/stm32f4xx_hal_uart.o
- .debug_info    0x000000000001cbbe      0x5e5 build/system_stm32f4xx.o
- .debug_info    0x000000000001d1a3      0x30f build/list.o
- .debug_info    0x000000000001d4b2     0x2968 build/queue.o
- .debug_info    0x000000000001fe1a     0x333f build/tasks.o
- .debug_info    0x0000000000023159     0x1bd3 build/timers.o
- .debug_info    0x0000000000024d2c     0x4d53 build/cmsis_os2.o
- .debug_info    0x0000000000029a7f      0x61a build/heap_4.o
- .debug_info    0x000000000002a099      0x5c8 build/port.o
- .debug_info    0x000000000002a661      0x185 build/sysmem.o
- .debug_info    0x000000000002a7e6      0x835 build/syscalls.o
- .debug_info    0x000000000002b01b       0x22 build/startup_stm32f411xe.o
+.debug_info     0x0000000000000000    0x2b018
+ .debug_info    0x0000000000000000     0x2a3d build/main.o
+ .debug_info    0x0000000000002a3d     0x1228 build/robot_servos.o
+ .debug_info    0x0000000000003c65      0x79c build/bluetooth_comm.o
+ .debug_info    0x0000000000004401      0x81a build/barcode_reader.o
+ .debug_info    0x0000000000004c1b      0x170 build/stm32f4xx_it.o
+ .debug_info    0x0000000000004d8b     0x1e5a build/stm32f4xx_hal_msp.o
+ .debug_info    0x0000000000006be5      0xc13 build/stm32f4xx_hal_rcc.o
+ .debug_info    0x00000000000077f8      0x775 build/stm32f4xx_hal_rcc_ex.o
+ .debug_info    0x0000000000007f6d      0x872 build/stm32f4xx_hal_gpio.o
+ .debug_info    0x00000000000087df      0xbc9 build/stm32f4xx_hal_dma.o
+ .debug_info    0x00000000000093a8     0x1136 build/stm32f4xx_hal_cortex.o
+ .debug_info    0x000000000000a4de      0xa66 build/stm32f4xx_hal.o
+ .debug_info    0x000000000000af44     0x3b97 build/stm32f4xx_hal_i2c.o
+ .debug_info    0x000000000000eadb     0x12b3 build/stm32f4xx_hal_i2s.o
+ .debug_info    0x000000000000fd8e      0xe79 build/stm32f4xx_hal_i2s_ex.o
+ .debug_info    0x0000000000010c07     0x1f21 build/stm32f4xx_hal_spi.o
+ .debug_info    0x0000000000012b28     0x40c4 build/stm32f4xx_hal_tim.o
+ .debug_info    0x0000000000016bec     0x1c87 build/stm32f4xx_hal_tim_ex.o
+ .debug_info    0x0000000000018873     0x4326 build/stm32f4xx_hal_uart.o
+ .debug_info    0x000000000001cb99      0x5e5 build/system_stm32f4xx.o
+ .debug_info    0x000000000001d17e      0x30f build/list.o
+ .debug_info    0x000000000001d48d     0x2968 build/queue.o
+ .debug_info    0x000000000001fdf5     0x333f build/tasks.o
+ .debug_info    0x0000000000023134     0x1bd3 build/timers.o
+ .debug_info    0x0000000000024d07     0x4d53 build/cmsis_os2.o
+ .debug_info    0x0000000000029a5a      0x61a build/heap_4.o
+ .debug_info    0x000000000002a074      0x5c8 build/port.o
+ .debug_info    0x000000000002a63c      0x185 build/sysmem.o
+ .debug_info    0x000000000002a7c1      0x835 build/syscalls.o
+ .debug_info    0x000000000002aff6       0x22 build/startup_stm32f411xe.o
 
-.debug_abbrev   0x0000000000000000     0x48b0
+.debug_abbrev   0x0000000000000000     0x48a8
  .debug_abbrev  0x0000000000000000      0x346 build/main.o
  .debug_abbrev  0x0000000000000346      0x26a build/robot_servos.o
- .debug_abbrev  0x00000000000005b0      0x1bb build/bluetooth_comm.o
- .debug_abbrev  0x000000000000076b      0x1df build/barcode_reader.o
- .debug_abbrev  0x000000000000094a       0xa4 build/stm32f4xx_it.o
- .debug_abbrev  0x00000000000009ee      0x24f build/stm32f4xx_hal_msp.o
- .debug_abbrev  0x0000000000000c3d      0x2aa build/stm32f4xx_hal_rcc.o
- .debug_abbrev  0x0000000000000ee7      0x1a1 build/stm32f4xx_hal_rcc_ex.o
- .debug_abbrev  0x0000000000001088      0x22b build/stm32f4xx_hal_gpio.o
- .debug_abbrev  0x00000000000012b3      0x2bf build/stm32f4xx_hal_dma.o
- .debug_abbrev  0x0000000000001572      0x379 build/stm32f4xx_hal_cortex.o
- .debug_abbrev  0x00000000000018eb      0x23a build/stm32f4xx_hal.o
- .debug_abbrev  0x0000000000001b25      0x304 build/stm32f4xx_hal_i2c.o
- .debug_abbrev  0x0000000000001e29      0x285 build/stm32f4xx_hal_i2s.o
- .debug_abbrev  0x00000000000020ae      0x2c2 build/stm32f4xx_hal_i2s_ex.o
- .debug_abbrev  0x0000000000002370      0x29e build/stm32f4xx_hal_spi.o
- .debug_abbrev  0x000000000000260e      0x29a build/stm32f4xx_hal_tim.o
- .debug_abbrev  0x00000000000028a8      0x2b0 build/stm32f4xx_hal_tim_ex.o
- .debug_abbrev  0x0000000000002b58      0x367 build/stm32f4xx_hal_uart.o
- .debug_abbrev  0x0000000000002ebf      0x11b build/system_stm32f4xx.o
- .debug_abbrev  0x0000000000002fda      0x124 build/list.o
- .debug_abbrev  0x00000000000030fe      0x3c4 build/queue.o
- .debug_abbrev  0x00000000000034c2      0x387 build/tasks.o
- .debug_abbrev  0x0000000000003849      0x366 build/timers.o
- .debug_abbrev  0x0000000000003baf      0x54e build/cmsis_os2.o
- .debug_abbrev  0x00000000000040fd      0x269 build/heap_4.o
- .debug_abbrev  0x0000000000004366      0x28a build/port.o
- .debug_abbrev  0x00000000000045f0       0xea build/sysmem.o
- .debug_abbrev  0x00000000000046da      0x1c4 build/syscalls.o
- .debug_abbrev  0x000000000000489e       0x12 build/startup_stm32f411xe.o
+ .debug_abbrev  0x00000000000005b0      0x1b7 build/bluetooth_comm.o
+ .debug_abbrev  0x0000000000000767      0x1db build/barcode_reader.o
+ .debug_abbrev  0x0000000000000942       0xa4 build/stm32f4xx_it.o
+ .debug_abbrev  0x00000000000009e6      0x24f build/stm32f4xx_hal_msp.o
+ .debug_abbrev  0x0000000000000c35      0x2aa build/stm32f4xx_hal_rcc.o
+ .debug_abbrev  0x0000000000000edf      0x1a1 build/stm32f4xx_hal_rcc_ex.o
+ .debug_abbrev  0x0000000000001080      0x22b build/stm32f4xx_hal_gpio.o
+ .debug_abbrev  0x00000000000012ab      0x2bf build/stm32f4xx_hal_dma.o
+ .debug_abbrev  0x000000000000156a      0x379 build/stm32f4xx_hal_cortex.o
+ .debug_abbrev  0x00000000000018e3      0x23a build/stm32f4xx_hal.o
+ .debug_abbrev  0x0000000000001b1d      0x304 build/stm32f4xx_hal_i2c.o
+ .debug_abbrev  0x0000000000001e21      0x285 build/stm32f4xx_hal_i2s.o
+ .debug_abbrev  0x00000000000020a6      0x2c2 build/stm32f4xx_hal_i2s_ex.o
+ .debug_abbrev  0x0000000000002368      0x29e build/stm32f4xx_hal_spi.o
+ .debug_abbrev  0x0000000000002606      0x29a build/stm32f4xx_hal_tim.o
+ .debug_abbrev  0x00000000000028a0      0x2b0 build/stm32f4xx_hal_tim_ex.o
+ .debug_abbrev  0x0000000000002b50      0x367 build/stm32f4xx_hal_uart.o
+ .debug_abbrev  0x0000000000002eb7      0x11b build/system_stm32f4xx.o
+ .debug_abbrev  0x0000000000002fd2      0x124 build/list.o
+ .debug_abbrev  0x00000000000030f6      0x3c4 build/queue.o
+ .debug_abbrev  0x00000000000034ba      0x387 build/tasks.o
+ .debug_abbrev  0x0000000000003841      0x366 build/timers.o
+ .debug_abbrev  0x0000000000003ba7      0x54e build/cmsis_os2.o
+ .debug_abbrev  0x00000000000040f5      0x269 build/heap_4.o
+ .debug_abbrev  0x000000000000435e      0x28a build/port.o
+ .debug_abbrev  0x00000000000045e8       0xea build/sysmem.o
+ .debug_abbrev  0x00000000000046d2      0x1c4 build/syscalls.o
+ .debug_abbrev  0x0000000000004896       0x12 build/startup_stm32f411xe.o
 
 .debug_loc      0x0000000000000000    0x26298
  .debug_loc     0x0000000000000000      0x50c build/main.o
@@ -3685,99 +3680,99 @@ LOAD /usr/local/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/libgcc.a
  .debug_ranges  0x0000000000001ca8       0x98 build/syscalls.o
  .debug_ranges  0x0000000000001d40       0x20 build/startup_stm32f411xe.o
 
-.debug_line     0x0000000000000000    0x231aa
+.debug_line     0x0000000000000000    0x231ac
  .debug_line    0x0000000000000000      0xabc build/main.o
  .debug_line    0x0000000000000abc      0x47f build/robot_servos.o
  .debug_line    0x0000000000000f3b      0x1ea build/bluetooth_comm.o
- .debug_line    0x0000000000001125      0x21e build/barcode_reader.o
- .debug_line    0x0000000000001343      0x20a build/stm32f4xx_it.o
- .debug_line    0x000000000000154d      0x6d7 build/stm32f4xx_hal_msp.o
- .debug_line    0x0000000000001c24      0xaf9 build/stm32f4xx_hal_rcc.o
- .debug_line    0x000000000000271d      0x60b build/stm32f4xx_hal_rcc_ex.o
- .debug_line    0x0000000000002d28      0x673 build/stm32f4xx_hal_gpio.o
- .debug_line    0x000000000000339b      0xdd5 build/stm32f4xx_hal_dma.o
- .debug_line    0x0000000000004170      0x75c build/stm32f4xx_hal_cortex.o
- .debug_line    0x00000000000048cc      0x515 build/stm32f4xx_hal.o
- .debug_line    0x0000000000004de1     0x5423 build/stm32f4xx_hal_i2c.o
- .debug_line    0x000000000000a204     0x13f1 build/stm32f4xx_hal_i2s.o
- .debug_line    0x000000000000b5f5     0x109b build/stm32f4xx_hal_i2s_ex.o
- .debug_line    0x000000000000c690     0x263c build/stm32f4xx_hal_spi.o
- .debug_line    0x000000000000eccc     0x499e build/stm32f4xx_hal_tim.o
- .debug_line    0x000000000001366a     0x1bfc build/stm32f4xx_hal_tim_ex.o
- .debug_line    0x0000000000015266     0x426b build/stm32f4xx_hal_uart.o
- .debug_line    0x00000000000194d1      0x200 build/system_stm32f4xx.o
- .debug_line    0x00000000000196d1      0x309 build/list.o
- .debug_line    0x00000000000199da     0x1fd2 build/queue.o
- .debug_line    0x000000000001b9ac     0x2cfa build/tasks.o
- .debug_line    0x000000000001e6a6      0xea8 build/timers.o
- .debug_line    0x000000000001f54e     0x2976 build/cmsis_os2.o
- .debug_line    0x0000000000021ec4      0x6ba build/heap_4.o
- .debug_line    0x000000000002257e      0x6ba build/port.o
- .debug_line    0x0000000000022c38      0x14a build/sysmem.o
- .debug_line    0x0000000000022d82      0x3b2 build/syscalls.o
- .debug_line    0x0000000000023134       0x76 build/startup_stm32f411xe.o
+ .debug_line    0x0000000000001125      0x220 build/barcode_reader.o
+ .debug_line    0x0000000000001345      0x20a build/stm32f4xx_it.o
+ .debug_line    0x000000000000154f      0x6d7 build/stm32f4xx_hal_msp.o
+ .debug_line    0x0000000000001c26      0xaf9 build/stm32f4xx_hal_rcc.o
+ .debug_line    0x000000000000271f      0x60b build/stm32f4xx_hal_rcc_ex.o
+ .debug_line    0x0000000000002d2a      0x673 build/stm32f4xx_hal_gpio.o
+ .debug_line    0x000000000000339d      0xdd5 build/stm32f4xx_hal_dma.o
+ .debug_line    0x0000000000004172      0x75c build/stm32f4xx_hal_cortex.o
+ .debug_line    0x00000000000048ce      0x515 build/stm32f4xx_hal.o
+ .debug_line    0x0000000000004de3     0x5423 build/stm32f4xx_hal_i2c.o
+ .debug_line    0x000000000000a206     0x13f1 build/stm32f4xx_hal_i2s.o
+ .debug_line    0x000000000000b5f7     0x109b build/stm32f4xx_hal_i2s_ex.o
+ .debug_line    0x000000000000c692     0x263c build/stm32f4xx_hal_spi.o
+ .debug_line    0x000000000000ecce     0x499e build/stm32f4xx_hal_tim.o
+ .debug_line    0x000000000001366c     0x1bfc build/stm32f4xx_hal_tim_ex.o
+ .debug_line    0x0000000000015268     0x426b build/stm32f4xx_hal_uart.o
+ .debug_line    0x00000000000194d3      0x200 build/system_stm32f4xx.o
+ .debug_line    0x00000000000196d3      0x309 build/list.o
+ .debug_line    0x00000000000199dc     0x1fd2 build/queue.o
+ .debug_line    0x000000000001b9ae     0x2cfa build/tasks.o
+ .debug_line    0x000000000001e6a8      0xea8 build/timers.o
+ .debug_line    0x000000000001f550     0x2976 build/cmsis_os2.o
+ .debug_line    0x0000000000021ec6      0x6ba build/heap_4.o
+ .debug_line    0x0000000000022580      0x6ba build/port.o
+ .debug_line    0x0000000000022c3a      0x14a build/sysmem.o
+ .debug_line    0x0000000000022d84      0x3b2 build/syscalls.o
+ .debug_line    0x0000000000023136       0x76 build/startup_stm32f411xe.o
 
-.debug_str      0x0000000000000000     0x8c58
- .debug_str     0x0000000000000000     0x1903 build/main.o
-                                       0x1aaa (size before relaxing)
- .debug_str     0x0000000000001903      0x1f1 build/robot_servos.o
+.debug_str      0x0000000000000000     0x8cbc
+ .debug_str     0x0000000000000000     0x1904 build/main.o
+                                       0x1aab (size before relaxing)
+ .debug_str     0x0000000000001904      0x251 build/robot_servos.o
                                         0x986 (size before relaxing)
- .debug_str     0x0000000000001af4       0x5b build/bluetooth_comm.o
-                                        0x6d5 (size before relaxing)
- .debug_str     0x0000000000001b4f       0x95 build/barcode_reader.o
-                                        0x788 (size before relaxing)
- .debug_str     0x0000000000001be4       0xc4 build/stm32f4xx_it.o
+ .debug_str     0x0000000000001b55       0x64 build/bluetooth_comm.o
+                                        0x6df (size before relaxing)
+ .debug_str     0x0000000000001bb9       0x8f build/barcode_reader.o
+                                        0x792 (size before relaxing)
+ .debug_str     0x0000000000001c48       0xc4 build/stm32f4xx_it.o
                                         0x269 (size before relaxing)
- .debug_str     0x0000000000001ca8      0x1b0 build/stm32f4xx_hal_msp.o
+ .debug_str     0x0000000000001d0c      0x1b0 build/stm32f4xx_hal_msp.o
                                        0x157e (size before relaxing)
- .debug_str     0x0000000000001e58      0x246 build/stm32f4xx_hal_rcc.o
+ .debug_str     0x0000000000001ebc      0x246 build/stm32f4xx_hal_rcc.o
                                         0x732 (size before relaxing)
- .debug_str     0x000000000000209e      0x10e build/stm32f4xx_hal_rcc_ex.o
+ .debug_str     0x0000000000002102      0x10e build/stm32f4xx_hal_rcc_ex.o
                                         0x529 (size before relaxing)
- .debug_str     0x00000000000021ac      0x114 build/stm32f4xx_hal_gpio.o
+ .debug_str     0x0000000000002210      0x114 build/stm32f4xx_hal_gpio.o
                                         0x50c (size before relaxing)
- .debug_str     0x00000000000022c0      0x303 build/stm32f4xx_hal_dma.o
+ .debug_str     0x0000000000002324      0x303 build/stm32f4xx_hal_dma.o
                                         0x790 (size before relaxing)
- .debug_str     0x00000000000025c3      0x527 build/stm32f4xx_hal_cortex.o
+ .debug_str     0x0000000000002627      0x527 build/stm32f4xx_hal_cortex.o
                                         0xb37 (size before relaxing)
- .debug_str     0x0000000000002aea      0x290 build/stm32f4xx_hal.o
+ .debug_str     0x0000000000002b4e      0x290 build/stm32f4xx_hal.o
                                         0xa2e (size before relaxing)
- .debug_str     0x0000000000002d7a      0x83a build/stm32f4xx_hal_i2c.o
+ .debug_str     0x0000000000002dde      0x83a build/stm32f4xx_hal_i2c.o
                                        0x105c (size before relaxing)
- .debug_str     0x00000000000035b4      0x256 build/stm32f4xx_hal_i2s.o
+ .debug_str     0x0000000000003618      0x256 build/stm32f4xx_hal_i2s.o
                                         0x94a (size before relaxing)
- .debug_str     0x000000000000380a      0x1ee build/stm32f4xx_hal_i2s_ex.o
+ .debug_str     0x000000000000386e      0x1ee build/stm32f4xx_hal_i2s_ex.o
                                         0x87b (size before relaxing)
- .debug_str     0x00000000000039f8      0x4eb build/stm32f4xx_hal_spi.o
+ .debug_str     0x0000000000003a5c      0x4eb build/stm32f4xx_hal_spi.o
                                         0xc0e (size before relaxing)
- .debug_str     0x0000000000003ee3      0xdb4 build/stm32f4xx_hal_tim.o
+ .debug_str     0x0000000000003f47      0xdb4 build/stm32f4xx_hal_tim.o
                                        0x16e3 (size before relaxing)
- .debug_str     0x0000000000004c97      0x521 build/stm32f4xx_hal_tim_ex.o
+ .debug_str     0x0000000000004cfb      0x521 build/stm32f4xx_hal_tim_ex.o
                                         0xed4 (size before relaxing)
- .debug_str     0x00000000000051b8      0x5b2 build/stm32f4xx_hal_uart.o
+ .debug_str     0x000000000000521c      0x5b2 build/stm32f4xx_hal_uart.o
                                         0xdb5 (size before relaxing)
- .debug_str     0x000000000000576a       0x47 build/system_stm32f4xx.o
+ .debug_str     0x00000000000057ce       0x47 build/system_stm32f4xx.o
                                         0x3a1 (size before relaxing)
- .debug_str     0x00000000000057b1      0x141 build/list.o
+ .debug_str     0x0000000000005815      0x141 build/list.o
                                         0x31c (size before relaxing)
- .debug_str     0x00000000000058f2      0x9eb build/queue.o
+ .debug_str     0x0000000000005956      0x9eb build/queue.o
                                         0xd32 (size before relaxing)
- .debug_str     0x00000000000062dd      0xc31 build/tasks.o
+ .debug_str     0x0000000000006341      0xc31 build/tasks.o
                                        0x1301 (size before relaxing)
- .debug_str     0x0000000000006f0e      0x5d8 build/timers.o
+ .debug_str     0x0000000000006f72      0x5d8 build/timers.o
                                         0xc62 (size before relaxing)
- .debug_str     0x00000000000074e6     0x109d build/cmsis_os2.o
+ .debug_str     0x000000000000754a     0x109d build/cmsis_os2.o
                                        0x1ff3 (size before relaxing)
- .debug_str     0x0000000000008583      0x2bf build/heap_4.o
+ .debug_str     0x00000000000085e7      0x2bf build/heap_4.o
                                         0x52a (size before relaxing)
- .debug_str     0x0000000000008842      0x17d build/port.o
+ .debug_str     0x00000000000088a6      0x17d build/port.o
                                         0x49c (size before relaxing)
- .debug_str     0x00000000000089bf       0x7a build/sysmem.o
+ .debug_str     0x0000000000008a23       0x7a build/sysmem.o
                                         0x23f (size before relaxing)
- .debug_str     0x0000000000008a39      0x1fb build/syscalls.o
+ .debug_str     0x0000000000008a9d      0x1fb build/syscalls.o
                                         0x413 (size before relaxing)
- .debug_str     0x0000000000008c34       0x24 build/startup_stm32f411xe.o
-                                         0x84 (size before relaxing)
+ .debug_str     0x0000000000008c98       0x24 build/startup_stm32f411xe.o
+                                         0x8e (size before relaxing)
 
 .comment        0x0000000000000000       0x49
  .comment       0x0000000000000000       0x49 build/main.o
@@ -4845,7 +4840,8 @@ boxSize_cal                                       build/main.o
 cleanup_glue                                      /usr/local/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-reent.o)
 clearScreen                                       build/main.o
 clearScreen_Handle                                build/main.o
-data_received                                     build/main.o
+data_received                                     build/barcode_reader.o
+                                                  build/main.o
 dropItem                                          build/robot_servos.o
 dropItem_TaskHandle                               build/robot_servos.o
 eTaskGetState                                     build/tasks.o
@@ -4866,8 +4862,8 @@ fabs                                              /usr/local/bin/../lib/gcc/arm-
 fflush                                            /usr/local/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-fflush.o)
 g_pfnVectors                                      build/startup_stm32f411xe.o
 hardware_init_hook                                /usr/local/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/crt0.o
-hi2c1                                             build/barcode_reader.o
 hi2c2                                             build/main.o
+                                                  build/barcode_reader.o
 hi2s3                                             build/main.o
 hspi2                                             build/main.o
 htim3                                             build/main.o
@@ -5011,15 +5007,18 @@ pxCurrentTCB                                      build/tasks.o
                                                   build/port.o
 pxPortInitialiseStack                             build/port.o
                                                   build/tasks.o
-qr_data                                           build/main.o
-received                                          build/main.o
+qr_data                                           build/barcode_reader.o
+                                                  build/main.o
+received                                          build/bluetooth_comm.o
+                                                  build/main.o
 robotArm                                          build/main.o
 robotArm_Handle                                   build/main.o
 robot_DropItem                                    build/robot_servos.o
                                                   build/main.o
 robot_PickItem                                    build/robot_servos.o
                                                   build/main.o
-rxBuffer                                          build/main.o
+rxBuffer                                          build/bluetooth_comm.o
+                                                  build/main.o
 sendBluetoothData_IT                              build/bluetooth_comm.o
                                                   build/main.o
 servoBelt                                         build/main.o
@@ -5032,7 +5031,7 @@ strcpy                                            /usr/local/bin/../lib/gcc/arm-
                                                   build/bluetooth_comm.o
 strlen                                            /usr/local/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(lib_a-strlen.o)
                                                   build/bluetooth_comm.o
-txBuffer                                          build/main.o
+txBuffer                                          build/bluetooth_comm.o
 ucQueueGetQueueType                               build/queue.o
 ucStreamBufferGetStreamBufferType                 build/stream_buffer.o
 ulTaskNotifyTake                                  build/tasks.o

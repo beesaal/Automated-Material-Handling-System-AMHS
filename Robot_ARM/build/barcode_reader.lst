@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccqwRP8n.s 			page 1
+ARM GAS  /tmp/ccLWm4h2.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -31,18 +31,21 @@ ARM GAS  /tmp/ccqwRP8n.s 			page 1
    1:Core/Src/barcode_reader.c **** #include "barcode_reader.h"
    2:Core/Src/barcode_reader.c **** 
    3:Core/Src/barcode_reader.c **** 
-   4:Core/Src/barcode_reader.c **** /**
-   5:Core/Src/barcode_reader.c ****  * @brief Initialize QR scanner (I2C).
-   6:Core/Src/barcode_reader.c ****  */
-   7:Core/Src/barcode_reader.c **** void QR_Scanner_Init(void) {
-   8:Core/Src/barcode_reader.c ****     QR_Scanner_Read(); // Start reading QR data with interrupt
-   9:Core/Src/barcode_reader.c **** }
-  10:Core/Src/barcode_reader.c **** 
-  11:Core/Src/barcode_reader.c **** /**
-  12:Core/Src/barcode_reader.c ****  * @brief Initiate I2C read for QR scanner using interrupts.
-  13:Core/Src/barcode_reader.c ****  */
-  14:Core/Src/barcode_reader.c **** void QR_Scanner_Read(void) {
-  29              		.loc 1 14 28 view -0
+   4:Core/Src/barcode_reader.c **** char qr_data[BUFFER_SIZE];
+   5:Core/Src/barcode_reader.c **** int data_received;
+   6:Core/Src/barcode_reader.c **** 
+   7:Core/Src/barcode_reader.c **** /**
+   8:Core/Src/barcode_reader.c ****  * @brief Initialize QR scanner (I2C).
+   9:Core/Src/barcode_reader.c ****  */
+  10:Core/Src/barcode_reader.c **** void QR_Scanner_Init(void) {
+  11:Core/Src/barcode_reader.c ****     QR_Scanner_Read(); // Start reading QR data with interrupt
+  12:Core/Src/barcode_reader.c **** }
+  13:Core/Src/barcode_reader.c **** 
+  14:Core/Src/barcode_reader.c **** /**
+  15:Core/Src/barcode_reader.c ****  * @brief Initiate I2C read for QR scanner using interrupts.
+  16:Core/Src/barcode_reader.c ****  */
+  17:Core/Src/barcode_reader.c **** void QR_Scanner_Read(void) {
+  29              		.loc 1 17 28 view -0
   30              		.cfi_startproc
   31              		@ args = 0, pretend = 0, frame = 0
   32              		@ frame_needed = 0, uses_anonymous_args = 0
@@ -51,25 +54,25 @@ ARM GAS  /tmp/ccqwRP8n.s 			page 1
   35              		.cfi_def_cfa_offset 8
   36              		.cfi_offset 3, -8
   37              		.cfi_offset 14, -4
-  15:Core/Src/barcode_reader.c ****     HAL_I2C_Master_Receive_IT(&hi2c1, QR_SCANNER_I2C_ADDR, (uint8_t*)qr_data, BUFFER_SIZE);
-  38              		.loc 1 15 5 view .LVU1
+  18:Core/Src/barcode_reader.c ****     HAL_I2C_Master_Receive_IT(&hi2c2, QR_SCANNER_I2C_ADDR, (uint8_t*)qr_data, BUFFER_SIZE);
+  38              		.loc 1 18 5 view .LVU1
   39 0002 6423     		movs	r3, #100
   40 0004 024A     		ldr	r2, .L3
+ARM GAS  /tmp/ccLWm4h2.s 			page 2
+
+
   41 0006 7821     		movs	r1, #120
   42 0008 0248     		ldr	r0, .L3+4
   43 000a FFF7FEFF 		bl	HAL_I2C_Master_Receive_IT
-ARM GAS  /tmp/ccqwRP8n.s 			page 2
-
-
   44              	.LVL0:
-  16:Core/Src/barcode_reader.c **** }
-  45              		.loc 1 16 1 is_stmt 0 view .LVU2
+  19:Core/Src/barcode_reader.c **** }
+  45              		.loc 1 19 1 is_stmt 0 view .LVU2
   46 000e 08BD     		pop	{r3, pc}
   47              	.L4:
   48              		.align	2
   49              	.L3:
   50 0010 00000000 		.word	.LANCHOR0
-  51 0014 00000000 		.word	hi2c1
+  51 0014 00000000 		.word	hi2c2
   52              		.cfi_endproc
   53              	.LFE142:
   55              		.section	.text.QR_Scanner_Init,"ax",%progbits
@@ -80,8 +83,8 @@ ARM GAS  /tmp/ccqwRP8n.s 			page 1
   60              		.thumb_func
   62              	QR_Scanner_Init:
   63              	.LFB141:
-   7:Core/Src/barcode_reader.c ****     QR_Scanner_Read(); // Start reading QR data with interrupt
-  64              		.loc 1 7 28 is_stmt 1 view -0
+  10:Core/Src/barcode_reader.c ****     QR_Scanner_Read(); // Start reading QR data with interrupt
+  64              		.loc 1 10 28 is_stmt 1 view -0
   65              		.cfi_startproc
   66              		@ args = 0, pretend = 0, frame = 0
   67              		@ frame_needed = 0, uses_anonymous_args = 0
@@ -90,12 +93,12 @@ ARM GAS  /tmp/ccqwRP8n.s 			page 1
   70              		.cfi_def_cfa_offset 8
   71              		.cfi_offset 3, -8
   72              		.cfi_offset 14, -4
-   8:Core/Src/barcode_reader.c **** }
-  73              		.loc 1 8 5 view .LVU4
+  11:Core/Src/barcode_reader.c **** }
+  73              		.loc 1 11 5 view .LVU4
   74 0002 FFF7FEFF 		bl	QR_Scanner_Read
   75              	.LVL1:
-   9:Core/Src/barcode_reader.c **** 
-  76              		.loc 1 9 1 is_stmt 0 view .LVU5
+  12:Core/Src/barcode_reader.c **** 
+  76              		.loc 1 12 1 is_stmt 0 view .LVU5
   77 0006 08BD     		pop	{r3, pc}
   78              		.cfi_endproc
   79              	.LFE141:
@@ -115,36 +118,36 @@ ARM GAS  /tmp/ccqwRP8n.s 			page 1
   90              		.thumb_func
   92              	Process_QR_Data:
   93              	.LVL2:
+ARM GAS  /tmp/ccLWm4h2.s 			page 3
+
+
   94              	.LFB143:
-  17:Core/Src/barcode_reader.c **** 
-  18:Core/Src/barcode_reader.c **** /**
-ARM GAS  /tmp/ccqwRP8n.s 			page 3
-
-
-  19:Core/Src/barcode_reader.c ****  * @brief Process the QR data once received.
-  20:Core/Src/barcode_reader.c ****  */
-  21:Core/Src/barcode_reader.c **** void Process_QR_Data(char *data) {
-  95              		.loc 1 21 34 is_stmt 1 view -0
+  20:Core/Src/barcode_reader.c **** 
+  21:Core/Src/barcode_reader.c **** /**
+  22:Core/Src/barcode_reader.c ****  * @brief Process the QR data once received.
+  23:Core/Src/barcode_reader.c ****  */
+  24:Core/Src/barcode_reader.c **** void Process_QR_Data(char *data) {
+  95              		.loc 1 24 34 is_stmt 1 view -0
   96              		.cfi_startproc
   97              		@ args = 0, pretend = 0, frame = 0
   98              		@ frame_needed = 0, uses_anonymous_args = 0
-  99              		.loc 1 21 34 is_stmt 0 view .LVU7
+  99              		.loc 1 24 34 is_stmt 0 view .LVU7
  100 0000 08B5     		push	{r3, lr}
  101              	.LCFI2:
  102              		.cfi_def_cfa_offset 8
  103              		.cfi_offset 3, -8
  104              		.cfi_offset 14, -4
  105 0002 0146     		mov	r1, r0
-  22:Core/Src/barcode_reader.c ****     printf("QR Code Data: %s\n", data);  // Print the received data
- 106              		.loc 1 22 5 is_stmt 1 view .LVU8
+  25:Core/Src/barcode_reader.c ****     printf("QR Code Data: %s\n", data);  // Print the received data
+ 106              		.loc 1 25 5 is_stmt 1 view .LVU8
  107 0004 0148     		ldr	r0, .L9
  108              	.LVL3:
- 109              		.loc 1 22 5 is_stmt 0 view .LVU9
+ 109              		.loc 1 25 5 is_stmt 0 view .LVU9
  110 0006 FFF7FEFF 		bl	printf
  111              	.LVL4:
-  23:Core/Src/barcode_reader.c ****     // Add more processing logic based on QR data if needed
-  24:Core/Src/barcode_reader.c **** }
- 112              		.loc 1 24 1 view .LVU10
+  26:Core/Src/barcode_reader.c ****     // Add more processing logic based on QR data if needed
+  27:Core/Src/barcode_reader.c **** }
+ 112              		.loc 1 27 1 view .LVU10
  113 000a 08BD     		pop	{r3, pc}
  114              	.L10:
  115              		.align	2
@@ -161,47 +164,47 @@ ARM GAS  /tmp/ccqwRP8n.s 			page 1
  128              	HAL_I2C_MasterRxCpltCallback:
  129              	.LVL5:
  130              	.LFB144:
-  25:Core/Src/barcode_reader.c **** 
-  26:Core/Src/barcode_reader.c **** /**
-  27:Core/Src/barcode_reader.c ****  * @brief Callback function called upon completion of I2C receive.
-  28:Core/Src/barcode_reader.c ****  */
-  29:Core/Src/barcode_reader.c **** void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef *hi2c) {
- 131              		.loc 1 29 60 is_stmt 1 view -0
+  28:Core/Src/barcode_reader.c **** 
+  29:Core/Src/barcode_reader.c **** /**
+  30:Core/Src/barcode_reader.c ****  * @brief Callback function called upon completion of I2C receive.
+  31:Core/Src/barcode_reader.c ****  */
+  32:Core/Src/barcode_reader.c **** void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef *hi2c) {
+ 131              		.loc 1 32 60 is_stmt 1 view -0
  132              		.cfi_startproc
  133              		@ args = 0, pretend = 0, frame = 0
  134              		@ frame_needed = 0, uses_anonymous_args = 0
  135              		@ link register save eliminated.
-  30:Core/Src/barcode_reader.c ****     if (hi2c->Instance == I2C1) {  // Check if the interrupt is from I2C1
- 136              		.loc 1 30 5 view .LVU12
- 137              		.loc 1 30 13 is_stmt 0 view .LVU13
+  33:Core/Src/barcode_reader.c ****     if (hi2c->Instance == I2C2) {  // Check if the interrupt is from I2C1
+ 136              		.loc 1 33 5 view .LVU12
+ 137              		.loc 1 33 13 is_stmt 0 view .LVU13
  138 0000 0268     		ldr	r2, [r0]
- 139              		.loc 1 30 8 view .LVU14
+ARM GAS  /tmp/ccLWm4h2.s 			page 4
+
+
+ 139              		.loc 1 33 8 view .LVU14
  140 0002 044B     		ldr	r3, .L14
  141 0004 9A42     		cmp	r2, r3
-ARM GAS  /tmp/ccqwRP8n.s 			page 4
-
-
  142 0006 00D0     		beq	.L13
  143              	.L11:
-  31:Core/Src/barcode_reader.c ****         data_received = 1;         // Set flag to indicate data received
-  32:Core/Src/barcode_reader.c ****     }
-  33:Core/Src/barcode_reader.c **** }
- 144              		.loc 1 33 1 view .LVU15
+  34:Core/Src/barcode_reader.c ****         data_received = 1;         // Set flag to indicate data received
+  35:Core/Src/barcode_reader.c ****     }
+  36:Core/Src/barcode_reader.c **** }
+ 144              		.loc 1 36 1 view .LVU15
  145 0008 7047     		bx	lr
  146              	.L13:
-  31:Core/Src/barcode_reader.c ****         data_received = 1;         // Set flag to indicate data received
- 147              		.loc 1 31 9 is_stmt 1 view .LVU16
-  31:Core/Src/barcode_reader.c ****         data_received = 1;         // Set flag to indicate data received
- 148              		.loc 1 31 23 is_stmt 0 view .LVU17
+  34:Core/Src/barcode_reader.c ****         data_received = 1;         // Set flag to indicate data received
+ 147              		.loc 1 34 9 is_stmt 1 view .LVU16
+  34:Core/Src/barcode_reader.c ****         data_received = 1;         // Set flag to indicate data received
+ 148              		.loc 1 34 23 is_stmt 0 view .LVU17
  149 000a 034B     		ldr	r3, .L14+4
  150 000c 0122     		movs	r2, #1
  151 000e 1A60     		str	r2, [r3]
- 152              		.loc 1 33 1 view .LVU18
+ 152              		.loc 1 36 1 view .LVU18
  153 0010 FAE7     		b	.L11
  154              	.L15:
  155 0012 00BF     		.align	2
  156              	.L14:
- 157 0014 00540040 		.word	1073763328
+ 157 0014 00580040 		.word	1073764352
  158 0018 00000000 		.word	.LANCHOR1
  159              		.cfi_endproc
  160              	.LFE144:
@@ -213,14 +216,14 @@ ARM GAS  /tmp/ccqwRP8n.s 			page 1
  167              		.thumb_func
  169              	I2C1_EV_IRQHandler:
  170              	.LFB145:
-  34:Core/Src/barcode_reader.c **** 
-  35:Core/Src/barcode_reader.c **** 
-  36:Core/Src/barcode_reader.c **** 
-  37:Core/Src/barcode_reader.c **** /**
-  38:Core/Src/barcode_reader.c ****  * @brief I2C1 event interrupt handler.
-  39:Core/Src/barcode_reader.c ****  */
-  40:Core/Src/barcode_reader.c **** void I2C1_EV_IRQHandler(void) {
- 171              		.loc 1 40 31 is_stmt 1 view -0
+  37:Core/Src/barcode_reader.c **** 
+  38:Core/Src/barcode_reader.c **** 
+  39:Core/Src/barcode_reader.c **** 
+  40:Core/Src/barcode_reader.c **** /**
+  41:Core/Src/barcode_reader.c ****  * @brief I2C1 event interrupt handler.
+  42:Core/Src/barcode_reader.c ****  */
+  43:Core/Src/barcode_reader.c **** void I2C1_EV_IRQHandler(void) {
+ 171              		.loc 1 43 31 is_stmt 1 view -0
  172              		.cfi_startproc
  173              		@ args = 0, pretend = 0, frame = 0
  174              		@ frame_needed = 0, uses_anonymous_args = 0
@@ -229,21 +232,21 @@ ARM GAS  /tmp/ccqwRP8n.s 			page 1
  177              		.cfi_def_cfa_offset 8
  178              		.cfi_offset 3, -8
  179              		.cfi_offset 14, -4
-  41:Core/Src/barcode_reader.c ****     HAL_I2C_EV_IRQHandler(&hi2c1);
- 180              		.loc 1 41 5 view .LVU20
+  44:Core/Src/barcode_reader.c ****     HAL_I2C_EV_IRQHandler(&hi2c2);
+ 180              		.loc 1 44 5 view .LVU20
  181 0002 0248     		ldr	r0, .L18
  182 0004 FFF7FEFF 		bl	HAL_I2C_EV_IRQHandler
  183              	.LVL6:
-  42:Core/Src/barcode_reader.c **** }
- 184              		.loc 1 42 1 is_stmt 0 view .LVU21
+  45:Core/Src/barcode_reader.c **** }
+ARM GAS  /tmp/ccLWm4h2.s 			page 5
+
+
+ 184              		.loc 1 45 1 is_stmt 0 view .LVU21
  185 0008 08BD     		pop	{r3, pc}
  186              	.L19:
-ARM GAS  /tmp/ccqwRP8n.s 			page 5
-
-
  187 000a 00BF     		.align	2
  188              	.L18:
- 189 000c 00000000 		.word	hi2c1
+ 189 000c 00000000 		.word	hi2c2
  190              		.cfi_endproc
  191              	.LFE145:
  193              		.global	data_received
@@ -272,33 +275,33 @@ ARM GAS  /tmp/ccqwRP8n.s 			page 1
  216              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h"
  217              		.file 8 "Core/Inc/barcode_reader.h"
  218              		.file 9 "/usr/local/arm-none-eabi/include/stdio.h"
-ARM GAS  /tmp/ccqwRP8n.s 			page 6
+ARM GAS  /tmp/ccLWm4h2.s 			page 6
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 barcode_reader.c
-     /tmp/ccqwRP8n.s:20     .text.QR_Scanner_Read:0000000000000000 $t
-     /tmp/ccqwRP8n.s:26     .text.QR_Scanner_Read:0000000000000000 QR_Scanner_Read
-     /tmp/ccqwRP8n.s:50     .text.QR_Scanner_Read:0000000000000010 $d
-     /tmp/ccqwRP8n.s:56     .text.QR_Scanner_Init:0000000000000000 $t
-     /tmp/ccqwRP8n.s:62     .text.QR_Scanner_Init:0000000000000000 QR_Scanner_Init
-     /tmp/ccqwRP8n.s:82     .rodata.Process_QR_Data.str1.4:0000000000000000 $d
-     /tmp/ccqwRP8n.s:86     .text.Process_QR_Data:0000000000000000 $t
-     /tmp/ccqwRP8n.s:92     .text.Process_QR_Data:0000000000000000 Process_QR_Data
-     /tmp/ccqwRP8n.s:117    .text.Process_QR_Data:000000000000000c $d
-     /tmp/ccqwRP8n.s:122    .text.HAL_I2C_MasterRxCpltCallback:0000000000000000 $t
-     /tmp/ccqwRP8n.s:128    .text.HAL_I2C_MasterRxCpltCallback:0000000000000000 HAL_I2C_MasterRxCpltCallback
-     /tmp/ccqwRP8n.s:157    .text.HAL_I2C_MasterRxCpltCallback:0000000000000014 $d
-     /tmp/ccqwRP8n.s:163    .text.I2C1_EV_IRQHandler:0000000000000000 $t
-     /tmp/ccqwRP8n.s:169    .text.I2C1_EV_IRQHandler:0000000000000000 I2C1_EV_IRQHandler
-     /tmp/ccqwRP8n.s:189    .text.I2C1_EV_IRQHandler:000000000000000c $d
-     /tmp/ccqwRP8n.s:200    .bss.data_received:0000000000000000 data_received
-     /tmp/ccqwRP8n.s:207    .bss.qr_data:0000000000000000 qr_data
-     /tmp/ccqwRP8n.s:196    .bss.data_received:0000000000000000 $d
-     /tmp/ccqwRP8n.s:203    .bss.qr_data:0000000000000000 $d
+     /tmp/ccLWm4h2.s:20     .text.QR_Scanner_Read:0000000000000000 $t
+     /tmp/ccLWm4h2.s:26     .text.QR_Scanner_Read:0000000000000000 QR_Scanner_Read
+     /tmp/ccLWm4h2.s:50     .text.QR_Scanner_Read:0000000000000010 $d
+     /tmp/ccLWm4h2.s:56     .text.QR_Scanner_Init:0000000000000000 $t
+     /tmp/ccLWm4h2.s:62     .text.QR_Scanner_Init:0000000000000000 QR_Scanner_Init
+     /tmp/ccLWm4h2.s:82     .rodata.Process_QR_Data.str1.4:0000000000000000 $d
+     /tmp/ccLWm4h2.s:86     .text.Process_QR_Data:0000000000000000 $t
+     /tmp/ccLWm4h2.s:92     .text.Process_QR_Data:0000000000000000 Process_QR_Data
+     /tmp/ccLWm4h2.s:117    .text.Process_QR_Data:000000000000000c $d
+     /tmp/ccLWm4h2.s:122    .text.HAL_I2C_MasterRxCpltCallback:0000000000000000 $t
+     /tmp/ccLWm4h2.s:128    .text.HAL_I2C_MasterRxCpltCallback:0000000000000000 HAL_I2C_MasterRxCpltCallback
+     /tmp/ccLWm4h2.s:157    .text.HAL_I2C_MasterRxCpltCallback:0000000000000014 $d
+     /tmp/ccLWm4h2.s:163    .text.I2C1_EV_IRQHandler:0000000000000000 $t
+     /tmp/ccLWm4h2.s:169    .text.I2C1_EV_IRQHandler:0000000000000000 I2C1_EV_IRQHandler
+     /tmp/ccLWm4h2.s:189    .text.I2C1_EV_IRQHandler:000000000000000c $d
+     /tmp/ccLWm4h2.s:200    .bss.data_received:0000000000000000 data_received
+     /tmp/ccLWm4h2.s:207    .bss.qr_data:0000000000000000 qr_data
+     /tmp/ccLWm4h2.s:196    .bss.data_received:0000000000000000 $d
+     /tmp/ccLWm4h2.s:203    .bss.qr_data:0000000000000000 $d
 
 UNDEFINED SYMBOLS
 HAL_I2C_Master_Receive_IT
-hi2c1
+hi2c2
 printf
 HAL_I2C_EV_IRQHandler

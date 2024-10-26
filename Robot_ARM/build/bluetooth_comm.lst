@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccasMpAy.s 			page 1
+ARM GAS  /tmp/ccyJrkg4.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -31,59 +31,61 @@ ARM GAS  /tmp/ccasMpAy.s 			page 1
   29              		.file 1 "Core/Src/bluetooth_comm.c"
    1:Core/Src/bluetooth_comm.c **** #include "bluetooth_comm.h"
    2:Core/Src/bluetooth_comm.c **** 
-   3:Core/Src/bluetooth_comm.c **** 
-   4:Core/Src/bluetooth_comm.c **** 
-   5:Core/Src/bluetooth_comm.c **** // Interrupt callback function for UART RX complete
-   6:Core/Src/bluetooth_comm.c **** void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
-  30              		.loc 1 6 57 view -0
+   3:Core/Src/bluetooth_comm.c **** uint8_t received = 0;
+   4:Core/Src/bluetooth_comm.c **** uint8_t rxBuffer[BUFFER_SIZE]; 
+   5:Core/Src/bluetooth_comm.c **** uint8_t txBuffer[BUFFER_SIZE];
+   6:Core/Src/bluetooth_comm.c **** 
+   7:Core/Src/bluetooth_comm.c **** // Interrupt callback function for UART RX complete
+   8:Core/Src/bluetooth_comm.c **** void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+  30              		.loc 1 8 57 view -0
   31              		.cfi_startproc
   32              		@ args = 0, pretend = 0, frame = 0
   33              		@ frame_needed = 0, uses_anonymous_args = 0
-  34              		.loc 1 6 57 is_stmt 0 view .LVU1
+  34              		.loc 1 8 57 is_stmt 0 view .LVU1
   35 0000 08B5     		push	{r3, lr}
   36              	.LCFI0:
   37              		.cfi_def_cfa_offset 8
   38              		.cfi_offset 3, -8
   39              		.cfi_offset 14, -4
-   7:Core/Src/bluetooth_comm.c ****     if (huart->Instance == USART1) {
-  40              		.loc 1 7 5 is_stmt 1 view .LVU2
-  41              		.loc 1 7 14 is_stmt 0 view .LVU3
+   9:Core/Src/bluetooth_comm.c ****     if (huart->Instance == USART1) {
+  40              		.loc 1 9 5 is_stmt 1 view .LVU2
+  41              		.loc 1 9 14 is_stmt 0 view .LVU3
   42 0002 0268     		ldr	r2, [r0]
-  43              		.loc 1 7 8 view .LVU4
+  43              		.loc 1 9 8 view .LVU4
   44 0004 064B     		ldr	r3, .L5
   45 0006 9A42     		cmp	r2, r3
   46 0008 00D0     		beq	.L4
   47              	.LVL1:
   48              	.L1:
-   8:Core/Src/bluetooth_comm.c ****         received = 1;  // Set the flag when data is received
-   9:Core/Src/bluetooth_comm.c ****         HAL_UART_Receive_IT(&huart1, rxBuffer, BUFFER_SIZE);  // Re-enable the interrupt for contin
-  10:Core/Src/bluetooth_comm.c ****     }
-ARM GAS  /tmp/ccasMpAy.s 			page 2
+  10:Core/Src/bluetooth_comm.c ****         received = 1;  // Set the flag when data is received
+ARM GAS  /tmp/ccyJrkg4.s 			page 2
 
 
-  11:Core/Src/bluetooth_comm.c **** }
-  49              		.loc 1 11 1 view .LVU5
+  11:Core/Src/bluetooth_comm.c ****         HAL_UART_Receive_IT(&huart1, rxBuffer, BUFFER_SIZE);  // Re-enable the interrupt for contin
+  12:Core/Src/bluetooth_comm.c ****     }
+  13:Core/Src/bluetooth_comm.c **** }
+  49              		.loc 1 13 1 view .LVU5
   50 000a 08BD     		pop	{r3, pc}
   51              	.LVL2:
   52              	.L4:
-   8:Core/Src/bluetooth_comm.c ****         received = 1;  // Set the flag when data is received
-  53              		.loc 1 8 9 is_stmt 1 view .LVU6
-   8:Core/Src/bluetooth_comm.c ****         received = 1;  // Set the flag when data is received
-  54              		.loc 1 8 18 is_stmt 0 view .LVU7
+  10:Core/Src/bluetooth_comm.c ****         received = 1;  // Set the flag when data is received
+  53              		.loc 1 10 9 is_stmt 1 view .LVU6
+  10:Core/Src/bluetooth_comm.c ****         received = 1;  // Set the flag when data is received
+  54              		.loc 1 10 18 is_stmt 0 view .LVU7
   55 000c 054B     		ldr	r3, .L5+4
   56 000e 0122     		movs	r2, #1
   57 0010 1A70     		strb	r2, [r3]
-   9:Core/Src/bluetooth_comm.c ****     }
-  58              		.loc 1 9 9 is_stmt 1 view .LVU8
+  11:Core/Src/bluetooth_comm.c ****     }
+  58              		.loc 1 11 9 is_stmt 1 view .LVU8
   59 0012 6422     		movs	r2, #100
   60 0014 0449     		ldr	r1, .L5+8
   61 0016 0548     		ldr	r0, .L5+12
   62              	.LVL3:
-   9:Core/Src/bluetooth_comm.c ****     }
-  63              		.loc 1 9 9 is_stmt 0 view .LVU9
+  11:Core/Src/bluetooth_comm.c ****     }
+  63              		.loc 1 11 9 is_stmt 0 view .LVU9
   64 0018 FFF7FEFF 		bl	HAL_UART_Receive_IT
   65              	.LVL4:
-  66              		.loc 1 11 1 view .LVU10
+  66              		.loc 1 13 1 view .LVU10
   67 001c F5E7     		b	.L1
   68              	.L6:
   69 001e 00BF     		.align	2
@@ -103,45 +105,45 @@ ARM GAS  /tmp/ccasMpAy.s 			page 1
   85              	sendBluetoothData_IT:
   86              	.LVL5:
   87              	.LFB142:
-  12:Core/Src/bluetooth_comm.c **** 
-  13:Core/Src/bluetooth_comm.c **** // Send data over Bluetooth using interrupt
-  14:Core/Src/bluetooth_comm.c **** void sendBluetoothData_IT(char* data) {
-  88              		.loc 1 14 39 is_stmt 1 view -0
+  14:Core/Src/bluetooth_comm.c **** 
+  15:Core/Src/bluetooth_comm.c **** // Send data over Bluetooth using interrupt
+  16:Core/Src/bluetooth_comm.c **** void sendBluetoothData_IT(char* data) {
+  88              		.loc 1 16 39 is_stmt 1 view -0
   89              		.cfi_startproc
   90              		@ args = 0, pretend = 0, frame = 0
   91              		@ frame_needed = 0, uses_anonymous_args = 0
-  92              		.loc 1 14 39 is_stmt 0 view .LVU12
+  92              		.loc 1 16 39 is_stmt 0 view .LVU12
   93 0000 10B5     		push	{r4, lr}
   94              	.LCFI1:
   95              		.cfi_def_cfa_offset 8
   96              		.cfi_offset 4, -8
   97              		.cfi_offset 14, -4
+ARM GAS  /tmp/ccyJrkg4.s 			page 3
+
+
   98 0002 0146     		mov	r1, r0
-  15:Core/Src/bluetooth_comm.c ****     strcpy((char*)txBuffer, data);  // Copy data to transmission buffer
-ARM GAS  /tmp/ccasMpAy.s 			page 3
-
-
-  99              		.loc 1 15 5 is_stmt 1 view .LVU13
+  17:Core/Src/bluetooth_comm.c ****     strcpy((char*)txBuffer, data);  // Copy data to transmission buffer
+  99              		.loc 1 17 5 is_stmt 1 view .LVU13
  100 0004 064C     		ldr	r4, .L9
  101 0006 2046     		mov	r0, r4
  102              	.LVL6:
- 103              		.loc 1 15 5 is_stmt 0 view .LVU14
+ 103              		.loc 1 17 5 is_stmt 0 view .LVU14
  104 0008 FFF7FEFF 		bl	strcpy
  105              	.LVL7:
-  16:Core/Src/bluetooth_comm.c ****     HAL_UART_Transmit_IT(&huart1, txBuffer, strlen((char*)txBuffer));  // Transmit in interrupt mod
- 106              		.loc 1 16 5 is_stmt 1 view .LVU15
- 107              		.loc 1 16 45 is_stmt 0 view .LVU16
+  18:Core/Src/bluetooth_comm.c ****     HAL_UART_Transmit_IT(&huart1, txBuffer, strlen((char*)txBuffer));  // Transmit in interrupt mod
+ 106              		.loc 1 18 5 is_stmt 1 view .LVU15
+ 107              		.loc 1 18 45 is_stmt 0 view .LVU16
  108 000c 2046     		mov	r0, r4
  109 000e FFF7FEFF 		bl	strlen
  110              	.LVL8:
- 111              		.loc 1 16 5 view .LVU17
+ 111              		.loc 1 18 5 view .LVU17
  112 0012 82B2     		uxth	r2, r0
  113 0014 2146     		mov	r1, r4
  114 0016 0348     		ldr	r0, .L9+4
  115 0018 FFF7FEFF 		bl	HAL_UART_Transmit_IT
  116              	.LVL9:
-  17:Core/Src/bluetooth_comm.c **** }
- 117              		.loc 1 17 1 view .LVU18
+  19:Core/Src/bluetooth_comm.c **** }
+ 117              		.loc 1 19 1 view .LVU18
  118 001c 10BD     		pop	{r4, pc}
  119              	.L10:
  120 001e 00BF     		.align	2
@@ -150,9 +152,9 @@ ARM GAS  /tmp/ccasMpAy.s 			page 1
  123 0024 00000000 		.word	huart1
  124              		.cfi_endproc
  125              	.LFE142:
- 127              		.global	received
- 128              		.global	txBuffer
- 129              		.global	rxBuffer
+ 127              		.global	txBuffer
+ 128              		.global	rxBuffer
+ 129              		.global	received
  130              		.section	.bss.received,"aw",%nobits
  131              		.set	.LANCHOR0,. + 0
  134              	received:
@@ -176,11 +178,11 @@ ARM GAS  /tmp/ccasMpAy.s 			page 1
  149      00000000 
  149      00000000 
  150              		.text
+ARM GAS  /tmp/ccyJrkg4.s 			page 4
+
+
  151              	.Letext0:
  152              		.file 2 "/usr/local/arm-none-eabi/include/machine/_default_types.h"
-ARM GAS  /tmp/ccasMpAy.s 			page 4
-
-
  153              		.file 3 "/usr/local/arm-none-eabi/include/sys/_stdint.h"
  154              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f411xe.h"
  155              		.file 5 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
@@ -188,23 +190,23 @@ ARM GAS  /tmp/ccasMpAy.s 			page 1
  157              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h"
  158              		.file 8 "Core/Inc/bluetooth_comm.h"
  159              		.file 9 "/usr/local/arm-none-eabi/include/string.h"
-ARM GAS  /tmp/ccasMpAy.s 			page 5
+ARM GAS  /tmp/ccyJrkg4.s 			page 5
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 bluetooth_comm.c
-     /tmp/ccasMpAy.s:20     .text.HAL_UART_RxCpltCallback:0000000000000000 $t
-     /tmp/ccasMpAy.s:26     .text.HAL_UART_RxCpltCallback:0000000000000000 HAL_UART_RxCpltCallback
-     /tmp/ccasMpAy.s:71     .text.HAL_UART_RxCpltCallback:0000000000000020 $d
-     /tmp/ccasMpAy.s:79     .text.sendBluetoothData_IT:0000000000000000 $t
-     /tmp/ccasMpAy.s:85     .text.sendBluetoothData_IT:0000000000000000 sendBluetoothData_IT
-     /tmp/ccasMpAy.s:122    .text.sendBluetoothData_IT:0000000000000020 $d
-     /tmp/ccasMpAy.s:134    .bss.received:0000000000000000 received
-     /tmp/ccasMpAy.s:148    .bss.txBuffer:0000000000000000 txBuffer
-     /tmp/ccasMpAy.s:141    .bss.rxBuffer:0000000000000000 rxBuffer
-     /tmp/ccasMpAy.s:135    .bss.received:0000000000000000 $d
-     /tmp/ccasMpAy.s:137    .bss.rxBuffer:0000000000000000 $d
-     /tmp/ccasMpAy.s:144    .bss.txBuffer:0000000000000000 $d
+     /tmp/ccyJrkg4.s:20     .text.HAL_UART_RxCpltCallback:0000000000000000 $t
+     /tmp/ccyJrkg4.s:26     .text.HAL_UART_RxCpltCallback:0000000000000000 HAL_UART_RxCpltCallback
+     /tmp/ccyJrkg4.s:71     .text.HAL_UART_RxCpltCallback:0000000000000020 $d
+     /tmp/ccyJrkg4.s:79     .text.sendBluetoothData_IT:0000000000000000 $t
+     /tmp/ccyJrkg4.s:85     .text.sendBluetoothData_IT:0000000000000000 sendBluetoothData_IT
+     /tmp/ccyJrkg4.s:122    .text.sendBluetoothData_IT:0000000000000020 $d
+     /tmp/ccyJrkg4.s:148    .bss.txBuffer:0000000000000000 txBuffer
+     /tmp/ccyJrkg4.s:141    .bss.rxBuffer:0000000000000000 rxBuffer
+     /tmp/ccyJrkg4.s:134    .bss.received:0000000000000000 received
+     /tmp/ccyJrkg4.s:135    .bss.received:0000000000000000 $d
+     /tmp/ccyJrkg4.s:137    .bss.rxBuffer:0000000000000000 $d
+     /tmp/ccyJrkg4.s:144    .bss.txBuffer:0000000000000000 $d
 
 UNDEFINED SYMBOLS
 HAL_UART_Receive_IT

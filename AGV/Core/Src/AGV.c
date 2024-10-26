@@ -1,9 +1,11 @@
 #include "AGV.h"
 
+uint8_t car_moving = 0;
+
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
     if (GPIO_Pin == FSR_Pin) {
         HAL_Delay(START_DELAY_MS); // Delay after FSR is pressed
-        car_moving = true;
+        car_moving = 1;
         Motor_MoveForward();
     }
 }

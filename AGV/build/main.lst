@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccoQ5dTH.s 			page 1
+ARM GAS  /tmp/ccTLbPL2.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
   29:Core/Src/main.c **** #include <string.h>
   30:Core/Src/main.c **** #include "event_groups.h"
   31:Core/Src/main.c **** #include <stdio.h>
-ARM GAS  /tmp/ccoQ5dTH.s 			page 2
+ARM GAS  /tmp/ccTLbPL2.s 			page 2
 
 
   32:Core/Src/main.c **** #include <stdlib.h>
@@ -118,7 +118,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
   86:Core/Src/main.c **** /* Private user code ---------------------------------------------------------*/
   87:Core/Src/main.c **** /* USER CODE BEGIN 0 */
   88:Core/Src/main.c **** uint8_t TaskAdd(void (*FunctionName)(void *argument), /* Function that implements the task. */
-ARM GAS  /tmp/ccoQ5dTH.s 			page 3
+ARM GAS  /tmp/ccTLbPL2.s 			page 3
 
 
   89:Core/Src/main.c **** char *TaskName, /* Text name for the task. */
@@ -178,7 +178,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  143:Core/Src/main.c ****   MX_ADC1_Init();
  144:Core/Src/main.c ****   MX_SPI1_Init();
  145:Core/Src/main.c ****   MX_USART1_UART_Init();
-ARM GAS  /tmp/ccoQ5dTH.s 			page 4
+ARM GAS  /tmp/ccTLbPL2.s 			page 4
 
 
  146:Core/Src/main.c ****   MX_USART2_UART_Init();
@@ -238,7 +238,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  200:Core/Src/main.c ****   * @brief  Function implementing the defaultTask thread.
  201:Core/Src/main.c ****   * @param  argument: Not used
  202:Core/Src/main.c ****   * @retval None
-ARM GAS  /tmp/ccoQ5dTH.s 			page 5
+ARM GAS  /tmp/ccTLbPL2.s 			page 5
 
 
  203:Core/Src/main.c ****   */
@@ -298,7 +298,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  257:Core/Src/main.c ****   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
  258:Core/Src/main.c **** 
  259:Core/Src/main.c ****   /** Configure the main internal regulator output voltage
-ARM GAS  /tmp/ccoQ5dTH.s 			page 6
+ARM GAS  /tmp/ccTLbPL2.s 			page 6
 
 
  260:Core/Src/main.c ****   */
@@ -358,7 +358,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  314:Core/Src/main.c ****   */
  315:Core/Src/main.c **** static void MX_ADC1_Init(void)
  316:Core/Src/main.c **** {
-ARM GAS  /tmp/ccoQ5dTH.s 			page 7
+ARM GAS  /tmp/ccTLbPL2.s 			page 7
 
 
  317:Core/Src/main.c **** 
@@ -418,7 +418,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  371:Core/Src/main.c ****   * @retval None
  372:Core/Src/main.c ****   */
  373:Core/Src/main.c **** static void MX_SPI1_Init(void)
-ARM GAS  /tmp/ccoQ5dTH.s 			page 8
+ARM GAS  /tmp/ccTLbPL2.s 			page 8
 
 
  374:Core/Src/main.c **** {
@@ -478,7 +478,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  428:Core/Src/main.c ****   huart1.Init.Mode = UART_MODE_TX_RX;
  429:Core/Src/main.c ****   huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
  430:Core/Src/main.c ****   huart1.Init.OverSampling = UART_OVERSAMPLING_16;
-ARM GAS  /tmp/ccoQ5dTH.s 			page 9
+ARM GAS  /tmp/ccTLbPL2.s 			page 9
 
 
  431:Core/Src/main.c ****   huart1.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
@@ -538,7 +538,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
   28              		.loc 1 484 1 view -0
   29              		.cfi_startproc
   30              		@ args = 0, pretend = 0, frame = 32
-ARM GAS  /tmp/ccoQ5dTH.s 			page 10
+ARM GAS  /tmp/ccTLbPL2.s 			page 10
 
 
   31              		@ frame_needed = 0, uses_anonymous_args = 0
@@ -598,7 +598,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
   78 0034 019A     		ldr	r2, [sp, #4]
   79              	.LBE5:
   80              		.loc 1 491 3 view .LVU14
-ARM GAS  /tmp/ccoQ5dTH.s 			page 11
+ARM GAS  /tmp/ccTLbPL2.s 			page 11
 
 
  492:Core/Src/main.c ****   __HAL_RCC_GPIOB_CLK_ENABLE();
@@ -658,7 +658,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  121              		.loc 1 505 25 is_stmt 0 view .LVU30
  122 006e 0694     		str	r4, [sp, #24]
  506:Core/Src/main.c ****   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-ARM GAS  /tmp/ccoQ5dTH.s 			page 12
+ARM GAS  /tmp/ccTLbPL2.s 			page 12
 
 
  123              		.loc 1 506 3 is_stmt 1 view .LVU31
@@ -718,7 +718,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  523:Core/Src/main.c ****   /*Configure GPIO pins : LEFT_IR_Pin ULTRASONIC_ECHO_Pin */
  524:Core/Src/main.c ****   GPIO_InitStruct.Pin = LEFT_IR_Pin|ULTRASONIC_ECHO_Pin;
  161              		.loc 1 524 3 view .LVU48
-ARM GAS  /tmp/ccoQ5dTH.s 			page 13
+ARM GAS  /tmp/ccTLbPL2.s 			page 13
 
 
  162              		.loc 1 524 23 is_stmt 0 view .LVU49
@@ -778,7 +778,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  209              		.cfi_offset 3, -8
  210              		.cfi_offset 14, -4
  211 0002 06E0     		b	.L7
-ARM GAS  /tmp/ccoQ5dTH.s 			page 14
+ARM GAS  /tmp/ccTLbPL2.s 			page 14
 
 
  212              	.LVL7:
@@ -816,7 +816,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  236              	.L11:
  237              		.align	2
  238              	.L10:
- 239 001c 00000000 		.word	.LANCHOR0
+ 239 001c 00000000 		.word	car_moving
  240              		.cfi_endproc
  241              	.LFE298:
  243              		.section	.text.task02,"ax",%progbits
@@ -838,7 +838,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  258              		.loc 1 230 1 is_stmt 0 view .LVU67
  259 0000 08B5     		push	{r3, lr}
  260              	.LCFI4:
-ARM GAS  /tmp/ccoQ5dTH.s 			page 15
+ARM GAS  /tmp/ccTLbPL2.s 			page 15
 
 
  261              		.cfi_def_cfa_offset 8
@@ -898,7 +898,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  305 0002 82B0     		sub	sp, sp, #8
  306              	.LCFI6:
  307              		.cfi_def_cfa_offset 24
-ARM GAS  /tmp/ccoQ5dTH.s 			page 16
+ARM GAS  /tmp/ccTLbPL2.s 			page 16
 
 
  308 0004 0C46     		mov	r4, r1
@@ -958,7 +958,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  351 002e FFF7FEFF 		bl	printf
  352              	.LVL21:
   99:Core/Src/main.c ****   } else {
-ARM GAS  /tmp/ccoQ5dTH.s 			page 17
+ARM GAS  /tmp/ccTLbPL2.s 			page 17
 
 
  353              		.loc 1 99 5 is_stmt 1 view .LVU84
@@ -1018,7 +1018,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  399              	.LVL25:
  400 0010 0146     		mov	r1, r0
  401 0012 0348     		ldr	r0, .L24
-ARM GAS  /tmp/ccoQ5dTH.s 			page 18
+ARM GAS  /tmp/ccTLbPL2.s 			page 18
 
 
  402 0014 FFF7FEFF 		bl	printf
@@ -1078,7 +1078,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  450              	.LVL30:
  246:Core/Src/main.c **** }
  451              		.loc 1 246 5 is_stmt 1 view .LVU99
-ARM GAS  /tmp/ccoQ5dTH.s 			page 19
+ARM GAS  /tmp/ccTLbPL2.s 			page 19
 
 
  247:Core/Src/main.c **** 
@@ -1092,7 +1092,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  459              	.L29:
  460              		.align	2
  461              	.L28:
- 462 001c 00000000 		.word	.LANCHOR1
+ 462 001c 00000000 		.word	.LANCHOR0
  463              		.cfi_endproc
  464              	.LFE300:
  466              		.section	.text.Error_Handler,"ax",%progbits
@@ -1138,7 +1138,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
    7:Drivers/CMSIS/Include/cmsis_gcc.h **** /*
    8:Drivers/CMSIS/Include/cmsis_gcc.h ****  * Copyright (c) 2009-2019 Arm Limited. All rights reserved.
    9:Drivers/CMSIS/Include/cmsis_gcc.h ****  *
-ARM GAS  /tmp/ccoQ5dTH.s 			page 20
+ARM GAS  /tmp/ccTLbPL2.s 			page 20
 
 
   10:Drivers/CMSIS/Include/cmsis_gcc.h ****  * SPDX-License-Identifier: Apache-2.0
@@ -1198,7 +1198,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
   64:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __PACKED_STRUCT
   65:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __PACKED_STRUCT                        struct __attribute__((packed, aligned(1)))
   66:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
-ARM GAS  /tmp/ccoQ5dTH.s 			page 21
+ARM GAS  /tmp/ccTLbPL2.s 			page 21
 
 
   67:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __PACKED_UNION
@@ -1258,7 +1258,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  121:Drivers/CMSIS/Include/cmsis_gcc.h **** 
  122:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef __PROGRAM_START
  123:Drivers/CMSIS/Include/cmsis_gcc.h **** 
-ARM GAS  /tmp/ccoQ5dTH.s 			page 22
+ARM GAS  /tmp/ccTLbPL2.s 			page 22
 
 
  124:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
@@ -1318,7 +1318,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  178:Drivers/CMSIS/Include/cmsis_gcc.h **** #define __VECTOR_TABLE            __Vectors
  179:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
  180:Drivers/CMSIS/Include/cmsis_gcc.h **** 
-ARM GAS  /tmp/ccoQ5dTH.s 			page 23
+ARM GAS  /tmp/ccTLbPL2.s 			page 23
 
 
  181:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef __VECTOR_TABLE_ATTRIBUTE
@@ -1378,7 +1378,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  507              		.thumb
  508              		.thumb_func
  510              	MX_ADC1_Init:
-ARM GAS  /tmp/ccoQ5dTH.s 			page 24
+ARM GAS  /tmp/ccTLbPL2.s 			page 24
 
 
  511              	.LFB302:
@@ -1438,7 +1438,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  550              		.loc 1 335 27 is_stmt 0 view .LVU122
  551 0020 0422     		movs	r2, #4
  552 0022 4261     		str	r2, [r0, #20]
-ARM GAS  /tmp/ccoQ5dTH.s 			page 25
+ARM GAS  /tmp/ccTLbPL2.s 			page 25
 
 
  336:Core/Src/main.c ****   hadc1.Init.ContinuousConvMode = DISABLE;
@@ -1498,7 +1498,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  586 0042 90B9     		cbnz	r0, .L36
  352:Core/Src/main.c ****   sConfig.Rank = ADC_REGULAR_RANK_1;
  587              		.loc 1 352 3 is_stmt 1 view .LVU144
-ARM GAS  /tmp/ccoQ5dTH.s 			page 26
+ARM GAS  /tmp/ccTLbPL2.s 			page 26
 
 
  352:Core/Src/main.c ****   sConfig.Rank = ADC_REGULAR_RANK_1;
@@ -1558,7 +1558,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  627              		.cfi_restore_state
  347:Core/Src/main.c ****   }
  628              		.loc 1 347 5 is_stmt 1 view .LVU160
-ARM GAS  /tmp/ccoQ5dTH.s 			page 27
+ARM GAS  /tmp/ccTLbPL2.s 			page 27
 
 
  629 006a FFF7FEFF 		bl	Error_Handler
@@ -1571,7 +1571,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  635              	.L39:
  636 0072 00BF     		.align	2
  637              	.L38:
- 638 0074 00000000 		.word	.LANCHOR2
+ 638 0074 00000000 		.word	.LANCHOR1
  639 0078 00000450 		.word	1342439424
  640 007c 00018021 		.word	562036992
  641              		.cfi_endproc
@@ -1618,7 +1618,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  675              		.loc 1 387 23 is_stmt 0 view .LVU170
  676 0012 4FF44072 		mov	r2, #768
  677 0016 C260     		str	r2, [r0, #12]
-ARM GAS  /tmp/ccoQ5dTH.s 			page 28
+ARM GAS  /tmp/ccTLbPL2.s 			page 28
 
 
  388:Core/Src/main.c ****   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
@@ -1678,7 +1678,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  711              		.loc 1 398 3 is_stmt 1 view .LVU191
  398:Core/Src/main.c ****   {
  712              		.loc 1 398 7 is_stmt 0 view .LVU192
-ARM GAS  /tmp/ccoQ5dTH.s 			page 29
+ARM GAS  /tmp/ccTLbPL2.s 			page 29
 
 
  713 0034 FFF7FEFF 		bl	HAL_SPI_Init
@@ -1697,7 +1697,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  723              	.L45:
  724              		.align	2
  725              	.L44:
- 726 0040 00000000 		.word	.LANCHOR3
+ 726 0040 00000000 		.word	.LANCHOR2
  727 0044 00300140 		.word	1073819648
  728              		.cfi_endproc
  729              	.LFE303:
@@ -1738,7 +1738,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  759 000e 0023     		movs	r3, #0
  760 0010 8360     		str	r3, [r0, #8]
  426:Core/Src/main.c ****   huart1.Init.Parity = UART_PARITY_NONE;
-ARM GAS  /tmp/ccoQ5dTH.s 			page 30
+ARM GAS  /tmp/ccTLbPL2.s 			page 30
 
 
  761              		.loc 1 426 3 is_stmt 1 view .LVU203
@@ -1796,9 +1796,9 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  795              	.L51:
  796 002e 00BF     		.align	2
  797              	.L50:
- 798 0030 00000000 		.word	.LANCHOR4
+ 798 0030 00000000 		.word	.LANCHOR3
  799 0034 00380140 		.word	1073821696
-ARM GAS  /tmp/ccoQ5dTH.s 			page 31
+ARM GAS  /tmp/ccTLbPL2.s 			page 31
 
 
  800              		.cfi_endproc
@@ -1858,7 +1858,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  464:Core/Src/main.c ****   huart2.Init.OverSampling = UART_OVERSAMPLING_16;
  843              		.loc 1 464 3 is_stmt 1 view .LVU235
  464:Core/Src/main.c ****   huart2.Init.OverSampling = UART_OVERSAMPLING_16;
-ARM GAS  /tmp/ccoQ5dTH.s 			page 32
+ARM GAS  /tmp/ccTLbPL2.s 			page 32
 
 
  844              		.loc 1 464 25 is_stmt 0 view .LVU236
@@ -1898,7 +1898,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  867              	.L57:
  868 002e 00BF     		.align	2
  869              	.L56:
- 870 0030 00000000 		.word	.LANCHOR1
+ 870 0030 00000000 		.word	.LANCHOR0
  871 0034 00440040 		.word	1073759232
  872              		.cfi_endproc
  873              	.LFE305:
@@ -1918,7 +1918,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  888 0000 00B5     		push	{lr}
  889              	.LCFI20:
  890              		.cfi_def_cfa_offset 4
-ARM GAS  /tmp/ccoQ5dTH.s 			page 33
+ARM GAS  /tmp/ccTLbPL2.s 			page 33
 
 
  891              		.cfi_offset 14, -4
@@ -1978,7 +1978,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  932 003c 0123     		movs	r3, #1
  933 003e 0793     		str	r3, [sp, #28]
  276:Core/Src/main.c ****   RCC_OscInitStruct.MSICalibrationValue = 0;
-ARM GAS  /tmp/ccoQ5dTH.s 			page 34
+ARM GAS  /tmp/ccTLbPL2.s 			page 34
 
 
  934              		.loc 1 276 3 is_stmt 1 view .LVU262
@@ -2038,7 +2038,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  286:Core/Src/main.c ****   {
  969              		.loc 1 286 3 is_stmt 1 view .LVU282
  286:Core/Src/main.c ****   {
-ARM GAS  /tmp/ccoQ5dTH.s 			page 35
+ARM GAS  /tmp/ccTLbPL2.s 			page 35
 
 
  970              		.loc 1 286 7 is_stmt 0 view .LVU283
@@ -2098,7 +2098,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  1008              		.cfi_remember_state
  1009              		.cfi_def_cfa_offset 4
  1010              		@ sp needed
-ARM GAS  /tmp/ccoQ5dTH.s 			page 36
+ARM GAS  /tmp/ccTLbPL2.s 			page 36
 
 
  1011 0086 5DF804FB 		ldr	pc, [sp], #4
@@ -2158,7 +2158,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  1055              		.loc 1 119 1 view -0
  1056              		.cfi_startproc
  1057              		@ Volatile: function does not return.
-ARM GAS  /tmp/ccoQ5dTH.s 			page 37
+ARM GAS  /tmp/ccTLbPL2.s 			page 37
 
 
  1058              		@ args = 0, pretend = 0, frame = 0
@@ -2218,7 +2218,7 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  150:Core/Src/main.c **** 
  1103              		.loc 1 150 3 view .LVU313
  1104 003c 0B4B     		ldr	r3, .L71+16
-ARM GAS  /tmp/ccoQ5dTH.s 			page 38
+ARM GAS  /tmp/ccTLbPL2.s 			page 38
 
 
  1105 003e 0193     		str	r3, [sp, #4]
@@ -2251,10 +2251,10 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  1127              		.align	2
  1128              	.L71:
  1129 005c 00000000 		.word	.LC3
- 1130 0060 00000000 		.word	.LANCHOR5
+ 1130 0060 00000000 		.word	.LANCHOR4
  1131 0064 0C000000 		.word	.LC4
  1132 0068 00000000 		.word	task01
- 1133 006c 00000000 		.word	.LANCHOR6
+ 1133 006c 00000000 		.word	.LANCHOR5
  1134 0070 14000000 		.word	.LC5
  1135 0074 00000000 		.word	task02
  1136 0078 1C000000 		.word	.LC6
@@ -2266,154 +2266,145 @@ ARM GAS  /tmp/ccoQ5dTH.s 			page 1
  1143              		.global	huart1
  1144              		.global	hspi1
  1145              		.global	hadc1
- 1146              		.global	car_moving
- 1147              		.section	.bss.car_moving,"aw",%nobits
- 1148              		.set	.LANCHOR0,. + 0
- 1151              	car_moving:
- 1152 0000 00       		.space	1
- 1153              		.section	.bss.hadc1,"aw",%nobits
+ 1146              		.section	.bss.hadc1,"aw",%nobits
+ 1147              		.align	2
+ 1148              		.set	.LANCHOR1,. + 0
+ 1151              	hadc1:
+ 1152 0000 00000000 		.space	100
+ 1152      00000000 
+ 1152      00000000 
+ 1152      00000000 
+ 1152      00000000 
+ 1153              		.section	.bss.hspi1,"aw",%nobits
  1154              		.align	2
  1155              		.set	.LANCHOR2,. + 0
- 1158              	hadc1:
+ARM GAS  /tmp/ccTLbPL2.s 			page 39
+
+
+ 1158              	hspi1:
  1159 0000 00000000 		.space	100
  1159      00000000 
  1159      00000000 
-ARM GAS  /tmp/ccoQ5dTH.s 			page 39
-
-
  1159      00000000 
  1159      00000000 
- 1160              		.section	.bss.hspi1,"aw",%nobits
+ 1160              		.section	.bss.huart1,"aw",%nobits
  1161              		.align	2
  1162              		.set	.LANCHOR3,. + 0
- 1165              	hspi1:
- 1166 0000 00000000 		.space	100
+ 1165              	huart1:
+ 1166 0000 00000000 		.space	136
  1166      00000000 
  1166      00000000 
  1166      00000000 
  1166      00000000 
- 1167              		.section	.bss.huart1,"aw",%nobits
+ 1167              		.section	.bss.huart2,"aw",%nobits
  1168              		.align	2
- 1169              		.set	.LANCHOR4,. + 0
- 1172              	huart1:
+ 1169              		.set	.LANCHOR0,. + 0
+ 1172              	huart2:
  1173 0000 00000000 		.space	136
  1173      00000000 
  1173      00000000 
  1173      00000000 
  1173      00000000 
- 1174              		.section	.bss.huart2,"aw",%nobits
+ 1174              		.section	.bss.task01_HANDLE,"aw",%nobits
  1175              		.align	2
- 1176              		.set	.LANCHOR1,. + 0
- 1179              	huart2:
- 1180 0000 00000000 		.space	136
- 1180      00000000 
- 1180      00000000 
- 1180      00000000 
- 1180      00000000 
- 1181              		.section	.bss.task01_HANDLE,"aw",%nobits
+ 1176              		.set	.LANCHOR4,. + 0
+ 1179              	task01_HANDLE:
+ 1180 0000 00000000 		.space	4
+ 1181              		.section	.bss.task02_HANDLE,"aw",%nobits
  1182              		.align	2
  1183              		.set	.LANCHOR5,. + 0
- 1186              	task01_HANDLE:
+ 1186              	task02_HANDLE:
  1187 0000 00000000 		.space	4
- 1188              		.section	.bss.task02_HANDLE,"aw",%nobits
- 1189              		.align	2
- 1190              		.set	.LANCHOR6,. + 0
- 1193              	task02_HANDLE:
- 1194 0000 00000000 		.space	4
- 1195              		.text
- 1196              	.Letext0:
- 1197              		.file 3 "/usr/local/arm-none-eabi/include/machine/_default_types.h"
- 1198              		.file 4 "/usr/local/arm-none-eabi/include/sys/_stdint.h"
- 1199              		.file 5 "Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l432xx.h"
- 1200              		.file 6 "Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l4xx.h"
- 1201              		.file 7 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_def.h"
- 1202              		.file 8 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h"
- 1203              		.file 9 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_gpio.h"
- 1204              		.file 10 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_dma.h"
- 1205              		.file 11 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_adc.h"
- 1206              		.file 12 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_spi.h"
- 1207              		.file 13 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h"
- 1208              		.file 14 "Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h"
- 1209              		.file 15 "Middlewares/Third_Party/FreeRTOS/Source/include/task.h"
- 1210              		.file 16 "Core/Inc/AGV.h"
- 1211              		.file 17 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr_ex.h"
- 1212              		.file 18 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr.h"
-ARM GAS  /tmp/ccoQ5dTH.s 			page 40
-
-
- 1213              		.file 19 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc_ex.h"
- 1214              		.file 20 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h"
- 1215              		.file 21 "<built-in>"
- 1216              		.file 22 "/usr/local/arm-none-eabi/include/stdio.h"
-ARM GAS  /tmp/ccoQ5dTH.s 			page 41
+ 1188              		.text
+ 1189              	.Letext0:
+ 1190              		.file 3 "/usr/local/arm-none-eabi/include/machine/_default_types.h"
+ 1191              		.file 4 "/usr/local/arm-none-eabi/include/sys/_stdint.h"
+ 1192              		.file 5 "Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l432xx.h"
+ 1193              		.file 6 "Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l4xx.h"
+ 1194              		.file 7 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_def.h"
+ 1195              		.file 8 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h"
+ 1196              		.file 9 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_gpio.h"
+ 1197              		.file 10 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_dma.h"
+ 1198              		.file 11 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_adc.h"
+ 1199              		.file 12 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_spi.h"
+ 1200              		.file 13 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h"
+ 1201              		.file 14 "Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h"
+ 1202              		.file 15 "Middlewares/Third_Party/FreeRTOS/Source/include/task.h"
+ 1203              		.file 16 "Core/Inc/AGV.h"
+ 1204              		.file 17 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr_ex.h"
+ 1205              		.file 18 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr.h"
+ 1206              		.file 19 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc_ex.h"
+ 1207              		.file 20 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h"
+ 1208              		.file 21 "<built-in>"
+ 1209              		.file 22 "/usr/local/arm-none-eabi/include/stdio.h"
+ARM GAS  /tmp/ccTLbPL2.s 			page 40
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 main.c
-     /tmp/ccoQ5dTH.s:20     .text.MX_GPIO_Init:0000000000000000 $t
-     /tmp/ccoQ5dTH.s:25     .text.MX_GPIO_Init:0000000000000000 MX_GPIO_Init
-     /tmp/ccoQ5dTH.s:185    .text.MX_GPIO_Init:00000000000000b4 $d
-     /tmp/ccoQ5dTH.s:191    .text.task01:0000000000000000 $t
-     /tmp/ccoQ5dTH.s:197    .text.task01:0000000000000000 task01
-     /tmp/ccoQ5dTH.s:239    .text.task01:000000000000001c $d
-     /tmp/ccoQ5dTH.s:244    .text.task02:0000000000000000 $t
-     /tmp/ccoQ5dTH.s:250    .text.task02:0000000000000000 task02
-     /tmp/ccoQ5dTH.s:277    .rodata.TaskAdd.str1.4:0000000000000000 $d
-     /tmp/ccoQ5dTH.s:284    .text.TaskAdd:0000000000000000 $t
-     /tmp/ccoQ5dTH.s:290    .text.TaskAdd:0000000000000000 TaskAdd
-     /tmp/ccoQ5dTH.s:360    .text.TaskAdd:0000000000000038 $d
-     /tmp/ccoQ5dTH.s:366    .rodata.KillTask.str1.4:0000000000000000 $d
-     /tmp/ccoQ5dTH.s:370    .text.KillTask:0000000000000000 $t
-     /tmp/ccoQ5dTH.s:376    .text.KillTask:0000000000000000 KillTask
-     /tmp/ccoQ5dTH.s:415    .text.KillTask:0000000000000020 $d
-     /tmp/ccoQ5dTH.s:420    .text.__io_putchar:0000000000000000 $t
-     /tmp/ccoQ5dTH.s:426    .text.__io_putchar:0000000000000000 __io_putchar
-     /tmp/ccoQ5dTH.s:462    .text.__io_putchar:000000000000001c $d
-     /tmp/ccoQ5dTH.s:467    .text.Error_Handler:0000000000000000 $t
-     /tmp/ccoQ5dTH.s:473    .text.Error_Handler:0000000000000000 Error_Handler
-     /tmp/ccoQ5dTH.s:505    .text.MX_ADC1_Init:0000000000000000 $t
-     /tmp/ccoQ5dTH.s:510    .text.MX_ADC1_Init:0000000000000000 MX_ADC1_Init
-     /tmp/ccoQ5dTH.s:638    .text.MX_ADC1_Init:0000000000000074 $d
-     /tmp/ccoQ5dTH.s:645    .text.MX_SPI1_Init:0000000000000000 $t
-     /tmp/ccoQ5dTH.s:650    .text.MX_SPI1_Init:0000000000000000 MX_SPI1_Init
-     /tmp/ccoQ5dTH.s:726    .text.MX_SPI1_Init:0000000000000040 $d
-     /tmp/ccoQ5dTH.s:732    .text.MX_USART1_UART_Init:0000000000000000 $t
-     /tmp/ccoQ5dTH.s:737    .text.MX_USART1_UART_Init:0000000000000000 MX_USART1_UART_Init
-     /tmp/ccoQ5dTH.s:798    .text.MX_USART1_UART_Init:0000000000000030 $d
-     /tmp/ccoQ5dTH.s:804    .text.MX_USART2_UART_Init:0000000000000000 $t
-     /tmp/ccoQ5dTH.s:809    .text.MX_USART2_UART_Init:0000000000000000 MX_USART2_UART_Init
-     /tmp/ccoQ5dTH.s:870    .text.MX_USART2_UART_Init:0000000000000030 $d
-     /tmp/ccoQ5dTH.s:876    .text.SystemClock_Config:0000000000000000 $t
-     /tmp/ccoQ5dTH.s:882    .text.SystemClock_Config:0000000000000000 SystemClock_Config
-     /tmp/ccoQ5dTH.s:1029   .text.SystemClock_Config:0000000000000098 $d
-     /tmp/ccoQ5dTH.s:1034   .rodata.main.str1.4:0000000000000000 $d
-     /tmp/ccoQ5dTH.s:1047   .text.main:0000000000000000 $t
-     /tmp/ccoQ5dTH.s:1053   .text.main:0000000000000000 main
-     /tmp/ccoQ5dTH.s:1129   .text.main:000000000000005c $d
-     /tmp/ccoQ5dTH.s:1193   .bss.task02_HANDLE:0000000000000000 task02_HANDLE
-     /tmp/ccoQ5dTH.s:1186   .bss.task01_HANDLE:0000000000000000 task01_HANDLE
-     /tmp/ccoQ5dTH.s:1179   .bss.huart2:0000000000000000 huart2
-     /tmp/ccoQ5dTH.s:1172   .bss.huart1:0000000000000000 huart1
-     /tmp/ccoQ5dTH.s:1165   .bss.hspi1:0000000000000000 hspi1
-     /tmp/ccoQ5dTH.s:1158   .bss.hadc1:0000000000000000 hadc1
-     /tmp/ccoQ5dTH.s:1151   .bss.car_moving:0000000000000000 car_moving
-     /tmp/ccoQ5dTH.s:1152   .bss.car_moving:0000000000000000 $d
-     /tmp/ccoQ5dTH.s:1154   .bss.hadc1:0000000000000000 $d
-     /tmp/ccoQ5dTH.s:1161   .bss.hspi1:0000000000000000 $d
-     /tmp/ccoQ5dTH.s:1168   .bss.huart1:0000000000000000 $d
-     /tmp/ccoQ5dTH.s:1175   .bss.huart2:0000000000000000 $d
-     /tmp/ccoQ5dTH.s:1182   .bss.task01_HANDLE:0000000000000000 $d
-     /tmp/ccoQ5dTH.s:1189   .bss.task02_HANDLE:0000000000000000 $d
-
-ARM GAS  /tmp/ccoQ5dTH.s 			page 42
-
+     /tmp/ccTLbPL2.s:20     .text.MX_GPIO_Init:0000000000000000 $t
+     /tmp/ccTLbPL2.s:25     .text.MX_GPIO_Init:0000000000000000 MX_GPIO_Init
+     /tmp/ccTLbPL2.s:185    .text.MX_GPIO_Init:00000000000000b4 $d
+     /tmp/ccTLbPL2.s:191    .text.task01:0000000000000000 $t
+     /tmp/ccTLbPL2.s:197    .text.task01:0000000000000000 task01
+     /tmp/ccTLbPL2.s:239    .text.task01:000000000000001c $d
+     /tmp/ccTLbPL2.s:244    .text.task02:0000000000000000 $t
+     /tmp/ccTLbPL2.s:250    .text.task02:0000000000000000 task02
+     /tmp/ccTLbPL2.s:277    .rodata.TaskAdd.str1.4:0000000000000000 $d
+     /tmp/ccTLbPL2.s:284    .text.TaskAdd:0000000000000000 $t
+     /tmp/ccTLbPL2.s:290    .text.TaskAdd:0000000000000000 TaskAdd
+     /tmp/ccTLbPL2.s:360    .text.TaskAdd:0000000000000038 $d
+     /tmp/ccTLbPL2.s:366    .rodata.KillTask.str1.4:0000000000000000 $d
+     /tmp/ccTLbPL2.s:370    .text.KillTask:0000000000000000 $t
+     /tmp/ccTLbPL2.s:376    .text.KillTask:0000000000000000 KillTask
+     /tmp/ccTLbPL2.s:415    .text.KillTask:0000000000000020 $d
+     /tmp/ccTLbPL2.s:420    .text.__io_putchar:0000000000000000 $t
+     /tmp/ccTLbPL2.s:426    .text.__io_putchar:0000000000000000 __io_putchar
+     /tmp/ccTLbPL2.s:462    .text.__io_putchar:000000000000001c $d
+     /tmp/ccTLbPL2.s:467    .text.Error_Handler:0000000000000000 $t
+     /tmp/ccTLbPL2.s:473    .text.Error_Handler:0000000000000000 Error_Handler
+     /tmp/ccTLbPL2.s:505    .text.MX_ADC1_Init:0000000000000000 $t
+     /tmp/ccTLbPL2.s:510    .text.MX_ADC1_Init:0000000000000000 MX_ADC1_Init
+     /tmp/ccTLbPL2.s:638    .text.MX_ADC1_Init:0000000000000074 $d
+     /tmp/ccTLbPL2.s:645    .text.MX_SPI1_Init:0000000000000000 $t
+     /tmp/ccTLbPL2.s:650    .text.MX_SPI1_Init:0000000000000000 MX_SPI1_Init
+     /tmp/ccTLbPL2.s:726    .text.MX_SPI1_Init:0000000000000040 $d
+     /tmp/ccTLbPL2.s:732    .text.MX_USART1_UART_Init:0000000000000000 $t
+     /tmp/ccTLbPL2.s:737    .text.MX_USART1_UART_Init:0000000000000000 MX_USART1_UART_Init
+     /tmp/ccTLbPL2.s:798    .text.MX_USART1_UART_Init:0000000000000030 $d
+     /tmp/ccTLbPL2.s:804    .text.MX_USART2_UART_Init:0000000000000000 $t
+     /tmp/ccTLbPL2.s:809    .text.MX_USART2_UART_Init:0000000000000000 MX_USART2_UART_Init
+     /tmp/ccTLbPL2.s:870    .text.MX_USART2_UART_Init:0000000000000030 $d
+     /tmp/ccTLbPL2.s:876    .text.SystemClock_Config:0000000000000000 $t
+     /tmp/ccTLbPL2.s:882    .text.SystemClock_Config:0000000000000000 SystemClock_Config
+     /tmp/ccTLbPL2.s:1029   .text.SystemClock_Config:0000000000000098 $d
+     /tmp/ccTLbPL2.s:1034   .rodata.main.str1.4:0000000000000000 $d
+     /tmp/ccTLbPL2.s:1047   .text.main:0000000000000000 $t
+     /tmp/ccTLbPL2.s:1053   .text.main:0000000000000000 main
+     /tmp/ccTLbPL2.s:1129   .text.main:000000000000005c $d
+     /tmp/ccTLbPL2.s:1186   .bss.task02_HANDLE:0000000000000000 task02_HANDLE
+     /tmp/ccTLbPL2.s:1179   .bss.task01_HANDLE:0000000000000000 task01_HANDLE
+     /tmp/ccTLbPL2.s:1172   .bss.huart2:0000000000000000 huart2
+     /tmp/ccTLbPL2.s:1165   .bss.huart1:0000000000000000 huart1
+     /tmp/ccTLbPL2.s:1158   .bss.hspi1:0000000000000000 hspi1
+     /tmp/ccTLbPL2.s:1151   .bss.hadc1:0000000000000000 hadc1
+     /tmp/ccTLbPL2.s:1147   .bss.hadc1:0000000000000000 $d
+     /tmp/ccTLbPL2.s:1154   .bss.hspi1:0000000000000000 $d
+     /tmp/ccTLbPL2.s:1161   .bss.huart1:0000000000000000 $d
+     /tmp/ccTLbPL2.s:1168   .bss.huart2:0000000000000000 $d
+     /tmp/ccTLbPL2.s:1175   .bss.task01_HANDLE:0000000000000000 $d
+     /tmp/ccTLbPL2.s:1182   .bss.task02_HANDLE:0000000000000000 $d
 
 UNDEFINED SYMBOLS
 HAL_GPIO_WritePin
+ARM GAS  /tmp/ccTLbPL2.s 			page 41
+
+
 HAL_GPIO_Init
 Obstacle_CheckAndHandle
 LineFollowing
 vTaskDelay
+car_moving
 xTaskCreate
 printf
 pcTaskGetName

@@ -1,6 +1,8 @@
 #include "bluetooth_comm.h"
 
-
+uint8_t received = 0;
+uint8_t rxBuffer[BUFFER_SIZE]; 
+uint8_t txBuffer[BUFFER_SIZE];
 
 // Interrupt callback function for UART RX complete
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
