@@ -1,0 +1,1833 @@
+ARM GAS  /tmp/cctktfYf.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"AGV.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.rodata.Ultrasonic_GetDistance.str1.4,"aMS",%progbits,1
+  20              		.align	2
+  21              	.LC0:
+  22 0000 53746172 		.ascii	"Starting Ultrasonic Distance Measurement...\015\000"
+  22      74696E67 
+  22      20556C74 
+  22      7261736F 
+  22      6E696320 
+  23 002d 000000   		.align	2
+  24              	.LC1:
+  25 0030 54524947 		.ascii	"TRIG pin set HIGH\015\000"
+  25      2070696E 
+  25      20736574 
+  25      20484947 
+  25      480D00
+  26 0043 00       		.align	2
+  27              	.LC2:
+  28 0044 54524947 		.ascii	"TRIG pin set LOW\015\000"
+  28      2070696E 
+  28      20736574 
+  28      204C4F57 
+  28      0D00
+  29 0056 0000     		.align	2
+  30              	.LC3:
+  31 0058 57616974 		.ascii	"Waiting for ECHO pin HIGH...\015\000"
+  31      696E6720 
+  31      666F7220 
+  31      4543484F 
+  31      2070696E 
+  32 0076 0000     		.align	2
+  33              	.LC4:
+  34 0078 54696D65 		.ascii	"Timeout waiting for ECHO pin HIGH. Measurement fail"
+  34      6F757420 
+  34      77616974 
+  34      696E6720 
+  34      666F7220 
+  35 00ab 65642E0D 		.ascii	"ed.\015\000"
+  35      00
+  36              		.align	2
+ARM GAS  /tmp/cctktfYf.s 			page 2
+
+
+  37              	.LC5:
+  38 00b0 4543484F 		.ascii	"ECHO pin went HIGH. Value1 captured: %lu\015\012\000"
+  38      2070696E 
+  38      2077656E 
+  38      74204849 
+  38      47482E20 
+  39 00db 00       		.align	2
+  40              	.LC6:
+  41 00dc 57616974 		.ascii	"Waiting for ECHO pin LOW...\015\000"
+  41      696E6720 
+  41      666F7220 
+  41      4543484F 
+  41      2070696E 
+  42 00f9 000000   		.align	2
+  43              	.LC7:
+  44 00fc 54696D65 		.ascii	"Timeout waiting for ECHO pin LOW. Measurement faile"
+  44      6F757420 
+  44      77616974 
+  44      696E6720 
+  44      666F7220 
+  45 012f 642E0D00 		.ascii	"d.\015\000"
+  46 0133 00       		.align	2
+  47              	.LC8:
+  48 0134 4543484F 		.ascii	"ECHO pin went LOW. Value2 captured: %lu\015\012\000"
+  48      2070696E 
+  48      2077656E 
+  48      74204C4F 
+  48      572E2056 
+  49              		.global	__aeabi_ui2d
+  50              		.global	__aeabi_dmul
+  51              		.global	__aeabi_d2uiz
+  52 015e 0000     		.align	2
+  53              	.LC9:
+  54 0160 44697374 		.ascii	"Distance measured: %u cm\015\012\000"
+  54      616E6365 
+  54      206D6561 
+  54      73757265 
+  54      643A2025 
+  55              		.section	.text.Ultrasonic_GetDistance,"ax",%progbits
+  56              		.align	1
+  57              		.global	Ultrasonic_GetDistance
+  58              		.syntax unified
+  59              		.thumb
+  60              		.thumb_func
+  62              	Ultrasonic_GetDistance:
+  63              	.LFB137:
+  64              		.file 1 "Core/Src/AGV.c"
+   1:Core/Src/AGV.c **** /**
+   2:Core/Src/AGV.c ****  * Basically agv/car will rotate in a loop (line) where there are mainly two ends one where the car
+   3:Core/Src/AGV.c ****  * with boxes and another where it will unload the boxes. on both the end there will be line on mid
+   4:Core/Src/AGV.c ****  * infron of the two ir sensor, just to make it stop. when it stop at those points whether to load 
+   5:Core/Src/AGV.c ****  * or to unload the boxes FSR sensor will signal the car to move forward blindly for like 2 sec and
+   6:Core/Src/AGV.c ****  * following algorithm agains kicks in and drive the car to another stop.
+   7:Core/Src/AGV.c ****  * 1. agv will wait for the arm to load up the box.
+   8:Core/Src/AGV.c ****  * 2. FSR will detect the box whether it's mounted or not
+   9:Core/Src/AGV.c ****  * 3. if the FSR is one (meaning the load is mounted) then the car began to move after 2 second tim
+  10:Core/Src/AGV.c ****  * 4. The car will follow the path until there is no obstacle infront of it 
+ARM GAS  /tmp/cctktfYf.s 			page 3
+
+
+  11:Core/Src/AGV.c ****  *      (ultrasonic sensor keeps continuosly detecting for the object).
+  12:Core/Src/AGV.c ****  * 5. if the ultrasonic sensor detects any object, the car will stop and sound a buzzer.
+  13:Core/Src/AGV.c ****  * 6. ultrasonic sensor is still detecting whether the object has been removed from the path or not
+  14:Core/Src/AGV.c ****  *      if removed then will send signal as (car_moving = 0 ) when car_moving is zero then car bega
+  15:Core/Src/AGV.c ****  *      after 2 sec.
+  16:Core/Src/AGV.c ****  * 7. the car will stop when it doesn't see any path :
+  17:Core/Src/AGV.c ****  *      meaning:
+  18:Core/Src/AGV.c ****  *              left side closed 
+  19:Core/Src/AGV.c ****  *              right side closed and 
+  20:Core/Src/AGV.c ****  *              front side closed too.
+  21:Core/Src/AGV.c ****  * 8. car will wait for there till the box has been uloaded:
+  22:Core/Src/AGV.c ****  FSR = 0;
+  23:Core/Src/AGV.c ****  9. When FSR = 0 the car will move after like 2 second
+  24:Core/Src/AGV.c ****  10. Then same loop continues.
+  25:Core/Src/AGV.c ****  * **/
+  26:Core/Src/AGV.c **** #include "AGV.h"
+  27:Core/Src/AGV.c **** 
+  28:Core/Src/AGV.c **** uint8_t car_moving = 0;
+  29:Core/Src/AGV.c **** uint16_t current_speed = MIN_SPEED;
+  30:Core/Src/AGV.c **** 
+  31:Core/Src/AGV.c **** static uint8_t load = 0;
+  32:Core/Src/AGV.c **** 
+  33:Core/Src/AGV.c **** // Define AGV states for non-blocking obstacle and line-following handling
+  34:Core/Src/AGV.c **** typedef enum {
+  35:Core/Src/AGV.c **** 	AGV_STATE_LINE_FOLLOWING,
+  36:Core/Src/AGV.c **** 	AGV_STATE_OBSTACLE_DETECTED,
+  37:Core/Src/AGV.c **** 	AGV_STATE_OBSTACLE_CLEAR,
+  38:Core/Src/AGV.c **** 	AGV_STATE_STOP_STATION
+  39:Core/Src/AGV.c **** } AGV_State;
+  40:Core/Src/AGV.c **** 
+  41:Core/Src/AGV.c **** AGV_State current_state = AGV_STATE_LINE_FOLLOWING;
+  42:Core/Src/AGV.c **** 
+  43:Core/Src/AGV.c **** void Obstacle_CheckAndHandle() {
+  44:Core/Src/AGV.c **** 	uint16_t distance = 10;
+  45:Core/Src/AGV.c ****     printf("Obstacle_Check\r\nObstacle distance: %d\r\n", distance);
+  46:Core/Src/AGV.c **** 
+  47:Core/Src/AGV.c **** 	switch (current_state) {
+  48:Core/Src/AGV.c **** 	case AGV_STATE_LINE_FOLLOWING:
+  49:Core/Src/AGV.c **** 		// Check for obstacles only in line-following state
+  50:Core/Src/AGV.c **** 		if (distance < OBSTACLE_THRESHOLD) {
+  51:Core/Src/AGV.c **** 			printf("Obstacle detected, stopping AGV...\r\n");
+  52:Core/Src/AGV.c **** 			SmoothStop();
+  53:Core/Src/AGV.c **** 			HAL_GPIO_TogglePin(GPIOB, BUZZER_Pin);  // Turn buzzer on
+  54:Core/Src/AGV.c **** 			current_state = AGV_STATE_OBSTACLE_DETECTED;
+  55:Core/Src/AGV.c **** 		}
+  56:Core/Src/AGV.c **** 		break;
+  57:Core/Src/AGV.c **** 
+  58:Core/Src/AGV.c **** 	case AGV_STATE_OBSTACLE_DETECTED:
+  59:Core/Src/AGV.c **** 		// Wait until obstacle clears without blocking
+  60:Core/Src/AGV.c **** 		if (distance >= OBSTACLE_THRESHOLD) {
+  61:Core/Src/AGV.c **** 			printf("Obstacle cleared, resuming AGV...\r\n");
+  62:Core/Src/AGV.c **** 			HAL_GPIO_WritePin(GPIOB, BUZZER_Pin, GPIO_PIN_RESET); // Turn buzzer off
+  63:Core/Src/AGV.c **** 			current_state = AGV_STATE_OBSTACLE_CLEAR;
+  64:Core/Src/AGV.c **** 		}
+  65:Core/Src/AGV.c **** 		break;
+  66:Core/Src/AGV.c **** 
+  67:Core/Src/AGV.c **** 	case AGV_STATE_OBSTACLE_CLEAR:
+ARM GAS  /tmp/cctktfYf.s 			page 4
+
+
+  68:Core/Src/AGV.c **** 		HAL_Delay(2000);  // Wait briefly before resuming
+  69:Core/Src/AGV.c **** 		SmoothStart();
+  70:Core/Src/AGV.c **** 		current_state = AGV_STATE_LINE_FOLLOWING; // Return to line-following mode
+  71:Core/Src/AGV.c **** 		break;
+  72:Core/Src/AGV.c **** 
+  73:Core/Src/AGV.c **** 	case AGV_STATE_STOP_STATION:
+  74:Core/Src/AGV.c **** 		//wait for (2 sec) at the station, to be loaded
+  75:Core/Src/AGV.c **** 		SmoothStop();
+  76:Core/Src/AGV.c **** 		HAL_Delay(2000);  // Pause for 2 seconds (adjust as needed)
+  77:Core/Src/AGV.c **** 
+  78:Core/Src/AGV.c **** 		if (load == 0) {
+  79:Core/Src/AGV.c **** 			if (HAL_GPIO_ReadPin(FSR_GPIO_Port, FSR_Pin) == GPIO_PIN_SET) { // Box loaded
+  80:Core/Src/AGV.c **** 				load = 1;
+  81:Core/Src/AGV.c **** 				SmoothStart();
+  82:Core/Src/AGV.c **** 				HAL_Delay(1500);
+  83:Core/Src/AGV.c **** 				current_state = AGV_STATE_LINE_FOLLOWING;
+  84:Core/Src/AGV.c **** 			} else {  // Box not loaded, wait to be loaded
+  85:Core/Src/AGV.c **** 				current_state = AGV_STATE_STOP_STATION;
+  86:Core/Src/AGV.c **** 			}
+  87:Core/Src/AGV.c **** 
+  88:Core/Src/AGV.c **** 		} else {
+  89:Core/Src/AGV.c **** 			if (HAL_GPIO_ReadPin(FSR_GPIO_Port, FSR_Pin) == GPIO_PIN_RESET) { // Box unloaded
+  90:Core/Src/AGV.c **** 				load = 0;
+  91:Core/Src/AGV.c **** 				SmoothStart();
+  92:Core/Src/AGV.c **** 				HAL_Delay(1500);
+  93:Core/Src/AGV.c **** 				current_state = AGV_STATE_LINE_FOLLOWING;
+  94:Core/Src/AGV.c **** 			} else {  // Box loaded, wait to be unloaded
+  95:Core/Src/AGV.c **** 				current_state = AGV_STATE_STOP_STATION;
+  96:Core/Src/AGV.c **** 			}
+  97:Core/Src/AGV.c **** 		}
+  98:Core/Src/AGV.c **** 		break;
+  99:Core/Src/AGV.c **** 
+ 100:Core/Src/AGV.c **** 	default:
+ 101:Core/Src/AGV.c **** 		printf("This is a default message.\r\n");
+ 102:Core/Src/AGV.c **** 		current_state = AGV_STATE_LINE_FOLLOWING;
+ 103:Core/Src/AGV.c **** 	}
+ 104:Core/Src/AGV.c **** }
+ 105:Core/Src/AGV.c **** 
+ 106:Core/Src/AGV.c **** void LineFollowing() {
+ 107:Core/Src/AGV.c **** 
+ 108:Core/Src/AGV.c ****     printf("LineFollowing...\r\n");
+ 109:Core/Src/AGV.c **** 	// Only perform line-following if in LINE_FOLLOWING state
+ 110:Core/Src/AGV.c **** 	if (current_state == AGV_STATE_LINE_FOLLOWING) {
+ 111:Core/Src/AGV.c **** 		uint8_t left_sensor = 0;
+ 112:Core/Src/AGV.c **** 		uint8_t right_sensor = 0;
+ 113:Core/Src/AGV.c **** 
+ 114:Core/Src/AGV.c **** 		if (HAL_GPIO_ReadPin(LEFT_IR_GPIO_Port, LEFT_IR_Pin)) {
+ 115:Core/Src/AGV.c **** 			left_sensor = LINE_DETECTED;
+ 116:Core/Src/AGV.c **** 		}
+ 117:Core/Src/AGV.c **** 		if (HAL_GPIO_ReadPin(RIGHT_IR_GPIO_Port, RIGHT_IR_Pin)) {
+ 118:Core/Src/AGV.c **** 			right_sensor = LINE_DETECTED;
+ 119:Core/Src/AGV.c **** 		}
+ 120:Core/Src/AGV.c **** 
+ 121:Core/Src/AGV.c **** 		if (left_sensor == LINE_DETECTED && right_sensor != LINE_DETECTED) {
+ 122:Core/Src/AGV.c **** 			printf("Turning Right.\r\n");
+ 123:Core/Src/AGV.c **** 			Motor_TurnRight();
+ 124:Core/Src/AGV.c **** 		} else if (left_sensor != LINE_DETECTED && right_sensor == LINE_DETECTED) {
+ARM GAS  /tmp/cctktfYf.s 			page 5
+
+
+ 125:Core/Src/AGV.c **** 			printf("Turning Left.\r\n");
+ 126:Core/Src/AGV.c **** 			Motor_TurnLeft();
+ 127:Core/Src/AGV.c **** 		} else if (left_sensor == LINE_DETECTED && right_sensor == LINE_DETECTED) {
+ 128:Core/Src/AGV.c **** 
+ 129:Core/Src/AGV.c **** 			printf("Moving Forward.\r\n");
+ 130:Core/Src/AGV.c **** 			Motor_MoveForward();
+ 131:Core/Src/AGV.c **** 			current_state = AGV_STATE_LINE_FOLLOWING;
+ 132:Core/Src/AGV.c **** 		} else {
+ 133:Core/Src/AGV.c **** 			printf("Station_Stop.\r\n");
+ 134:Core/Src/AGV.c **** 			current_state = AGV_STATE_STOP_STATION;
+ 135:Core/Src/AGV.c **** 		}
+ 136:Core/Src/AGV.c **** 	}
+ 137:Core/Src/AGV.c **** }
+ 138:Core/Src/AGV.c **** 
+ 139:Core/Src/AGV.c **** uint16_t Ultrasonic_GetDistance() {
+  65              		.loc 1 139 35 view -0
+  66              		.cfi_startproc
+  67              		@ args = 0, pretend = 0, frame = 0
+  68              		@ frame_needed = 0, uses_anonymous_args = 0
+  69 0000 70B5     		push	{r4, r5, r6, lr}
+  70              	.LCFI0:
+  71              		.cfi_def_cfa_offset 16
+  72              		.cfi_offset 4, -16
+  73              		.cfi_offset 5, -12
+  74              		.cfi_offset 6, -8
+  75              		.cfi_offset 14, -4
+ 140:Core/Src/AGV.c **** 	uint16_t Distance = 0;
+  76              		.loc 1 140 2 view .LVU1
+  77              	.LVL0:
+ 141:Core/Src/AGV.c **** 	uint32_t pMillis = 0;
+  78              		.loc 1 141 2 view .LVU2
+ 142:Core/Src/AGV.c **** 	uint32_t Value1 = 0;
+  79              		.loc 1 142 2 view .LVU3
+ 143:Core/Src/AGV.c **** 	uint32_t Value2 = 0;
+  80              		.loc 1 143 2 view .LVU4
+ 144:Core/Src/AGV.c **** 
+ 145:Core/Src/AGV.c **** 	printf("Starting Ultrasonic Distance Measurement...\r\n");
+  81              		.loc 1 145 2 view .LVU5
+  82 0002 3D48     		ldr	r0, .L13+8
+  83 0004 FFF7FEFF 		bl	puts
+  84              	.LVL1:
+ 146:Core/Src/AGV.c **** 
+ 147:Core/Src/AGV.c **** 	// Trigger the ultrasonic sensor
+ 148:Core/Src/AGV.c **** 	HAL_GPIO_WritePin(ULTRASONIC_TRIG_GPIO_Port, ULTRASONIC_TRIG_Pin,
+  85              		.loc 1 148 2 view .LVU6
+  86 0008 0122     		movs	r2, #1
+  87 000a 2021     		movs	r1, #32
+  88 000c 3B48     		ldr	r0, .L13+12
+  89 000e FFF7FEFF 		bl	HAL_GPIO_WritePin
+  90              	.LVL2:
+ 149:Core/Src/AGV.c **** 			GPIO_PIN_SET);
+ 150:Core/Src/AGV.c **** 	printf("TRIG pin set HIGH\r\n");
+  91              		.loc 1 150 2 view .LVU7
+  92 0012 3B48     		ldr	r0, .L13+16
+  93 0014 FFF7FEFF 		bl	puts
+  94              	.LVL3:
+ 151:Core/Src/AGV.c **** 
+ARM GAS  /tmp/cctktfYf.s 			page 6
+
+
+ 152:Core/Src/AGV.c **** 	__HAL_TIM_SET_COUNTER(&htim6, 0);
+  95              		.loc 1 152 2 view .LVU8
+  96 0018 3A4B     		ldr	r3, .L13+20
+  97 001a 1A68     		ldr	r2, [r3]
+  98 001c 0023     		movs	r3, #0
+  99 001e 5362     		str	r3, [r2, #36]
+ 153:Core/Src/AGV.c **** 	while (__HAL_TIM_GET_COUNTER(&htim6) < 10)
+ 100              		.loc 1 153 2 view .LVU9
+ 101              	.L2:
+ 154:Core/Src/AGV.c **** 		;  // Wait for 10 us
+ 102              		.loc 1 154 3 discriminator 1 view .LVU10
+ 153:Core/Src/AGV.c **** 	while (__HAL_TIM_GET_COUNTER(&htim6) < 10)
+ 103              		.loc 1 153 8 discriminator 1 view .LVU11
+ 153:Core/Src/AGV.c **** 	while (__HAL_TIM_GET_COUNTER(&htim6) < 10)
+ 104              		.loc 1 153 9 is_stmt 0 discriminator 1 view .LVU12
+ 105 0020 536A     		ldr	r3, [r2, #36]
+ 153:Core/Src/AGV.c **** 	while (__HAL_TIM_GET_COUNTER(&htim6) < 10)
+ 106              		.loc 1 153 8 discriminator 1 view .LVU13
+ 107 0022 092B     		cmp	r3, #9
+ 108 0024 FCD9     		bls	.L2
+ 155:Core/Src/AGV.c **** 	HAL_GPIO_WritePin(ULTRASONIC_TRIG_GPIO_Port, ULTRASONIC_TRIG_Pin,
+ 109              		.loc 1 155 2 is_stmt 1 view .LVU14
+ 110 0026 0022     		movs	r2, #0
+ 111 0028 2021     		movs	r1, #32
+ 112 002a 3448     		ldr	r0, .L13+12
+ 113 002c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 114              	.LVL4:
+ 156:Core/Src/AGV.c **** 			GPIO_PIN_RESET);
+ 157:Core/Src/AGV.c **** 	printf("TRIG pin set LOW\r\n");
+ 115              		.loc 1 157 2 view .LVU15
+ 116 0030 3548     		ldr	r0, .L13+24
+ 117 0032 FFF7FEFF 		bl	puts
+ 118              	.LVL5:
+ 158:Core/Src/AGV.c **** 
+ 159:Core/Src/AGV.c **** 	// Record the start time to avoid infinite loop
+ 160:Core/Src/AGV.c **** 	pMillis = HAL_GetTick();
+ 119              		.loc 1 160 2 view .LVU16
+ 120              		.loc 1 160 12 is_stmt 0 view .LVU17
+ 121 0036 FFF7FEFF 		bl	HAL_GetTick
+ 122              	.LVL6:
+ 123 003a 0546     		mov	r5, r0
+ 124              	.LVL7:
+ 161:Core/Src/AGV.c **** 	printf("Waiting for ECHO pin HIGH...\r\n");
+ 125              		.loc 1 161 2 is_stmt 1 view .LVU18
+ 126 003c 3348     		ldr	r0, .L13+28
+ 127              	.LVL8:
+ 128              		.loc 1 161 2 is_stmt 0 view .LVU19
+ 129 003e FFF7FEFF 		bl	puts
+ 130              	.LVL9:
+ 162:Core/Src/AGV.c **** 
+ 163:Core/Src/AGV.c **** 	// Wait for the echo pin to go high, timeout extended to 20 ms
+ 164:Core/Src/AGV.c **** 	while (!(HAL_GPIO_ReadPin(ULTRASONIC_ECHO_GPIO_Port,
+ 131              		.loc 1 164 2 is_stmt 1 view .LVU20
+ 132              	.L4:
+ 165:Core/Src/AGV.c **** 	ULTRASONIC_ECHO_Pin)) && (pMillis + 20 > HAL_GetTick()))
+ 166:Core/Src/AGV.c **** 		;
+ 133              		.loc 1 166 3 view .LVU21
+ARM GAS  /tmp/cctktfYf.s 			page 7
+
+
+ 164:Core/Src/AGV.c **** 	ULTRASONIC_ECHO_Pin)) && (pMillis + 20 > HAL_GetTick()))
+ 134              		.loc 1 164 8 view .LVU22
+ 164:Core/Src/AGV.c **** 	ULTRASONIC_ECHO_Pin)) && (pMillis + 20 > HAL_GetTick()))
+ 135              		.loc 1 164 11 is_stmt 0 view .LVU23
+ 136 0042 4021     		movs	r1, #64
+ 137 0044 2D48     		ldr	r0, .L13+12
+ 138 0046 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 139              	.LVL10:
+ 164:Core/Src/AGV.c **** 	ULTRASONIC_ECHO_Pin)) && (pMillis + 20 > HAL_GetTick()))
+ 140              		.loc 1 164 8 view .LVU24
+ 141 004a 28B9     		cbnz	r0, .L3
+ 165:Core/Src/AGV.c **** 	ULTRASONIC_ECHO_Pin)) && (pMillis + 20 > HAL_GetTick()))
+ 142              		.loc 1 165 36 view .LVU25
+ 143 004c 05F11404 		add	r4, r5, #20
+ 165:Core/Src/AGV.c **** 	ULTRASONIC_ECHO_Pin)) && (pMillis + 20 > HAL_GetTick()))
+ 144              		.loc 1 165 43 view .LVU26
+ 145 0050 FFF7FEFF 		bl	HAL_GetTick
+ 146              	.LVL11:
+ 165:Core/Src/AGV.c **** 	ULTRASONIC_ECHO_Pin)) && (pMillis + 20 > HAL_GetTick()))
+ 147              		.loc 1 165 24 view .LVU27
+ 148 0054 8442     		cmp	r4, r0
+ 149 0056 F4D8     		bhi	.L4
+ 150              	.L3:
+ 167:Core/Src/AGV.c **** 
+ 168:Core/Src/AGV.c **** 	if (!(HAL_GPIO_ReadPin(ULTRASONIC_ECHO_GPIO_Port, ULTRASONIC_ECHO_Pin))) {
+ 151              		.loc 1 168 2 is_stmt 1 view .LVU28
+ 152              		.loc 1 168 8 is_stmt 0 view .LVU29
+ 153 0058 4021     		movs	r1, #64
+ 154 005a 2848     		ldr	r0, .L13+12
+ 155 005c FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 156              	.LVL12:
+ 157              		.loc 1 168 5 view .LVU30
+ 158 0060 0028     		cmp	r0, #0
+ 159 0062 38D0     		beq	.L11
+ 169:Core/Src/AGV.c **** 		printf("Timeout waiting for ECHO pin HIGH. Measurement failed.\r\n");
+ 170:Core/Src/AGV.c **** 		return 0;
+ 171:Core/Src/AGV.c **** 	}
+ 172:Core/Src/AGV.c **** 	Value1 = __HAL_TIM_GET_COUNTER(&htim6);
+ 160              		.loc 1 172 2 is_stmt 1 view .LVU31
+ 161              		.loc 1 172 11 is_stmt 0 view .LVU32
+ 162 0064 274B     		ldr	r3, .L13+20
+ 163 0066 1B68     		ldr	r3, [r3]
+ 164              		.loc 1 172 9 view .LVU33
+ 165 0068 5E6A     		ldr	r6, [r3, #36]
+ 166              	.LVL13:
+ 173:Core/Src/AGV.c **** 	printf("ECHO pin went HIGH. Value1 captured: %lu\r\n", Value1);
+ 167              		.loc 1 173 2 is_stmt 1 view .LVU34
+ 168 006a 3146     		mov	r1, r6
+ 169 006c 2848     		ldr	r0, .L13+32
+ 170 006e FFF7FEFF 		bl	printf
+ 171              	.LVL14:
+ 174:Core/Src/AGV.c **** 
+ 175:Core/Src/AGV.c **** 	// Record the start time again to avoid infinite loop
+ 176:Core/Src/AGV.c **** 	pMillis = HAL_GetTick();
+ 172              		.loc 1 176 2 view .LVU35
+ 173              		.loc 1 176 12 is_stmt 0 view .LVU36
+ 174 0072 FFF7FEFF 		bl	HAL_GetTick
+ARM GAS  /tmp/cctktfYf.s 			page 8
+
+
+ 175              	.LVL15:
+ 176 0076 0546     		mov	r5, r0
+ 177              	.LVL16:
+ 177:Core/Src/AGV.c **** 	printf("Waiting for ECHO pin LOW...\r\n");
+ 178              		.loc 1 177 2 is_stmt 1 view .LVU37
+ 179 0078 2648     		ldr	r0, .L13+36
+ 180              	.LVL17:
+ 181              		.loc 1 177 2 is_stmt 0 view .LVU38
+ 182 007a FFF7FEFF 		bl	puts
+ 183              	.LVL18:
+ 178:Core/Src/AGV.c **** 
+ 179:Core/Src/AGV.c **** 	// Wait for the echo pin to go low, timeout extended to 100 ms
+ 180:Core/Src/AGV.c **** 	while ((HAL_GPIO_ReadPin(ULTRASONIC_ECHO_GPIO_Port, ULTRASONIC_ECHO_Pin))
+ 184              		.loc 1 180 2 is_stmt 1 view .LVU39
+ 185              	.L8:
+ 181:Core/Src/AGV.c **** 			&& (pMillis + 100 > HAL_GetTick()))
+ 182:Core/Src/AGV.c **** 		;
+ 186              		.loc 1 182 3 view .LVU40
+ 180:Core/Src/AGV.c **** 			&& (pMillis + 100 > HAL_GetTick()))
+ 187              		.loc 1 180 8 view .LVU41
+ 180:Core/Src/AGV.c **** 			&& (pMillis + 100 > HAL_GetTick()))
+ 188              		.loc 1 180 10 is_stmt 0 view .LVU42
+ 189 007e 4021     		movs	r1, #64
+ 190 0080 1E48     		ldr	r0, .L13+12
+ 191 0082 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 192              	.LVL19:
+ 180:Core/Src/AGV.c **** 			&& (pMillis + 100 > HAL_GetTick()))
+ 193              		.loc 1 180 8 view .LVU43
+ 194 0086 28B1     		cbz	r0, .L7
+ 181:Core/Src/AGV.c **** 			&& (pMillis + 100 > HAL_GetTick()))
+ 195              		.loc 1 181 16 view .LVU44
+ 196 0088 05F16404 		add	r4, r5, #100
+ 181:Core/Src/AGV.c **** 			&& (pMillis + 100 > HAL_GetTick()))
+ 197              		.loc 1 181 24 view .LVU45
+ 198 008c FFF7FEFF 		bl	HAL_GetTick
+ 199              	.LVL20:
+ 181:Core/Src/AGV.c **** 			&& (pMillis + 100 > HAL_GetTick()))
+ 200              		.loc 1 181 4 view .LVU46
+ 201 0090 8442     		cmp	r4, r0
+ 202 0092 F4D8     		bhi	.L8
+ 203              	.L7:
+ 183:Core/Src/AGV.c **** 
+ 184:Core/Src/AGV.c **** 	if (HAL_GPIO_ReadPin(ULTRASONIC_ECHO_GPIO_Port, ULTRASONIC_ECHO_Pin)) {
+ 204              		.loc 1 184 2 is_stmt 1 view .LVU47
+ 205              		.loc 1 184 6 is_stmt 0 view .LVU48
+ 206 0094 4021     		movs	r1, #64
+ 207 0096 1948     		ldr	r0, .L13+12
+ 208 0098 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 209              	.LVL21:
+ 210              		.loc 1 184 5 view .LVU49
+ 211 009c 00BB     		cbnz	r0, .L12
+ 185:Core/Src/AGV.c **** 		printf("Timeout waiting for ECHO pin LOW. Measurement failed.\r\n");
+ 186:Core/Src/AGV.c **** 		return 0;
+ 187:Core/Src/AGV.c **** 	}
+ 188:Core/Src/AGV.c **** 	Value2 = __HAL_TIM_GET_COUNTER(&htim6);
+ 212              		.loc 1 188 2 is_stmt 1 view .LVU50
+ 213              		.loc 1 188 11 is_stmt 0 view .LVU51
+ARM GAS  /tmp/cctktfYf.s 			page 9
+
+
+ 214 009e 194B     		ldr	r3, .L13+20
+ 215 00a0 1B68     		ldr	r3, [r3]
+ 216              		.loc 1 188 9 view .LVU52
+ 217 00a2 5C6A     		ldr	r4, [r3, #36]
+ 218              	.LVL22:
+ 189:Core/Src/AGV.c **** 	printf("ECHO pin went LOW. Value2 captured: %lu\r\n", Value2);
+ 219              		.loc 1 189 2 is_stmt 1 view .LVU53
+ 220 00a4 2146     		mov	r1, r4
+ 221 00a6 1C48     		ldr	r0, .L13+40
+ 222 00a8 FFF7FEFF 		bl	printf
+ 223              	.LVL23:
+ 190:Core/Src/AGV.c **** 
+ 191:Core/Src/AGV.c **** 	// Calculate distance
+ 192:Core/Src/AGV.c **** 	Distance = (Value2 - Value1) * 0.034 / 2;
+ 224              		.loc 1 192 2 view .LVU54
+ 225              		.loc 1 192 31 is_stmt 0 view .LVU55
+ 226 00ac A01B     		subs	r0, r4, r6
+ 227 00ae FFF7FEFF 		bl	__aeabi_ui2d
+ 228              	.LVL24:
+ 229 00b2 0FA3     		adr	r3, .L13
+ 230 00b4 D3E90023 		ldrd	r2, [r3]
+ 231 00b8 FFF7FEFF 		bl	__aeabi_dmul
+ 232              	.LVL25:
+ 233              		.loc 1 192 39 view .LVU56
+ 234 00bc 0022     		movs	r2, #0
+ 235 00be 174B     		ldr	r3, .L13+44
+ 236 00c0 FFF7FEFF 		bl	__aeabi_dmul
+ 237              	.LVL26:
+ 238              		.loc 1 192 11 view .LVU57
+ 239 00c4 FFF7FEFF 		bl	__aeabi_d2uiz
+ 240              	.LVL27:
+ 241 00c8 84B2     		uxth	r4, r0
+ 242              	.LVL28:
+ 193:Core/Src/AGV.c **** 	printf("Distance measured: %u cm\r\n", Distance);
+ 243              		.loc 1 193 2 is_stmt 1 view .LVU58
+ 244 00ca 2146     		mov	r1, r4
+ 245 00cc 1448     		ldr	r0, .L13+48
+ 246 00ce FFF7FEFF 		bl	printf
+ 247              	.LVL29:
+ 194:Core/Src/AGV.c **** 
+ 195:Core/Src/AGV.c **** 	return Distance;
+ 248              		.loc 1 195 2 view .LVU59
+ 249              	.L6:
+ 196:Core/Src/AGV.c **** }
+ 250              		.loc 1 196 1 is_stmt 0 view .LVU60
+ 251 00d2 2046     		mov	r0, r4
+ 252 00d4 70BD     		pop	{r4, r5, r6, pc}
+ 253              	.LVL30:
+ 254              	.L11:
+ 169:Core/Src/AGV.c **** 		return 0;
+ 255              		.loc 1 169 3 is_stmt 1 view .LVU61
+ 256 00d6 1348     		ldr	r0, .L13+52
+ 257 00d8 FFF7FEFF 		bl	puts
+ 258              	.LVL31:
+ 170:Core/Src/AGV.c **** 	}
+ 259              		.loc 1 170 3 view .LVU62
+ 170:Core/Src/AGV.c **** 	}
+ARM GAS  /tmp/cctktfYf.s 			page 10
+
+
+ 260              		.loc 1 170 10 is_stmt 0 view .LVU63
+ 261 00dc 0024     		movs	r4, #0
+ 262 00de F8E7     		b	.L6
+ 263              	.LVL32:
+ 264              	.L12:
+ 185:Core/Src/AGV.c **** 		return 0;
+ 265              		.loc 1 185 3 is_stmt 1 view .LVU64
+ 266 00e0 1148     		ldr	r0, .L13+56
+ 267 00e2 FFF7FEFF 		bl	puts
+ 268              	.LVL33:
+ 186:Core/Src/AGV.c **** 	}
+ 269              		.loc 1 186 3 view .LVU65
+ 186:Core/Src/AGV.c **** 	}
+ 270              		.loc 1 186 10 is_stmt 0 view .LVU66
+ 271 00e6 0024     		movs	r4, #0
+ 272 00e8 F3E7     		b	.L6
+ 273              	.L14:
+ 274 00ea 00BFAFF3 		.align	3
+ 274      0080
+ 275              	.L13:
+ 276 00f0 9CC420B0 		.word	-1340029796
+ 277 00f4 7268A13F 		.word	1067542642
+ 278 00f8 00000000 		.word	.LC0
+ 279 00fc 00040048 		.word	1207960576
+ 280 0100 30000000 		.word	.LC1
+ 281 0104 00000000 		.word	htim6
+ 282 0108 44000000 		.word	.LC2
+ 283 010c 58000000 		.word	.LC3
+ 284 0110 B0000000 		.word	.LC5
+ 285 0114 DC000000 		.word	.LC6
+ 286 0118 34010000 		.word	.LC8
+ 287 011c 0000E03F 		.word	1071644672
+ 288 0120 60010000 		.word	.LC9
+ 289 0124 78000000 		.word	.LC4
+ 290 0128 FC000000 		.word	.LC7
+ 291              		.cfi_endproc
+ 292              	.LFE137:
+ 294              		.section	.rodata.Motor_Stop.str1.4,"aMS",%progbits,1
+ 295              		.align	2
+ 296              	.LC10:
+ 297 0000 4D6F746F 		.ascii	"Motor_Stop...\015\000"
+ 297      725F5374 
+ 297      6F702E2E 
+ 297      2E0D00
+ 298              		.section	.text.Motor_Stop,"ax",%progbits
+ 299              		.align	1
+ 300              		.global	Motor_Stop
+ 301              		.syntax unified
+ 302              		.thumb
+ 303              		.thumb_func
+ 305              	Motor_Stop:
+ 306              	.LFB138:
+ 197:Core/Src/AGV.c **** 
+ 198:Core/Src/AGV.c **** // Motor control functions
+ 199:Core/Src/AGV.c **** 
+ 200:Core/Src/AGV.c **** /**
+ 201:Core/Src/AGV.c ****  *  Input1   Input2  Spinning Direction
+ARM GAS  /tmp/cctktfYf.s 			page 11
+
+
+ 202:Core/Src/AGV.c **** 
+ 203:Core/Src/AGV.c ****  Low(0)  Low(0)  Motor OFF
+ 204:Core/Src/AGV.c ****  High(1) Low(0)  Forward
+ 205:Core/Src/AGV.c ****  Low(0)  High(1) Backward
+ 206:Core/Src/AGV.c ****  High(1) High(1) Motor OFF
+ 207:Core/Src/AGV.c **** 
+ 208:Core/Src/AGV.c **** 
+ 209:Core/Src/AGV.c ****  **/
+ 210:Core/Src/AGV.c **** 
+ 211:Core/Src/AGV.c **** void Motor_Stop() {
+ 307              		.loc 1 211 19 is_stmt 1 view -0
+ 308              		.cfi_startproc
+ 309              		@ args = 0, pretend = 0, frame = 0
+ 310              		@ frame_needed = 0, uses_anonymous_args = 0
+ 311 0000 08B5     		push	{r3, lr}
+ 312              	.LCFI1:
+ 313              		.cfi_def_cfa_offset 8
+ 314              		.cfi_offset 3, -8
+ 315              		.cfi_offset 14, -4
+ 212:Core/Src/AGV.c ****     printf("Motor_Stop...\r\n");
+ 316              		.loc 1 212 5 view .LVU68
+ 317 0002 0F48     		ldr	r0, .L17
+ 318 0004 FFF7FEFF 		bl	puts
+ 319              	.LVL34:
+ 213:Core/Src/AGV.c **** 	HAL_GPIO_WritePin(IN1_GPIO_Port, IN1_Pin, GPIO_PIN_RESET);
+ 320              		.loc 1 213 2 view .LVU69
+ 321 0008 0022     		movs	r2, #0
+ 322 000a 0121     		movs	r1, #1
+ 323 000c 0D48     		ldr	r0, .L17+4
+ 324 000e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 325              	.LVL35:
+ 214:Core/Src/AGV.c **** 	HAL_GPIO_WritePin(IN2_GPIO_Port, IN2_Pin, GPIO_PIN_RESET);
+ 326              		.loc 1 214 2 view .LVU70
+ 327 0012 0022     		movs	r2, #0
+ 328 0014 8021     		movs	r1, #128
+ 329 0016 4FF09040 		mov	r0, #1207959552
+ 330 001a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 331              	.LVL36:
+ 215:Core/Src/AGV.c **** 	HAL_GPIO_WritePin(IN3_GPIO_Port, IN3_Pin, GPIO_PIN_RESET);
+ 332              		.loc 1 215 2 view .LVU71
+ 333 001e 0022     		movs	r2, #0
+ 334 0020 4021     		movs	r1, #64
+ 335 0022 4FF09040 		mov	r0, #1207959552
+ 336 0026 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 337              	.LVL37:
+ 216:Core/Src/AGV.c **** 	HAL_GPIO_WritePin(IN4_GPIO_Port, IN4_Pin, GPIO_PIN_RESET);
+ 338              		.loc 1 216 2 view .LVU72
+ 339 002a 0022     		movs	r2, #0
+ 340 002c 1021     		movs	r1, #16
+ 341 002e 4FF09040 		mov	r0, #1207959552
+ 342 0032 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 343              	.LVL38:
+ 217:Core/Src/AGV.c **** 
+ 218:Core/Src/AGV.c **** 	car_moving = 0;
+ 344              		.loc 1 218 2 view .LVU73
+ 345              		.loc 1 218 13 is_stmt 0 view .LVU74
+ 346 0036 044B     		ldr	r3, .L17+8
+ARM GAS  /tmp/cctktfYf.s 			page 12
+
+
+ 347 0038 0022     		movs	r2, #0
+ 348 003a 1A70     		strb	r2, [r3]
+ 219:Core/Src/AGV.c **** }
+ 349              		.loc 1 219 1 view .LVU75
+ 350 003c 08BD     		pop	{r3, pc}
+ 351              	.L18:
+ 352 003e 00BF     		.align	2
+ 353              	.L17:
+ 354 0040 00000000 		.word	.LC10
+ 355 0044 00040048 		.word	1207960576
+ 356 0048 00000000 		.word	.LANCHOR0
+ 357              		.cfi_endproc
+ 358              	.LFE138:
+ 360              		.section	.rodata.Motor_MoveForward.str1.4,"aMS",%progbits,1
+ 361              		.align	2
+ 362              	.LC11:
+ 363 0000 4D6F746F 		.ascii	"Motor_MoveForward...\015\000"
+ 363      725F4D6F 
+ 363      7665466F 
+ 363      72776172 
+ 363      642E2E2E 
+ 364              		.section	.text.Motor_MoveForward,"ax",%progbits
+ 365              		.align	1
+ 366              		.global	Motor_MoveForward
+ 367              		.syntax unified
+ 368              		.thumb
+ 369              		.thumb_func
+ 371              	Motor_MoveForward:
+ 372              	.LFB139:
+ 220:Core/Src/AGV.c **** 
+ 221:Core/Src/AGV.c **** void Motor_MoveForward() {
+ 373              		.loc 1 221 26 is_stmt 1 view -0
+ 374              		.cfi_startproc
+ 375              		@ args = 0, pretend = 0, frame = 0
+ 376              		@ frame_needed = 0, uses_anonymous_args = 0
+ 377 0000 08B5     		push	{r3, lr}
+ 378              	.LCFI2:
+ 379              		.cfi_def_cfa_offset 8
+ 380              		.cfi_offset 3, -8
+ 381              		.cfi_offset 14, -4
+ 222:Core/Src/AGV.c ****     printf("Motor_MoveForward...\r\n");
+ 382              		.loc 1 222 5 view .LVU77
+ 383 0002 0F48     		ldr	r0, .L21
+ 384 0004 FFF7FEFF 		bl	puts
+ 385              	.LVL39:
+ 223:Core/Src/AGV.c **** 	HAL_GPIO_WritePin(IN1_GPIO_Port, IN1_Pin, GPIO_PIN_SET);
+ 386              		.loc 1 223 2 view .LVU78
+ 387 0008 0122     		movs	r2, #1
+ 388 000a 1146     		mov	r1, r2
+ 389 000c 0D48     		ldr	r0, .L21+4
+ 390 000e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 391              	.LVL40:
+ 224:Core/Src/AGV.c **** 	HAL_GPIO_WritePin(IN2_GPIO_Port, IN2_Pin, GPIO_PIN_RESET);
+ 392              		.loc 1 224 2 view .LVU79
+ 393 0012 0022     		movs	r2, #0
+ 394 0014 8021     		movs	r1, #128
+ 395 0016 4FF09040 		mov	r0, #1207959552
+ARM GAS  /tmp/cctktfYf.s 			page 13
+
+
+ 396 001a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 397              	.LVL41:
+ 225:Core/Src/AGV.c **** 
+ 226:Core/Src/AGV.c **** 	HAL_GPIO_WritePin(IN3_GPIO_Port, IN3_Pin, GPIO_PIN_SET);
+ 398              		.loc 1 226 2 view .LVU80
+ 399 001e 0122     		movs	r2, #1
+ 400 0020 4021     		movs	r1, #64
+ 401 0022 4FF09040 		mov	r0, #1207959552
+ 402 0026 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 403              	.LVL42:
+ 227:Core/Src/AGV.c **** 	HAL_GPIO_WritePin(IN4_GPIO_Port, IN4_Pin, GPIO_PIN_RESET);
+ 404              		.loc 1 227 2 view .LVU81
+ 405 002a 0022     		movs	r2, #0
+ 406 002c 1021     		movs	r1, #16
+ 407 002e 4FF09040 		mov	r0, #1207959552
+ 408 0032 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 409              	.LVL43:
+ 228:Core/Src/AGV.c **** 
+ 229:Core/Src/AGV.c **** 	car_moving = 1;
+ 410              		.loc 1 229 2 view .LVU82
+ 411              		.loc 1 229 13 is_stmt 0 view .LVU83
+ 412 0036 044B     		ldr	r3, .L21+8
+ 413 0038 0122     		movs	r2, #1
+ 414 003a 1A70     		strb	r2, [r3]
+ 230:Core/Src/AGV.c **** }
+ 415              		.loc 1 230 1 view .LVU84
+ 416 003c 08BD     		pop	{r3, pc}
+ 417              	.L22:
+ 418 003e 00BF     		.align	2
+ 419              	.L21:
+ 420 0040 00000000 		.word	.LC11
+ 421 0044 00040048 		.word	1207960576
+ 422 0048 00000000 		.word	.LANCHOR0
+ 423              		.cfi_endproc
+ 424              	.LFE139:
+ 426              		.section	.rodata.Motor_MoveBackward.str1.4,"aMS",%progbits,1
+ 427              		.align	2
+ 428              	.LC12:
+ 429 0000 4D6F746F 		.ascii	"Motor_MoveBackward...\015\000"
+ 429      725F4D6F 
+ 429      76654261 
+ 429      636B7761 
+ 429      72642E2E 
+ 430              		.section	.text.Motor_MoveBackward,"ax",%progbits
+ 431              		.align	1
+ 432              		.global	Motor_MoveBackward
+ 433              		.syntax unified
+ 434              		.thumb
+ 435              		.thumb_func
+ 437              	Motor_MoveBackward:
+ 438              	.LFB140:
+ 231:Core/Src/AGV.c **** 
+ 232:Core/Src/AGV.c **** void Motor_MoveBackward() {
+ 439              		.loc 1 232 27 is_stmt 1 view -0
+ 440              		.cfi_startproc
+ 441              		@ args = 0, pretend = 0, frame = 0
+ 442              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /tmp/cctktfYf.s 			page 14
+
+
+ 443 0000 08B5     		push	{r3, lr}
+ 444              	.LCFI3:
+ 445              		.cfi_def_cfa_offset 8
+ 446              		.cfi_offset 3, -8
+ 447              		.cfi_offset 14, -4
+ 233:Core/Src/AGV.c ****     printf("Motor_MoveBackward...\r\n");
+ 448              		.loc 1 233 5 view .LVU86
+ 449 0002 0D48     		ldr	r0, .L25
+ 450 0004 FFF7FEFF 		bl	puts
+ 451              	.LVL44:
+ 234:Core/Src/AGV.c **** 	HAL_GPIO_WritePin(IN1_GPIO_Port, IN1_Pin, GPIO_PIN_RESET);
+ 452              		.loc 1 234 2 view .LVU87
+ 453 0008 0022     		movs	r2, #0
+ 454 000a 0121     		movs	r1, #1
+ 455 000c 0B48     		ldr	r0, .L25+4
+ 456 000e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 457              	.LVL45:
+ 235:Core/Src/AGV.c **** 	HAL_GPIO_WritePin(IN2_GPIO_Port, IN2_Pin, GPIO_PIN_SET);
+ 458              		.loc 1 235 2 view .LVU88
+ 459 0012 0122     		movs	r2, #1
+ 460 0014 8021     		movs	r1, #128
+ 461 0016 4FF09040 		mov	r0, #1207959552
+ 462 001a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 463              	.LVL46:
+ 236:Core/Src/AGV.c **** 
+ 237:Core/Src/AGV.c **** 	HAL_GPIO_WritePin(IN3_GPIO_Port, IN3_Pin, GPIO_PIN_RESET);
+ 464              		.loc 1 237 2 view .LVU89
+ 465 001e 0022     		movs	r2, #0
+ 466 0020 4021     		movs	r1, #64
+ 467 0022 4FF09040 		mov	r0, #1207959552
+ 468 0026 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 469              	.LVL47:
+ 238:Core/Src/AGV.c **** 	HAL_GPIO_WritePin(IN4_GPIO_Port, IN4_Pin, GPIO_PIN_SET);
+ 470              		.loc 1 238 2 view .LVU90
+ 471 002a 0122     		movs	r2, #1
+ 472 002c 1021     		movs	r1, #16
+ 473 002e 4FF09040 		mov	r0, #1207959552
+ 474 0032 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 475              	.LVL48:
+ 239:Core/Src/AGV.c **** }
+ 476              		.loc 1 239 1 is_stmt 0 view .LVU91
+ 477 0036 08BD     		pop	{r3, pc}
+ 478              	.L26:
+ 479              		.align	2
+ 480              	.L25:
+ 481 0038 00000000 		.word	.LC12
+ 482 003c 00040048 		.word	1207960576
+ 483              		.cfi_endproc
+ 484              	.LFE140:
+ 486              		.section	.rodata.Motor_TurnLeft.str1.4,"aMS",%progbits,1
+ 487              		.align	2
+ 488              	.LC13:
+ 489 0000 4D6F746F 		.ascii	"Motor_TurnLeft...\015\000"
+ 489      725F5475 
+ 489      726E4C65 
+ 489      66742E2E 
+ 489      2E0D00
+ARM GAS  /tmp/cctktfYf.s 			page 15
+
+
+ 490              		.section	.text.Motor_TurnLeft,"ax",%progbits
+ 491              		.align	1
+ 492              		.global	Motor_TurnLeft
+ 493              		.syntax unified
+ 494              		.thumb
+ 495              		.thumb_func
+ 497              	Motor_TurnLeft:
+ 498              	.LFB141:
+ 240:Core/Src/AGV.c **** 
+ 241:Core/Src/AGV.c **** void Motor_TurnLeft() {
+ 499              		.loc 1 241 23 is_stmt 1 view -0
+ 500              		.cfi_startproc
+ 501              		@ args = 0, pretend = 0, frame = 0
+ 502              		@ frame_needed = 0, uses_anonymous_args = 0
+ 503 0000 08B5     		push	{r3, lr}
+ 504              	.LCFI4:
+ 505              		.cfi_def_cfa_offset 8
+ 506              		.cfi_offset 3, -8
+ 507              		.cfi_offset 14, -4
+ 242:Core/Src/AGV.c ****     printf("Motor_TurnLeft...\r\n");
+ 508              		.loc 1 242 5 view .LVU93
+ 509 0002 0D48     		ldr	r0, .L29
+ 510 0004 FFF7FEFF 		bl	puts
+ 511              	.LVL49:
+ 243:Core/Src/AGV.c **** 	HAL_GPIO_WritePin(IN1_GPIO_Port, IN1_Pin, GPIO_PIN_RESET);
+ 512              		.loc 1 243 2 view .LVU94
+ 513 0008 0022     		movs	r2, #0
+ 514 000a 0121     		movs	r1, #1
+ 515 000c 0B48     		ldr	r0, .L29+4
+ 516 000e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 517              	.LVL50:
+ 244:Core/Src/AGV.c **** 	HAL_GPIO_WritePin(IN2_GPIO_Port, IN2_Pin, GPIO_PIN_RESET);
+ 518              		.loc 1 244 2 view .LVU95
+ 519 0012 0022     		movs	r2, #0
+ 520 0014 8021     		movs	r1, #128
+ 521 0016 4FF09040 		mov	r0, #1207959552
+ 522 001a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 523              	.LVL51:
+ 245:Core/Src/AGV.c **** 
+ 246:Core/Src/AGV.c **** 	HAL_GPIO_WritePin(IN3_GPIO_Port, IN3_Pin, GPIO_PIN_SET);
+ 524              		.loc 1 246 2 view .LVU96
+ 525 001e 0122     		movs	r2, #1
+ 526 0020 4021     		movs	r1, #64
+ 527 0022 4FF09040 		mov	r0, #1207959552
+ 528 0026 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 529              	.LVL52:
+ 247:Core/Src/AGV.c **** 	HAL_GPIO_WritePin(IN4_GPIO_Port, IN4_Pin, GPIO_PIN_RESET);
+ 530              		.loc 1 247 2 view .LVU97
+ 531 002a 0022     		movs	r2, #0
+ 532 002c 1021     		movs	r1, #16
+ 533 002e 4FF09040 		mov	r0, #1207959552
+ 534 0032 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 535              	.LVL53:
+ 248:Core/Src/AGV.c **** }
+ 536              		.loc 1 248 1 is_stmt 0 view .LVU98
+ 537 0036 08BD     		pop	{r3, pc}
+ 538              	.L30:
+ARM GAS  /tmp/cctktfYf.s 			page 16
+
+
+ 539              		.align	2
+ 540              	.L29:
+ 541 0038 00000000 		.word	.LC13
+ 542 003c 00040048 		.word	1207960576
+ 543              		.cfi_endproc
+ 544              	.LFE141:
+ 546              		.section	.rodata.Motor_TurnRight.str1.4,"aMS",%progbits,1
+ 547              		.align	2
+ 548              	.LC14:
+ 549 0000 4D6F746F 		.ascii	"Motor_TurnRight...\015\000"
+ 549      725F5475 
+ 549      726E5269 
+ 549      6768742E 
+ 549      2E2E0D00 
+ 550              		.section	.text.Motor_TurnRight,"ax",%progbits
+ 551              		.align	1
+ 552              		.global	Motor_TurnRight
+ 553              		.syntax unified
+ 554              		.thumb
+ 555              		.thumb_func
+ 557              	Motor_TurnRight:
+ 558              	.LFB142:
+ 249:Core/Src/AGV.c **** 
+ 250:Core/Src/AGV.c **** void Motor_TurnRight() {
+ 559              		.loc 1 250 24 is_stmt 1 view -0
+ 560              		.cfi_startproc
+ 561              		@ args = 0, pretend = 0, frame = 0
+ 562              		@ frame_needed = 0, uses_anonymous_args = 0
+ 563 0000 08B5     		push	{r3, lr}
+ 564              	.LCFI5:
+ 565              		.cfi_def_cfa_offset 8
+ 566              		.cfi_offset 3, -8
+ 567              		.cfi_offset 14, -4
+ 251:Core/Src/AGV.c **** 
+ 252:Core/Src/AGV.c ****     printf("Motor_TurnRight...\r\n");
+ 568              		.loc 1 252 5 view .LVU100
+ 569 0002 0D48     		ldr	r0, .L33
+ 570 0004 FFF7FEFF 		bl	puts
+ 571              	.LVL54:
+ 253:Core/Src/AGV.c **** 	HAL_GPIO_WritePin(IN1_GPIO_Port, IN1_Pin, GPIO_PIN_SET);
+ 572              		.loc 1 253 2 view .LVU101
+ 573 0008 0122     		movs	r2, #1
+ 574 000a 1146     		mov	r1, r2
+ 575 000c 0B48     		ldr	r0, .L33+4
+ 576 000e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 577              	.LVL55:
+ 254:Core/Src/AGV.c **** 	HAL_GPIO_WritePin(IN2_GPIO_Port, IN2_Pin, GPIO_PIN_RESET);
+ 578              		.loc 1 254 2 view .LVU102
+ 579 0012 0022     		movs	r2, #0
+ 580 0014 8021     		movs	r1, #128
+ 581 0016 4FF09040 		mov	r0, #1207959552
+ 582 001a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 583              	.LVL56:
+ 255:Core/Src/AGV.c **** 
+ 256:Core/Src/AGV.c **** 	HAL_GPIO_WritePin(IN3_GPIO_Port, IN3_Pin, GPIO_PIN_RESET);
+ 584              		.loc 1 256 2 view .LVU103
+ 585 001e 0022     		movs	r2, #0
+ARM GAS  /tmp/cctktfYf.s 			page 17
+
+
+ 586 0020 4021     		movs	r1, #64
+ 587 0022 4FF09040 		mov	r0, #1207959552
+ 588 0026 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 589              	.LVL57:
+ 257:Core/Src/AGV.c **** 	HAL_GPIO_WritePin(IN4_GPIO_Port, IN4_Pin, GPIO_PIN_RESET);
+ 590              		.loc 1 257 2 view .LVU104
+ 591 002a 0022     		movs	r2, #0
+ 592 002c 1021     		movs	r1, #16
+ 593 002e 4FF09040 		mov	r0, #1207959552
+ 594 0032 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 595              	.LVL58:
+ 258:Core/Src/AGV.c **** }
+ 596              		.loc 1 258 1 is_stmt 0 view .LVU105
+ 597 0036 08BD     		pop	{r3, pc}
+ 598              	.L34:
+ 599              		.align	2
+ 600              	.L33:
+ 601 0038 00000000 		.word	.LC14
+ 602 003c 00040048 		.word	1207960576
+ 603              		.cfi_endproc
+ 604              	.LFE142:
+ 606              		.section	.rodata.LineFollowing.str1.4,"aMS",%progbits,1
+ 607              		.align	2
+ 608              	.LC15:
+ 609 0000 4C696E65 		.ascii	"LineFollowing...\015\000"
+ 609      466F6C6C 
+ 609      6F77696E 
+ 609      672E2E2E 
+ 609      0D00
+ 610 0012 0000     		.align	2
+ 611              	.LC16:
+ 612 0014 5475726E 		.ascii	"Turning Right.\015\000"
+ 612      696E6720 
+ 612      52696768 
+ 612      742E0D00 
+ 613              		.align	2
+ 614              	.LC17:
+ 615 0024 5475726E 		.ascii	"Turning Left.\015\000"
+ 615      696E6720 
+ 615      4C656674 
+ 615      2E0D00
+ 616 0033 00       		.align	2
+ 617              	.LC18:
+ 618 0034 4D6F7669 		.ascii	"Moving Forward.\015\000"
+ 618      6E672046 
+ 618      6F727761 
+ 618      72642E0D 
+ 618      00
+ 619 0045 000000   		.align	2
+ 620              	.LC19:
+ 621 0048 53746174 		.ascii	"Station_Stop.\015\000"
+ 621      696F6E5F 
+ 621      53746F70 
+ 621      2E0D00
+ 622              		.section	.text.LineFollowing,"ax",%progbits
+ 623              		.align	1
+ 624              		.global	LineFollowing
+ARM GAS  /tmp/cctktfYf.s 			page 18
+
+
+ 625              		.syntax unified
+ 626              		.thumb
+ 627              		.thumb_func
+ 629              	LineFollowing:
+ 630              	.LFB136:
+ 106:Core/Src/AGV.c **** 
+ 631              		.loc 1 106 22 is_stmt 1 view -0
+ 632              		.cfi_startproc
+ 633              		@ args = 0, pretend = 0, frame = 0
+ 634              		@ frame_needed = 0, uses_anonymous_args = 0
+ 635 0000 10B5     		push	{r4, lr}
+ 636              	.LCFI6:
+ 637              		.cfi_def_cfa_offset 8
+ 638              		.cfi_offset 4, -8
+ 639              		.cfi_offset 14, -4
+ 108:Core/Src/AGV.c **** 	// Only perform line-following if in LINE_FOLLOWING state
+ 640              		.loc 1 108 5 view .LVU107
+ 641 0002 1E48     		ldr	r0, .L49
+ 642 0004 FFF7FEFF 		bl	puts
+ 643              	.LVL59:
+ 110:Core/Src/AGV.c **** 		uint8_t left_sensor = 0;
+ 644              		.loc 1 110 2 view .LVU108
+ 110:Core/Src/AGV.c **** 		uint8_t left_sensor = 0;
+ 645              		.loc 1 110 20 is_stmt 0 view .LVU109
+ 646 0008 1D4B     		ldr	r3, .L49+4
+ 647 000a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 110:Core/Src/AGV.c **** 		uint8_t left_sensor = 0;
+ 648              		.loc 1 110 5 view .LVU110
+ 649 000c 03B1     		cbz	r3, .L45
+ 650              	.L35:
+ 137:Core/Src/AGV.c **** 
+ 651              		.loc 1 137 1 view .LVU111
+ 652 000e 10BD     		pop	{r4, pc}
+ 653              	.L45:
+ 654              	.LBB2:
+ 111:Core/Src/AGV.c **** 		uint8_t right_sensor = 0;
+ 655              		.loc 1 111 3 is_stmt 1 view .LVU112
+ 656              	.LVL60:
+ 112:Core/Src/AGV.c **** 
+ 657              		.loc 1 112 3 view .LVU113
+ 114:Core/Src/AGV.c **** 			left_sensor = LINE_DETECTED;
+ 658              		.loc 1 114 3 view .LVU114
+ 114:Core/Src/AGV.c **** 			left_sensor = LINE_DETECTED;
+ 659              		.loc 1 114 7 is_stmt 0 view .LVU115
+ 660 0010 1021     		movs	r1, #16
+ 661 0012 1C48     		ldr	r0, .L49+8
+ 662 0014 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 663              	.LVL61:
+ 114:Core/Src/AGV.c **** 			left_sensor = LINE_DETECTED;
+ 664              		.loc 1 114 6 view .LVU116
+ 665 0018 0446     		mov	r4, r0
+ 666 001a 00B1     		cbz	r0, .L37
+ 115:Core/Src/AGV.c **** 		}
+ 667              		.loc 1 115 16 view .LVU117
+ 668 001c 0124     		movs	r4, #1
+ 669              	.L37:
+ 670              	.LVL62:
+ARM GAS  /tmp/cctktfYf.s 			page 19
+
+
+ 117:Core/Src/AGV.c **** 			right_sensor = LINE_DETECTED;
+ 671              		.loc 1 117 3 is_stmt 1 view .LVU118
+ 117:Core/Src/AGV.c **** 			right_sensor = LINE_DETECTED;
+ 672              		.loc 1 117 7 is_stmt 0 view .LVU119
+ 673 001e 8021     		movs	r1, #128
+ 674 0020 1848     		ldr	r0, .L49+8
+ 675 0022 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 676              	.LVL63:
+ 117:Core/Src/AGV.c **** 			right_sensor = LINE_DETECTED;
+ 677              		.loc 1 117 6 view .LVU120
+ 678 0026 0346     		mov	r3, r0
+ 679 0028 00B1     		cbz	r0, .L38
+ 118:Core/Src/AGV.c **** 		}
+ 680              		.loc 1 118 17 view .LVU121
+ 681 002a 0123     		movs	r3, #1
+ 682              	.L38:
+ 683              	.LVL64:
+ 121:Core/Src/AGV.c **** 			printf("Turning Right.\r\n");
+ 684              		.loc 1 121 3 is_stmt 1 view .LVU122
+ 121:Core/Src/AGV.c **** 			printf("Turning Right.\r\n");
+ 685              		.loc 1 121 6 is_stmt 0 view .LVU123
+ 686 002c 012C     		cmp	r4, #1
+ 687 002e 0ED0     		beq	.L46
+ 688              	.L39:
+ 124:Core/Src/AGV.c **** 			printf("Turning Left.\r\n");
+ 689              		.loc 1 124 10 is_stmt 1 view .LVU124
+ 124:Core/Src/AGV.c **** 			printf("Turning Left.\r\n");
+ 690              		.loc 1 124 13 is_stmt 0 view .LVU125
+ 691 0030 012C     		cmp	r4, #1
+ 692 0032 01D0     		beq	.L40
+ 124:Core/Src/AGV.c **** 			printf("Turning Left.\r\n");
+ 693              		.loc 1 124 43 discriminator 1 view .LVU126
+ 694 0034 012B     		cmp	r3, #1
+ 695 0036 12D0     		beq	.L47
+ 696              	.L40:
+ 127:Core/Src/AGV.c **** 
+ 697              		.loc 1 127 10 is_stmt 1 view .LVU127
+ 127:Core/Src/AGV.c **** 
+ 698              		.loc 1 127 13 is_stmt 0 view .LVU128
+ 699 0038 012C     		cmp	r4, #1
+ 700 003a 01D1     		bne	.L41
+ 127:Core/Src/AGV.c **** 
+ 701              		.loc 1 127 43 discriminator 1 view .LVU129
+ 702 003c 012B     		cmp	r3, #1
+ 703 003e 14D0     		beq	.L48
+ 704              	.L41:
+ 133:Core/Src/AGV.c **** 			current_state = AGV_STATE_STOP_STATION;
+ 705              		.loc 1 133 4 is_stmt 1 view .LVU130
+ 706 0040 1148     		ldr	r0, .L49+12
+ 707 0042 FFF7FEFF 		bl	puts
+ 708              	.LVL65:
+ 134:Core/Src/AGV.c **** 		}
+ 709              		.loc 1 134 4 view .LVU131
+ 134:Core/Src/AGV.c **** 		}
+ 710              		.loc 1 134 18 is_stmt 0 view .LVU132
+ 711 0046 0E4B     		ldr	r3, .L49+4
+ 712 0048 0322     		movs	r2, #3
+ARM GAS  /tmp/cctktfYf.s 			page 20
+
+
+ 713 004a 1A70     		strb	r2, [r3]
+ 714              	.LBE2:
+ 137:Core/Src/AGV.c **** 
+ 715              		.loc 1 137 1 view .LVU133
+ 716 004c DFE7     		b	.L35
+ 717              	.LVL66:
+ 718              	.L46:
+ 719              	.LBB3:
+ 121:Core/Src/AGV.c **** 			printf("Turning Right.\r\n");
+ 720              		.loc 1 121 36 discriminator 1 view .LVU134
+ 721 004e 012B     		cmp	r3, #1
+ 722 0050 EED0     		beq	.L39
+ 122:Core/Src/AGV.c **** 			Motor_TurnRight();
+ 723              		.loc 1 122 4 is_stmt 1 view .LVU135
+ 724 0052 0E48     		ldr	r0, .L49+16
+ 725 0054 FFF7FEFF 		bl	puts
+ 726              	.LVL67:
+ 123:Core/Src/AGV.c **** 		} else if (left_sensor != LINE_DETECTED && right_sensor == LINE_DETECTED) {
+ 727              		.loc 1 123 4 view .LVU136
+ 728 0058 FFF7FEFF 		bl	Motor_TurnRight
+ 729              	.LVL68:
+ 730 005c D7E7     		b	.L35
+ 731              	.LVL69:
+ 732              	.L47:
+ 125:Core/Src/AGV.c **** 			Motor_TurnLeft();
+ 733              		.loc 1 125 4 view .LVU137
+ 734 005e 0C48     		ldr	r0, .L49+20
+ 735 0060 FFF7FEFF 		bl	puts
+ 736              	.LVL70:
+ 126:Core/Src/AGV.c **** 		} else if (left_sensor == LINE_DETECTED && right_sensor == LINE_DETECTED) {
+ 737              		.loc 1 126 4 view .LVU138
+ 738 0064 FFF7FEFF 		bl	Motor_TurnLeft
+ 739              	.LVL71:
+ 740 0068 D1E7     		b	.L35
+ 741              	.LVL72:
+ 742              	.L48:
+ 129:Core/Src/AGV.c **** 			Motor_MoveForward();
+ 743              		.loc 1 129 4 view .LVU139
+ 744 006a 0A48     		ldr	r0, .L49+24
+ 745 006c FFF7FEFF 		bl	puts
+ 746              	.LVL73:
+ 130:Core/Src/AGV.c **** 			current_state = AGV_STATE_LINE_FOLLOWING;
+ 747              		.loc 1 130 4 view .LVU140
+ 748 0070 FFF7FEFF 		bl	Motor_MoveForward
+ 749              	.LVL74:
+ 131:Core/Src/AGV.c **** 		} else {
+ 750              		.loc 1 131 4 view .LVU141
+ 131:Core/Src/AGV.c **** 		} else {
+ 751              		.loc 1 131 18 is_stmt 0 view .LVU142
+ 752 0074 024B     		ldr	r3, .L49+4
+ 753 0076 0022     		movs	r2, #0
+ 754 0078 1A70     		strb	r2, [r3]
+ 755 007a C8E7     		b	.L35
+ 756              	.L50:
+ 757              		.align	2
+ 758              	.L49:
+ 759 007c 00000000 		.word	.LC15
+ARM GAS  /tmp/cctktfYf.s 			page 21
+
+
+ 760 0080 00000000 		.word	.LANCHOR1
+ 761 0084 00040048 		.word	1207960576
+ 762 0088 48000000 		.word	.LC19
+ 763 008c 14000000 		.word	.LC16
+ 764 0090 24000000 		.word	.LC17
+ 765 0094 34000000 		.word	.LC18
+ 766              	.LBE3:
+ 767              		.cfi_endproc
+ 768              	.LFE136:
+ 770              		.section	.text.SetMotorSpeed,"ax",%progbits
+ 771              		.align	1
+ 772              		.global	SetMotorSpeed
+ 773              		.syntax unified
+ 774              		.thumb
+ 775              		.thumb_func
+ 777              	SetMotorSpeed:
+ 778              	.LVL75:
+ 779              	.LFB145:
+ 259:Core/Src/AGV.c **** 
+ 260:Core/Src/AGV.c **** // Smooth start by gradually increasing speed
+ 261:Core/Src/AGV.c **** void SmoothStart() {
+ 262:Core/Src/AGV.c ****     printf("Smooth Start...\r\n");
+ 263:Core/Src/AGV.c **** 	for (current_speed = MIN_SPEED; current_speed <= MAX_SPEED; current_speed +=
+ 264:Core/Src/AGV.c **** 			SPEED_STEP) {
+ 265:Core/Src/AGV.c **** 		SetMotorSpeed(current_speed);
+ 266:Core/Src/AGV.c **** 		HAL_Delay(1);  // Adjust delay for smoother/faster acceleration
+ 267:Core/Src/AGV.c **** 	}
+ 268:Core/Src/AGV.c **** 	Motor_MoveForward();
+ 269:Core/Src/AGV.c **** 	car_moving = 1;
+ 270:Core/Src/AGV.c **** }
+ 271:Core/Src/AGV.c **** 
+ 272:Core/Src/AGV.c **** // Smooth stop by gradually decreasing speed
+ 273:Core/Src/AGV.c **** void SmoothStop() {
+ 274:Core/Src/AGV.c ****     printf("Smooth Stop...\r\n");
+ 275:Core/Src/AGV.c **** 	for (current_speed = MAX_SPEED; current_speed >= MIN_SPEED; current_speed -=
+ 276:Core/Src/AGV.c **** 			SPEED_STEP) {
+ 277:Core/Src/AGV.c **** 		SetMotorSpeed(current_speed);
+ 278:Core/Src/AGV.c **** 		HAL_Delay(1);  // Adjust delay for smoother/faster deceleration
+ 279:Core/Src/AGV.c **** 	}
+ 280:Core/Src/AGV.c **** 	Motor_Stop();
+ 281:Core/Src/AGV.c **** 	car_moving = 0;
+ 282:Core/Src/AGV.c **** }
+ 283:Core/Src/AGV.c **** // Function to set motor speed using PWM
+ 284:Core/Src/AGV.c **** void SetMotorSpeed(uint16_t speed) {
+ 780              		.loc 1 284 36 is_stmt 1 view -0
+ 781              		.cfi_startproc
+ 782              		@ args = 0, pretend = 0, frame = 0
+ 783              		@ frame_needed = 0, uses_anonymous_args = 0
+ 784              		@ link register save eliminated.
+ 285:Core/Src/AGV.c **** 
+ 286:Core/Src/AGV.c **** 	__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, speed); //speed for motor 1ENA
+ 785              		.loc 1 286 2 view .LVU144
+ 786 0000 024B     		ldr	r3, .L52
+ 787 0002 1B68     		ldr	r3, [r3]
+ 788 0004 5863     		str	r0, [r3, #52]
+ 287:Core/Src/AGV.c **** 	__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, speed); //speed for motor 2ENB
+ 789              		.loc 1 287 2 view .LVU145
+ARM GAS  /tmp/cctktfYf.s 			page 22
+
+
+ 790 0006 1864     		str	r0, [r3, #64]
+ 288:Core/Src/AGV.c **** }
+ 791              		.loc 1 288 1 is_stmt 0 view .LVU146
+ 792 0008 7047     		bx	lr
+ 793              	.L53:
+ 794 000a 00BF     		.align	2
+ 795              	.L52:
+ 796 000c 00000000 		.word	htim1
+ 797              		.cfi_endproc
+ 798              	.LFE145:
+ 800              		.section	.rodata.SmoothStart.str1.4,"aMS",%progbits,1
+ 801              		.align	2
+ 802              	.LC20:
+ 803 0000 536D6F6F 		.ascii	"Smooth Start...\015\000"
+ 803      74682053 
+ 803      74617274 
+ 803      2E2E2E0D 
+ 803      00
+ 804              		.section	.text.SmoothStart,"ax",%progbits
+ 805              		.align	1
+ 806              		.global	SmoothStart
+ 807              		.syntax unified
+ 808              		.thumb
+ 809              		.thumb_func
+ 811              	SmoothStart:
+ 812              	.LFB143:
+ 261:Core/Src/AGV.c ****     printf("Smooth Start...\r\n");
+ 813              		.loc 1 261 20 is_stmt 1 view -0
+ 814              		.cfi_startproc
+ 815              		@ args = 0, pretend = 0, frame = 0
+ 816              		@ frame_needed = 0, uses_anonymous_args = 0
+ 817 0000 08B5     		push	{r3, lr}
+ 818              	.LCFI7:
+ 819              		.cfi_def_cfa_offset 8
+ 820              		.cfi_offset 3, -8
+ 821              		.cfi_offset 14, -4
+ 262:Core/Src/AGV.c **** 	for (current_speed = MIN_SPEED; current_speed <= MAX_SPEED; current_speed +=
+ 822              		.loc 1 262 5 view .LVU148
+ 823 0002 0E48     		ldr	r0, .L58
+ 824 0004 FFF7FEFF 		bl	puts
+ 825              	.LVL76:
+ 263:Core/Src/AGV.c **** 			SPEED_STEP) {
+ 826              		.loc 1 263 2 view .LVU149
+ 263:Core/Src/AGV.c **** 			SPEED_STEP) {
+ 827              		.loc 1 263 21 is_stmt 0 view .LVU150
+ 828 0008 0D4B     		ldr	r3, .L58+4
+ 829 000a 42F20F72 		movw	r2, #9999
+ 830 000e 1A80     		strh	r2, [r3]	@ movhi
+ 263:Core/Src/AGV.c **** 			SPEED_STEP) {
+ 831              		.loc 1 263 2 view .LVU151
+ 832 0010 08E0     		b	.L55
+ 833              	.L56:
+ 265:Core/Src/AGV.c **** 		HAL_Delay(1);  // Adjust delay for smoother/faster acceleration
+ 834              		.loc 1 265 3 is_stmt 1 discriminator 3 view .LVU152
+ 835 0012 FFF7FEFF 		bl	SetMotorSpeed
+ 836              	.LVL77:
+ 266:Core/Src/AGV.c **** 	}
+ARM GAS  /tmp/cctktfYf.s 			page 23
+
+
+ 837              		.loc 1 266 3 discriminator 3 view .LVU153
+ 838 0016 0120     		movs	r0, #1
+ 839 0018 FFF7FEFF 		bl	HAL_Delay
+ 840              	.LVL78:
+ 263:Core/Src/AGV.c **** 			SPEED_STEP) {
+ 841              		.loc 1 263 62 discriminator 3 view .LVU154
+ 263:Core/Src/AGV.c **** 			SPEED_STEP) {
+ 842              		.loc 1 263 76 is_stmt 0 discriminator 3 view .LVU155
+ 843 001c 084A     		ldr	r2, .L58+4
+ 844 001e 1388     		ldrh	r3, [r2]
+ 845 0020 0A33     		adds	r3, r3, #10
+ 846 0022 1380     		strh	r3, [r2]	@ movhi
+ 847              	.L55:
+ 263:Core/Src/AGV.c **** 			SPEED_STEP) {
+ 848              		.loc 1 263 34 is_stmt 1 discriminator 1 view .LVU156
+ 263:Core/Src/AGV.c **** 			SPEED_STEP) {
+ 849              		.loc 1 263 48 is_stmt 0 discriminator 1 view .LVU157
+ 850 0024 064B     		ldr	r3, .L58+4
+ 851 0026 1888     		ldrh	r0, [r3]
+ 263:Core/Src/AGV.c **** 			SPEED_STEP) {
+ 852              		.loc 1 263 2 discriminator 1 view .LVU158
+ 853 0028 42F20F73 		movw	r3, #9999
+ 854 002c 9842     		cmp	r0, r3
+ 855 002e F0D9     		bls	.L56
+ 268:Core/Src/AGV.c **** 	car_moving = 1;
+ 856              		.loc 1 268 2 is_stmt 1 view .LVU159
+ 857 0030 FFF7FEFF 		bl	Motor_MoveForward
+ 858              	.LVL79:
+ 269:Core/Src/AGV.c **** }
+ 859              		.loc 1 269 2 view .LVU160
+ 269:Core/Src/AGV.c **** }
+ 860              		.loc 1 269 13 is_stmt 0 view .LVU161
+ 861 0034 034B     		ldr	r3, .L58+8
+ 862 0036 0122     		movs	r2, #1
+ 863 0038 1A70     		strb	r2, [r3]
+ 270:Core/Src/AGV.c **** 
+ 864              		.loc 1 270 1 view .LVU162
+ 865 003a 08BD     		pop	{r3, pc}
+ 866              	.L59:
+ 867              		.align	2
+ 868              	.L58:
+ 869 003c 00000000 		.word	.LC20
+ 870 0040 00000000 		.word	.LANCHOR2
+ 871 0044 00000000 		.word	.LANCHOR0
+ 872              		.cfi_endproc
+ 873              	.LFE143:
+ 875              		.section	.rodata.SmoothStop.str1.4,"aMS",%progbits,1
+ 876              		.align	2
+ 877              	.LC21:
+ 878 0000 536D6F6F 		.ascii	"Smooth Stop...\015\000"
+ 878      74682053 
+ 878      746F702E 
+ 878      2E2E0D00 
+ 879              		.section	.text.SmoothStop,"ax",%progbits
+ 880              		.align	1
+ 881              		.global	SmoothStop
+ 882              		.syntax unified
+ARM GAS  /tmp/cctktfYf.s 			page 24
+
+
+ 883              		.thumb
+ 884              		.thumb_func
+ 886              	SmoothStop:
+ 887              	.LFB144:
+ 273:Core/Src/AGV.c ****     printf("Smooth Stop...\r\n");
+ 888              		.loc 1 273 19 is_stmt 1 view -0
+ 889              		.cfi_startproc
+ 890              		@ args = 0, pretend = 0, frame = 0
+ 891              		@ frame_needed = 0, uses_anonymous_args = 0
+ 892 0000 08B5     		push	{r3, lr}
+ 893              	.LCFI8:
+ 894              		.cfi_def_cfa_offset 8
+ 895              		.cfi_offset 3, -8
+ 896              		.cfi_offset 14, -4
+ 274:Core/Src/AGV.c **** 	for (current_speed = MAX_SPEED; current_speed >= MIN_SPEED; current_speed -=
+ 897              		.loc 1 274 5 view .LVU164
+ 898 0002 0E48     		ldr	r0, .L64
+ 899 0004 FFF7FEFF 		bl	puts
+ 900              	.LVL80:
+ 275:Core/Src/AGV.c **** 			SPEED_STEP) {
+ 901              		.loc 1 275 2 view .LVU165
+ 275:Core/Src/AGV.c **** 			SPEED_STEP) {
+ 902              		.loc 1 275 21 is_stmt 0 view .LVU166
+ 903 0008 0D4B     		ldr	r3, .L64+4
+ 904 000a 42F20F72 		movw	r2, #9999
+ 905 000e 1A80     		strh	r2, [r3]	@ movhi
+ 275:Core/Src/AGV.c **** 			SPEED_STEP) {
+ 906              		.loc 1 275 2 view .LVU167
+ 907 0010 08E0     		b	.L61
+ 908              	.L62:
+ 277:Core/Src/AGV.c **** 		HAL_Delay(1);  // Adjust delay for smoother/faster deceleration
+ 909              		.loc 1 277 3 is_stmt 1 discriminator 3 view .LVU168
+ 910 0012 FFF7FEFF 		bl	SetMotorSpeed
+ 911              	.LVL81:
+ 278:Core/Src/AGV.c **** 	}
+ 912              		.loc 1 278 3 discriminator 3 view .LVU169
+ 913 0016 0120     		movs	r0, #1
+ 914 0018 FFF7FEFF 		bl	HAL_Delay
+ 915              	.LVL82:
+ 275:Core/Src/AGV.c **** 			SPEED_STEP) {
+ 916              		.loc 1 275 62 discriminator 3 view .LVU170
+ 275:Core/Src/AGV.c **** 			SPEED_STEP) {
+ 917              		.loc 1 275 76 is_stmt 0 discriminator 3 view .LVU171
+ 918 001c 084A     		ldr	r2, .L64+4
+ 919 001e 1388     		ldrh	r3, [r2]
+ 920 0020 0A3B     		subs	r3, r3, #10
+ 921 0022 1380     		strh	r3, [r2]	@ movhi
+ 922              	.L61:
+ 275:Core/Src/AGV.c **** 			SPEED_STEP) {
+ 923              		.loc 1 275 34 is_stmt 1 discriminator 1 view .LVU172
+ 275:Core/Src/AGV.c **** 			SPEED_STEP) {
+ 924              		.loc 1 275 48 is_stmt 0 discriminator 1 view .LVU173
+ 925 0024 064B     		ldr	r3, .L64+4
+ 926 0026 1888     		ldrh	r0, [r3]
+ 275:Core/Src/AGV.c **** 			SPEED_STEP) {
+ 927              		.loc 1 275 2 discriminator 1 view .LVU174
+ 928 0028 42F20E73 		movw	r3, #9998
+ARM GAS  /tmp/cctktfYf.s 			page 25
+
+
+ 929 002c 9842     		cmp	r0, r3
+ 930 002e F0D8     		bhi	.L62
+ 280:Core/Src/AGV.c **** 	car_moving = 0;
+ 931              		.loc 1 280 2 is_stmt 1 view .LVU175
+ 932 0030 FFF7FEFF 		bl	Motor_Stop
+ 933              	.LVL83:
+ 281:Core/Src/AGV.c **** }
+ 934              		.loc 1 281 2 view .LVU176
+ 281:Core/Src/AGV.c **** }
+ 935              		.loc 1 281 13 is_stmt 0 view .LVU177
+ 936 0034 034B     		ldr	r3, .L64+8
+ 937 0036 0022     		movs	r2, #0
+ 938 0038 1A70     		strb	r2, [r3]
+ 282:Core/Src/AGV.c **** // Function to set motor speed using PWM
+ 939              		.loc 1 282 1 view .LVU178
+ 940 003a 08BD     		pop	{r3, pc}
+ 941              	.L65:
+ 942              		.align	2
+ 943              	.L64:
+ 944 003c 00000000 		.word	.LC21
+ 945 0040 00000000 		.word	.LANCHOR2
+ 946 0044 00000000 		.word	.LANCHOR0
+ 947              		.cfi_endproc
+ 948              	.LFE144:
+ 950              		.section	.rodata.Obstacle_CheckAndHandle.str1.4,"aMS",%progbits,1
+ 951              		.align	2
+ 952              	.LC22:
+ 953 0000 4F627374 		.ascii	"Obstacle_Check\015\012Obstacle distance: %d\015\012"
+ 953      61636C65 
+ 953      5F436865 
+ 953      636B0D0A 
+ 953      4F627374 
+ 954 0027 00       		.ascii	"\000"
+ 955              		.align	2
+ 956              	.LC23:
+ 957 0028 4F627374 		.ascii	"Obstacle cleared, resuming AGV...\015\000"
+ 957      61636C65 
+ 957      20636C65 
+ 957      61726564 
+ 957      2C207265 
+ 958 004b 00       		.align	2
+ 959              	.LC24:
+ 960 004c 54686973 		.ascii	"This is a default message.\015\000"
+ 960      20697320 
+ 960      61206465 
+ 960      6661756C 
+ 960      74206D65 
+ 961              		.section	.text.Obstacle_CheckAndHandle,"ax",%progbits
+ 962              		.align	1
+ 963              		.global	Obstacle_CheckAndHandle
+ 964              		.syntax unified
+ 965              		.thumb
+ 966              		.thumb_func
+ 968              	Obstacle_CheckAndHandle:
+ 969              	.LFB135:
+  43:Core/Src/AGV.c **** 	uint16_t distance = 10;
+ 970              		.loc 1 43 32 is_stmt 1 view -0
+ARM GAS  /tmp/cctktfYf.s 			page 26
+
+
+ 971              		.cfi_startproc
+ 972              		@ args = 0, pretend = 0, frame = 0
+ 973              		@ frame_needed = 0, uses_anonymous_args = 0
+ 974 0000 10B5     		push	{r4, lr}
+ 975              	.LCFI9:
+ 976              		.cfi_def_cfa_offset 8
+ 977              		.cfi_offset 4, -8
+ 978              		.cfi_offset 14, -4
+  44:Core/Src/AGV.c ****     printf("Obstacle_Check\r\nObstacle distance: %d\r\n", distance);
+ 979              		.loc 1 44 2 view .LVU180
+ 980              	.LVL84:
+  45:Core/Src/AGV.c **** 
+ 981              		.loc 1 45 5 view .LVU181
+ 982 0002 0A21     		movs	r1, #10
+ 983 0004 2F48     		ldr	r0, .L79
+ 984 0006 FFF7FEFF 		bl	printf
+ 985              	.LVL85:
+  47:Core/Src/AGV.c **** 	case AGV_STATE_LINE_FOLLOWING:
+ 986              		.loc 1 47 2 view .LVU182
+ 987 000a 2F4B     		ldr	r3, .L79+4
+ 988 000c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 989 000e 032B     		cmp	r3, #3
+ 990 0010 50D8     		bhi	.L67
+ 991 0012 DFE803F0 		tbb	[pc, r3]
+ 992              	.L69:
+ 993 0016 0D       		.byte	(.L66-.L69)/2
+ 994 0017 02       		.byte	(.L71-.L69)/2
+ 995 0018 0E       		.byte	(.L70-.L69)/2
+ 996 0019 18       		.byte	(.L68-.L69)/2
+ 997              		.p2align 1
+ 998              	.L71:
+  60:Core/Src/AGV.c **** 			printf("Obstacle cleared, resuming AGV...\r\n");
+ 999              		.loc 1 60 3 view .LVU183
+  61:Core/Src/AGV.c **** 			HAL_GPIO_WritePin(GPIOB, BUZZER_Pin, GPIO_PIN_RESET); // Turn buzzer off
+ 1000              		.loc 1 61 4 view .LVU184
+ 1001 001a 2C48     		ldr	r0, .L79+8
+ 1002 001c FFF7FEFF 		bl	puts
+ 1003              	.LVL86:
+  62:Core/Src/AGV.c **** 			current_state = AGV_STATE_OBSTACLE_CLEAR;
+ 1004              		.loc 1 62 4 view .LVU185
+ 1005 0020 0022     		movs	r2, #0
+ 1006 0022 0221     		movs	r1, #2
+ 1007 0024 2A48     		ldr	r0, .L79+12
+ 1008 0026 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 1009              	.LVL87:
+  63:Core/Src/AGV.c **** 		}
+ 1010              		.loc 1 63 4 view .LVU186
+  63:Core/Src/AGV.c **** 		}
+ 1011              		.loc 1 63 18 is_stmt 0 view .LVU187
+ 1012 002a 274B     		ldr	r3, .L79+4
+ 1013 002c 0222     		movs	r2, #2
+ 1014 002e 1A70     		strb	r2, [r3]
+ 1015              	.L66:
+ 104:Core/Src/AGV.c **** 
+ 1016              		.loc 1 104 1 view .LVU188
+ 1017 0030 10BD     		pop	{r4, pc}
+ 1018              	.L70:
+ARM GAS  /tmp/cctktfYf.s 			page 27
+
+
+  68:Core/Src/AGV.c **** 		SmoothStart();
+ 1019              		.loc 1 68 3 is_stmt 1 view .LVU189
+ 1020 0032 4FF4FA60 		mov	r0, #2000
+ 1021 0036 FFF7FEFF 		bl	HAL_Delay
+ 1022              	.LVL88:
+  69:Core/Src/AGV.c **** 		current_state = AGV_STATE_LINE_FOLLOWING; // Return to line-following mode
+ 1023              		.loc 1 69 3 view .LVU190
+ 1024 003a FFF7FEFF 		bl	SmoothStart
+ 1025              	.LVL89:
+  70:Core/Src/AGV.c **** 		break;
+ 1026              		.loc 1 70 3 view .LVU191
+  70:Core/Src/AGV.c **** 		break;
+ 1027              		.loc 1 70 17 is_stmt 0 view .LVU192
+ 1028 003e 224B     		ldr	r3, .L79+4
+ 1029 0040 0022     		movs	r2, #0
+ 1030 0042 1A70     		strb	r2, [r3]
+  71:Core/Src/AGV.c **** 
+ 1031              		.loc 1 71 3 is_stmt 1 view .LVU193
+ 1032 0044 F4E7     		b	.L66
+ 1033              	.L68:
+  75:Core/Src/AGV.c **** 		HAL_Delay(2000);  // Pause for 2 seconds (adjust as needed)
+ 1034              		.loc 1 75 3 view .LVU194
+ 1035 0046 FFF7FEFF 		bl	SmoothStop
+ 1036              	.LVL90:
+  76:Core/Src/AGV.c **** 
+ 1037              		.loc 1 76 3 view .LVU195
+ 1038 004a 4FF4FA60 		mov	r0, #2000
+ 1039 004e FFF7FEFF 		bl	HAL_Delay
+ 1040              	.LVL91:
+  78:Core/Src/AGV.c **** 			if (HAL_GPIO_ReadPin(FSR_GPIO_Port, FSR_Pin) == GPIO_PIN_SET) { // Box loaded
+ 1041              		.loc 1 78 3 view .LVU196
+  78:Core/Src/AGV.c **** 			if (HAL_GPIO_ReadPin(FSR_GPIO_Port, FSR_Pin) == GPIO_PIN_SET) { // Box loaded
+ 1042              		.loc 1 78 12 is_stmt 0 view .LVU197
+ 1043 0052 204B     		ldr	r3, .L79+16
+ 1044 0054 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  78:Core/Src/AGV.c **** 			if (HAL_GPIO_ReadPin(FSR_GPIO_Port, FSR_Pin) == GPIO_PIN_SET) { // Box loaded
+ 1045              		.loc 1 78 6 view .LVU198
+ 1046 0056 BBB9     		cbnz	r3, .L73
+  79:Core/Src/AGV.c **** 				load = 1;
+ 1047              		.loc 1 79 4 is_stmt 1 view .LVU199
+  79:Core/Src/AGV.c **** 				load = 1;
+ 1048              		.loc 1 79 8 is_stmt 0 view .LVU200
+ 1049 0058 0821     		movs	r1, #8
+ 1050 005a 4FF09040 		mov	r0, #1207959552
+ 1051 005e FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 1052              	.LVL92:
+  79:Core/Src/AGV.c **** 				load = 1;
+ 1053              		.loc 1 79 7 view .LVU201
+ 1054 0062 0128     		cmp	r0, #1
+ 1055 0064 03D0     		beq	.L77
+  85:Core/Src/AGV.c **** 			}
+ 1056              		.loc 1 85 5 is_stmt 1 view .LVU202
+  85:Core/Src/AGV.c **** 			}
+ 1057              		.loc 1 85 19 is_stmt 0 view .LVU203
+ 1058 0066 184B     		ldr	r3, .L79+4
+ 1059 0068 0322     		movs	r2, #3
+ 1060 006a 1A70     		strb	r2, [r3]
+ARM GAS  /tmp/cctktfYf.s 			page 28
+
+
+ 1061 006c E0E7     		b	.L66
+ 1062              	.L77:
+  80:Core/Src/AGV.c **** 				SmoothStart();
+ 1063              		.loc 1 80 5 is_stmt 1 view .LVU204
+  80:Core/Src/AGV.c **** 				SmoothStart();
+ 1064              		.loc 1 80 10 is_stmt 0 view .LVU205
+ 1065 006e 194B     		ldr	r3, .L79+16
+ 1066 0070 0122     		movs	r2, #1
+ 1067 0072 1A70     		strb	r2, [r3]
+  81:Core/Src/AGV.c **** 				HAL_Delay(1500);
+ 1068              		.loc 1 81 5 is_stmt 1 view .LVU206
+ 1069 0074 FFF7FEFF 		bl	SmoothStart
+ 1070              	.LVL93:
+  82:Core/Src/AGV.c **** 				current_state = AGV_STATE_LINE_FOLLOWING;
+ 1071              		.loc 1 82 5 view .LVU207
+ 1072 0078 40F2DC50 		movw	r0, #1500
+ 1073 007c FFF7FEFF 		bl	HAL_Delay
+ 1074              	.LVL94:
+  83:Core/Src/AGV.c **** 			} else {  // Box not loaded, wait to be loaded
+ 1075              		.loc 1 83 5 view .LVU208
+  83:Core/Src/AGV.c **** 			} else {  // Box not loaded, wait to be loaded
+ 1076              		.loc 1 83 19 is_stmt 0 view .LVU209
+ 1077 0080 114B     		ldr	r3, .L79+4
+ 1078 0082 0022     		movs	r2, #0
+ 1079 0084 1A70     		strb	r2, [r3]
+ 1080 0086 D3E7     		b	.L66
+ 1081              	.L73:
+  89:Core/Src/AGV.c **** 				load = 0;
+ 1082              		.loc 1 89 4 is_stmt 1 view .LVU210
+  89:Core/Src/AGV.c **** 				load = 0;
+ 1083              		.loc 1 89 8 is_stmt 0 view .LVU211
+ 1084 0088 0821     		movs	r1, #8
+ 1085 008a 4FF09040 		mov	r0, #1207959552
+ 1086 008e FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 1087              	.LVL95:
+  89:Core/Src/AGV.c **** 				load = 0;
+ 1088              		.loc 1 89 7 view .LVU212
+ 1089 0092 18B1     		cbz	r0, .L78
+  95:Core/Src/AGV.c **** 			}
+ 1090              		.loc 1 95 5 is_stmt 1 view .LVU213
+  95:Core/Src/AGV.c **** 			}
+ 1091              		.loc 1 95 19 is_stmt 0 view .LVU214
+ 1092 0094 0C4B     		ldr	r3, .L79+4
+ 1093 0096 0322     		movs	r2, #3
+ 1094 0098 1A70     		strb	r2, [r3]
+ 1095 009a C9E7     		b	.L66
+ 1096              	.L78:
+  90:Core/Src/AGV.c **** 				SmoothStart();
+ 1097              		.loc 1 90 5 is_stmt 1 view .LVU215
+  90:Core/Src/AGV.c **** 				SmoothStart();
+ 1098              		.loc 1 90 10 is_stmt 0 view .LVU216
+ 1099 009c 0024     		movs	r4, #0
+ 1100 009e 0D4B     		ldr	r3, .L79+16
+ 1101 00a0 1C70     		strb	r4, [r3]
+  91:Core/Src/AGV.c **** 				HAL_Delay(1500);
+ 1102              		.loc 1 91 5 is_stmt 1 view .LVU217
+ 1103 00a2 FFF7FEFF 		bl	SmoothStart
+ARM GAS  /tmp/cctktfYf.s 			page 29
+
+
+ 1104              	.LVL96:
+  92:Core/Src/AGV.c **** 				current_state = AGV_STATE_LINE_FOLLOWING;
+ 1105              		.loc 1 92 5 view .LVU218
+ 1106 00a6 40F2DC50 		movw	r0, #1500
+ 1107 00aa FFF7FEFF 		bl	HAL_Delay
+ 1108              	.LVL97:
+  93:Core/Src/AGV.c **** 			} else {  // Box loaded, wait to be unloaded
+ 1109              		.loc 1 93 5 view .LVU219
+  93:Core/Src/AGV.c **** 			} else {  // Box loaded, wait to be unloaded
+ 1110              		.loc 1 93 19 is_stmt 0 view .LVU220
+ 1111 00ae 064B     		ldr	r3, .L79+4
+ 1112 00b0 1C70     		strb	r4, [r3]
+ 1113 00b2 BDE7     		b	.L66
+ 1114              	.L67:
+ 101:Core/Src/AGV.c **** 		current_state = AGV_STATE_LINE_FOLLOWING;
+ 1115              		.loc 1 101 3 is_stmt 1 view .LVU221
+ 1116 00b4 0848     		ldr	r0, .L79+20
+ 1117 00b6 FFF7FEFF 		bl	puts
+ 1118              	.LVL98:
+ 102:Core/Src/AGV.c **** 	}
+ 1119              		.loc 1 102 3 view .LVU222
+ 102:Core/Src/AGV.c **** 	}
+ 1120              		.loc 1 102 17 is_stmt 0 view .LVU223
+ 1121 00ba 034B     		ldr	r3, .L79+4
+ 1122 00bc 0022     		movs	r2, #0
+ 1123 00be 1A70     		strb	r2, [r3]
+ 104:Core/Src/AGV.c **** 
+ 1124              		.loc 1 104 1 view .LVU224
+ 1125 00c0 B6E7     		b	.L66
+ 1126              	.L80:
+ 1127 00c2 00BF     		.align	2
+ 1128              	.L79:
+ 1129 00c4 00000000 		.word	.LC22
+ 1130 00c8 00000000 		.word	.LANCHOR1
+ 1131 00cc 28000000 		.word	.LC23
+ 1132 00d0 00040048 		.word	1207960576
+ 1133 00d4 00000000 		.word	.LANCHOR3
+ 1134 00d8 4C000000 		.word	.LC24
+ 1135              		.cfi_endproc
+ 1136              	.LFE135:
+ 1138              		.global	current_state
+ 1139              		.global	current_speed
+ 1140              		.global	car_moving
+ 1141              		.section	.bss.car_moving,"aw",%nobits
+ 1142              		.set	.LANCHOR0,. + 0
+ 1145              	car_moving:
+ 1146 0000 00       		.space	1
+ 1147              		.section	.bss.current_state,"aw",%nobits
+ 1148              		.set	.LANCHOR1,. + 0
+ 1151              	current_state:
+ 1152 0000 00       		.space	1
+ 1153              		.section	.bss.load,"aw",%nobits
+ 1154              		.set	.LANCHOR3,. + 0
+ 1157              	load:
+ 1158 0000 00       		.space	1
+ 1159              		.section	.data.current_speed,"aw"
+ 1160              		.align	1
+ARM GAS  /tmp/cctktfYf.s 			page 30
+
+
+ 1161              		.set	.LANCHOR2,. + 0
+ 1164              	current_speed:
+ 1165 0000 0F27     		.short	9999
+ 1166              		.text
+ 1167              	.Letext0:
+ 1168              		.file 2 "/usr/local/arm-none-eabi/include/machine/_default_types.h"
+ 1169              		.file 3 "/usr/local/arm-none-eabi/include/sys/_stdint.h"
+ 1170              		.file 4 "Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l432xx.h"
+ 1171              		.file 5 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_def.h"
+ 1172              		.file 6 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_gpio.h"
+ 1173              		.file 7 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_dma.h"
+ 1174              		.file 8 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim.h"
+ 1175              		.file 9 "Core/Inc/AGV.h"
+ 1176              		.file 10 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h"
+ 1177              		.file 11 "/usr/local/arm-none-eabi/include/stdio.h"
+ 1178              		.file 12 "<built-in>"
+ARM GAS  /tmp/cctktfYf.s 			page 31
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 AGV.c
+     /tmp/cctktfYf.s:20     .rodata.Ultrasonic_GetDistance.str1.4:0000000000000000 $d
+     /tmp/cctktfYf.s:56     .text.Ultrasonic_GetDistance:0000000000000000 $t
+     /tmp/cctktfYf.s:62     .text.Ultrasonic_GetDistance:0000000000000000 Ultrasonic_GetDistance
+     /tmp/cctktfYf.s:276    .text.Ultrasonic_GetDistance:00000000000000f0 $d
+     /tmp/cctktfYf.s:295    .rodata.Motor_Stop.str1.4:0000000000000000 $d
+     /tmp/cctktfYf.s:299    .text.Motor_Stop:0000000000000000 $t
+     /tmp/cctktfYf.s:305    .text.Motor_Stop:0000000000000000 Motor_Stop
+     /tmp/cctktfYf.s:354    .text.Motor_Stop:0000000000000040 $d
+     /tmp/cctktfYf.s:361    .rodata.Motor_MoveForward.str1.4:0000000000000000 $d
+     /tmp/cctktfYf.s:365    .text.Motor_MoveForward:0000000000000000 $t
+     /tmp/cctktfYf.s:371    .text.Motor_MoveForward:0000000000000000 Motor_MoveForward
+     /tmp/cctktfYf.s:420    .text.Motor_MoveForward:0000000000000040 $d
+     /tmp/cctktfYf.s:427    .rodata.Motor_MoveBackward.str1.4:0000000000000000 $d
+     /tmp/cctktfYf.s:431    .text.Motor_MoveBackward:0000000000000000 $t
+     /tmp/cctktfYf.s:437    .text.Motor_MoveBackward:0000000000000000 Motor_MoveBackward
+     /tmp/cctktfYf.s:481    .text.Motor_MoveBackward:0000000000000038 $d
+     /tmp/cctktfYf.s:487    .rodata.Motor_TurnLeft.str1.4:0000000000000000 $d
+     /tmp/cctktfYf.s:491    .text.Motor_TurnLeft:0000000000000000 $t
+     /tmp/cctktfYf.s:497    .text.Motor_TurnLeft:0000000000000000 Motor_TurnLeft
+     /tmp/cctktfYf.s:541    .text.Motor_TurnLeft:0000000000000038 $d
+     /tmp/cctktfYf.s:547    .rodata.Motor_TurnRight.str1.4:0000000000000000 $d
+     /tmp/cctktfYf.s:551    .text.Motor_TurnRight:0000000000000000 $t
+     /tmp/cctktfYf.s:557    .text.Motor_TurnRight:0000000000000000 Motor_TurnRight
+     /tmp/cctktfYf.s:601    .text.Motor_TurnRight:0000000000000038 $d
+     /tmp/cctktfYf.s:607    .rodata.LineFollowing.str1.4:0000000000000000 $d
+     /tmp/cctktfYf.s:623    .text.LineFollowing:0000000000000000 $t
+     /tmp/cctktfYf.s:629    .text.LineFollowing:0000000000000000 LineFollowing
+     /tmp/cctktfYf.s:759    .text.LineFollowing:000000000000007c $d
+     /tmp/cctktfYf.s:771    .text.SetMotorSpeed:0000000000000000 $t
+     /tmp/cctktfYf.s:777    .text.SetMotorSpeed:0000000000000000 SetMotorSpeed
+     /tmp/cctktfYf.s:796    .text.SetMotorSpeed:000000000000000c $d
+     /tmp/cctktfYf.s:801    .rodata.SmoothStart.str1.4:0000000000000000 $d
+     /tmp/cctktfYf.s:805    .text.SmoothStart:0000000000000000 $t
+     /tmp/cctktfYf.s:811    .text.SmoothStart:0000000000000000 SmoothStart
+     /tmp/cctktfYf.s:869    .text.SmoothStart:000000000000003c $d
+     /tmp/cctktfYf.s:876    .rodata.SmoothStop.str1.4:0000000000000000 $d
+     /tmp/cctktfYf.s:880    .text.SmoothStop:0000000000000000 $t
+     /tmp/cctktfYf.s:886    .text.SmoothStop:0000000000000000 SmoothStop
+     /tmp/cctktfYf.s:944    .text.SmoothStop:000000000000003c $d
+     /tmp/cctktfYf.s:951    .rodata.Obstacle_CheckAndHandle.str1.4:0000000000000000 $d
+     /tmp/cctktfYf.s:962    .text.Obstacle_CheckAndHandle:0000000000000000 $t
+     /tmp/cctktfYf.s:968    .text.Obstacle_CheckAndHandle:0000000000000000 Obstacle_CheckAndHandle
+     /tmp/cctktfYf.s:993    .text.Obstacle_CheckAndHandle:0000000000000016 $d
+     /tmp/cctktfYf.s:997    .text.Obstacle_CheckAndHandle:000000000000001a $t
+     /tmp/cctktfYf.s:1129   .text.Obstacle_CheckAndHandle:00000000000000c4 $d
+     /tmp/cctktfYf.s:1151   .bss.current_state:0000000000000000 current_state
+     /tmp/cctktfYf.s:1164   .data.current_speed:0000000000000000 current_speed
+     /tmp/cctktfYf.s:1145   .bss.car_moving:0000000000000000 car_moving
+     /tmp/cctktfYf.s:1146   .bss.car_moving:0000000000000000 $d
+     /tmp/cctktfYf.s:1152   .bss.current_state:0000000000000000 $d
+     /tmp/cctktfYf.s:1157   .bss.load:0000000000000000 load
+     /tmp/cctktfYf.s:1158   .bss.load:0000000000000000 $d
+     /tmp/cctktfYf.s:1160   .data.current_speed:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+ARM GAS  /tmp/cctktfYf.s 			page 32
+
+
+__aeabi_ui2d
+__aeabi_dmul
+__aeabi_d2uiz
+puts
+HAL_GPIO_WritePin
+HAL_GetTick
+HAL_GPIO_ReadPin
+printf
+htim6
+htim1
+HAL_Delay
